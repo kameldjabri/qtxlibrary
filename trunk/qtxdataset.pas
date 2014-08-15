@@ -27,27 +27,27 @@ unit qtxdataset;
 interface
 
 uses
-  W3System;
+  W3System, qtxutils;
 
 type
 
   (* Forward declaration *)
-  TQTXDatasetField = Class;
-  TQTXBooleanField       = Class;
-  TQTXIntegerField       = Class;
-  TQTXFloatField         = Class;
-  TQTXStringField        = Class;
-  TQTXDatasetFields      = Class;
-  TQTXDataset      = Class;
-  TQTXFieldDef           = Class;
-  TQTXFieldDefs          = Class;
+  TQTXDatasetField  = Class;
+  TQTXBooleanField  = Class;
+  TQTXIntegerField  = Class;
+  TQTXFloatField    = Class;
+  TQTXStringField   = Class;
+  TQTXDatasetFields = Class;
+  TQTXDataset       = Class;
+  TQTXFieldDef      = Class;
+  TQTXFieldDefs     = Class;
 
   (* Exception classes *)
   EW3FieldDefs          = Class(EW3Exception);
   EW3DatasetField       = Class(EW3Exception);
   EW3Dataset            = Class(EW3Exception);
 
-  TQTXDatasetPacket      = Variant;
+  TQTXDatasetPacket     = Variant;
 
   TQTXDatasetFieldType =
     (
@@ -57,8 +57,8 @@ type
         ftFloat,
         ftString,
         ftDateTime,
-        ftAutoInc,    //  Calculated
-        ftGUID        //  Calculated
+        ftAutoInc,    //  generated
+        ftGUID        //  generated
     );
 
   TQTXDatasetState =(dsIdle,dsInsert,dsEdit);
@@ -73,11 +73,6 @@ type
     function  getFieldIdentifier:String;
   end;
 
-  TQTXGUID = Class
-  public
-    class function CreateGUID:String;
-  end;
-
   TQTXDatasetField = Class(TObject)
   private
     FName:      String;
@@ -88,8 +83,8 @@ type
     Procedure   setAsDateTime(const aValue:TDateTime);
     function    getAsDateTime:TDateTime;
   protected
-    Procedure   Calculate;virtual;
-    function    getCalculated:Boolean;virtual;
+    Procedure   Generate;virtual;
+    function    getGenerated:Boolean;virtual;
     function    getValue:Variant;virtual;
     procedure   setValue(const aValue:variant);virtual;
     procedure   setName (const aValue:String);
@@ -100,7 +95,7 @@ type
     Property    Kind:TQTXDatasetFieldType read FKind;
     Property    Name:String read FName write setName;
     Property    Data:Variant read getValue write setValue;
-    Property    Calculated:Boolean read getCalculated;
+    Property    Generated:Boolean read getGenerated;
 
     Property    AsString:String
                 read (TVariant.AsString(FValue))
@@ -129,8 +124,8 @@ type
   private
     FCalc:    Integer;
   protected
-    Procedure Calculate;override;
-    function  getCalculated:Boolean;override;
+    Procedure Generate;override;
+    function  getGenerated:Boolean;override;
   public
     Property  Value:Integer
               read (TVariant.AsInteger(Inherited getValue));
@@ -138,8 +133,8 @@ type
 
   TQTXGUIDField = Class(TQTXDatasetField)
   protected
-    Procedure Calculate;override;
-    function  getCalculated:Boolean;override;
+    Procedure Generate;override;
+    function  getGenerated:Boolean;override;
   public
     Property  Value:String
               read (TVariant.asString(Inherited getValue));
@@ -272,7 +267,7 @@ type
 
     FDsIndex:   Integer;
 
-    Procedure   UpdateCalculatedFields;
+    Procedure   UpdateGeneratedFields;
 
     procedure   setActive(const aValue:Boolean);
     Procedure   setPosition(const aNewPosition:Integer);
@@ -379,28 +374,6 @@ TQTXDatasetHeader  = Record
   dhFieldDefs:  String;
   dhData:       String;
 End;
-
-//#############################################################################
-// TQTXGUID
-//#############################################################################
-
-// http://www.ietf.org/rfc/rfc4122.txt
-class function TQTXGUID.CreateGUID:String;
-Begin
-  asm
-    var s = [];
-    var hexDigits = "0123456789abcdef";
-    for (var i = 0; i < 36; i++) {
-        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-    }
-    s[14] = "4";
-    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
-    s[8] = s[13] = s[18] = s[23] = "-";
-
-    @result = s.join("");
-  end;
-  result:=uppercase(result);
-end;
 
 //#############################################################################
 // TQTXFieldDefs
@@ -873,13 +846,13 @@ Begin
   end;
 end;
 
-Procedure TQTXDataset.UpdateCalculatedFields;
+Procedure TQTXDataset.UpdateGeneratedFields;
 var
   x:  Integer;
 Begin
   for x:=0 to FFields.Count-1 do
-  if FFields.Items[x].calculated then
-  FFields.items[x].Calculate;
+  if FFields.Items[x].Generated then
+  FFields.items[x].Generate;
 end;
 
 Procedure TQTXDataset.Append;
@@ -893,7 +866,7 @@ Begin
       //Last;
       setState(dsInsert);
       (FFields as IDatasetFieldsAccess).resetValues;
-      UpdateCalculatedFields;
+      UpdateGeneratedFields;
     end else
     raise EW3Dataset.Create(CNT_DATASET_INVALID_STATE);
   end else
@@ -910,7 +883,7 @@ Begin
       setPosition(FCache.Count);
       setState(dsInsert);
       (FFields as IDatasetFieldsAccess).resetValues;
-      UpdateCalculatedFields;
+      UpdateGeneratedFields;
     end else
     raise EW3Dataset.Create(CNT_DATASET_INVALID_STATE);
   end else
@@ -932,7 +905,7 @@ Begin
         setPosition(FCache.length-1);
 
         setState(dsEdit);
-        UpdateCalculatedFields;
+        UpdateGeneratedFields;
       end;
     end else
     raise EW3Dataset.Create(CNT_DATASET_INVALID_STATE);
@@ -1317,12 +1290,12 @@ end;
 // TQTXGUIDField
 //#############################################################################
 
-function TQTXGUIDField.getCalculated:Boolean;
+function TQTXGUIDField.getGenerated:Boolean;
 Begin
   result:=true;
 end;
 
-Procedure TQTXGUIDField.Calculate;
+Procedure TQTXGUIDField.Generate;
 Begin
   inherited setValue(uppercase(TQTXGUID.createGUID));
 end;
@@ -1331,12 +1304,12 @@ end;
 // TQTXAutoIncField
 //#############################################################################
 
-function TQTXAutoIncField.getCalculated:Boolean;
+function TQTXAutoIncField.getGenerated:Boolean;
 Begin
   result:=true;
 end;
 
-Procedure TQTXAutoIncField.Calculate;
+Procedure TQTXAutoIncField.Generate;
 Begin
   inc(FCalc);
   inherited setValue(FCalc);
@@ -1378,11 +1351,11 @@ Begin
   result:=FValue;
 end;
 
-Procedure TQTXDatasetField.Calculate;
+Procedure TQTXDatasetField.Generate;
 Begin
 end;
 
-function TQTXDatasetField.getCalculated:Boolean;
+function TQTXDatasetField.getGenerated:Boolean;
 Begin
   result:=False;
 end;
