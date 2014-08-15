@@ -1,7 +1,29 @@
 unit qtxTransformController;
 
-// Written by Jon Lennart Aasenden
-// Copyright Jon Lennart Aasenden LTD, all rights reserved
+
+//#############################################################################
+//
+//  Unit:       qtxTransformController.pas
+//  Author:     Jon Lennart Aasenden [cipher diaz of quartex]
+//  Copyright:  Jon Lennart Aasenden, all rights reserved
+//
+//  Description:
+//  ============
+//  This unit contains a controller to manage a HTML element (control)
+//  using CSS3 GPU powered effects.
+//
+//  _______           _______  _______ _________ _______
+// (  ___  )|\     /|(  ___  )(  ____ )\__   __/(  ____ \|\     /|
+// | (   ) || )   ( || (   ) || (    )|   ) (   | (    \/( \   / )
+// | |   | || |   | || (___) || (____)|   | |   | (__     \ (_) /
+// | |   | || |   | ||  ___  ||     __)   | |   |  __)     ) _ (
+// | | /\| || |   | || (   ) || (\ (      | |   | (       / ( ) \
+// | (_\ \ || (___) || )   ( || ) \ \__   | |   | (____/\( /   \ )
+// (____\/_)(_______)|/     \||/   \__/   )_(   (_______/|/     \|
+//
+//
+//#############################################################################
+
 
 interface
 
@@ -10,7 +32,14 @@ uses
 
 type
 
-  TQTXTransformOptions = set of (toUsePos,toUseRotX,toUseRotY,toUseRotZ,toUseScale);
+  TQTXTransformOptions = set of
+    (
+    toUsePos,
+    toUseRotX,
+    toUseRotY,
+    toUseRotZ,
+    toUseScale
+    );
 
   TQTXTransformController = Class(TObject)
   private
@@ -65,9 +94,9 @@ type
 
 implementation
 
-{ **************************************************************************** }
-{ TQTXTransformController                                                    }
-{ **************************************************************************** }
+//############################################################################
+// TQTXTransformController
+//############################################################################
 
 Constructor TQTXTransformController.Create(const aHandle:THandle);
 Begin
@@ -92,7 +121,6 @@ Begin
   end else
   Raise EW3Exception.Create('Invalid control handle error');
 end;
-
 
 procedure TQTXTransformController.MoveX(const aValue: Float);
 begin

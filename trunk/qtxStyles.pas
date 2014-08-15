@@ -1,18 +1,27 @@
 unit qtxStyles;
 
+
 //#############################################################################
 //
 //  Unit:       qtxStyles.pas
-//  Author:     Jon Lennart Aasenden
-//  Company:    Jon Lennart Aasenden LTD
-//  Copyright:  Copyright Jon Lennart Aasenden, all rights reserved
+//  Author:     Jon Lennart Aasenden [cipher diaz of quartex]
+//  Copyright:  Jon Lennart Aasenden, all rights reserved
 //
-//  About:      This unit introduces CSS oriented helper classes and
-//              methods.
+//  Description:
+//  ============
+//  This unit introduces CSS oriented helper classes and methods
+//
+//  _______           _______  _______ _________ _______
+// (  ___  )|\     /|(  ___  )(  ____ )\__   __/(  ____ \|\     /|
+// | (   ) || )   ( || (   ) || (    )|   ) (   | (    \/( \   / )
+// | |   | || |   | || (___) || (____)|   | |   | (__     \ (_) /
+// | |   | || |   | ||  ___  ||     __)   | |   |  __)     ) _ (
+// | | /\| || |   | || (   ) || (\ (      | |   | (       / ( ) \
+// | (_\ \ || (___) || )   ( || ) \ \__   | |   | (____/\( /   \ )
+// (____\/_)(_______)|/     \||/   \__/   )_(   (_______/|/     \|
 //
 //
 //#############################################################################
-
 
 
 interface
