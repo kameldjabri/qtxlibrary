@@ -78,15 +78,21 @@ type
     property  toTop:Integer read FToY write FToY;
   End;
 
-  TQTXEffectsHelper = Class helper for TW3CustomControl
+  TQTXEffectsHelper = Class helper for TW3MovableControl
     Procedure fxFadeOut(const Duration:Float);
     Procedure fxFadeIn(const Duration:Float);
     Procedure fxWarpOut(const Duration:Float);
     procedure fxWarpIn(const Duration:Float);
     Procedure fxZoomIn(const Duration:Float);
     Procedure fxZoomOut(const Duration:Float);
+
     Procedure fxMoveTo(const dx,dy:Integer;
-              const Duration:Float);
+              const Duration:Float);overload;
+
+    Procedure fxMoveTo(const dx,dy:Integer;
+              const Duration:Float;
+              const callback:TProcedureRef);overload;
+
     Procedure fxMoveBy(const dx,dy:Integer;
               const Duration:Float);
     Procedure fxMoveUp(const Duration:Float);
@@ -313,6 +319,36 @@ Begin
   mEffect.execute(self);
 end;
 
+Procedure TQTXEffectsHelper.fxMoveTo(const dx,dy:Integer;
+          const Duration:Float;
+          const callback:TProcedureRef);
+var
+  mEffect: TW3CustomAnimation;
+Begin
+  mEffect:=TQTXMoveAnimation.Create;
+  mEffect.duration:=Duration;
+  TQTXMoveAnimation(mEffect).fromX:=self.left;
+  TQTXMoveAnimation(mEffect).fromY:=self.top;
+  TQTXMoveAnimation(mEffect).toX:=dx;
+  TQTXMoveAnimation(mEffect).toY:=dy;
+  TQTXMoveAnimation(mEffect).Timing:=atLinear;
+  mEffect.onAnimationEnds:=Procedure (sender:TObject)
+    Begin
+      self.left:=dx;
+      self.top:=dy;
+
+      if assigned(callBack) then
+      callback();
+
+      w3_callback( Procedure ()
+      Begin
+        TW3CustomAnimation(sender).free;
+      end, 100);
+    end;
+  mEffect.execute(self);
+end;
+
+
 Procedure TQTXEffectsHelper.fxMoveTo(const dx,dy:Integer;const Duration:Float);
 var
   mEffect: TW3CustomAnimation;
@@ -323,7 +359,7 @@ Begin
   TQTXMoveAnimation(mEffect).fromY:=self.top;
   TQTXMoveAnimation(mEffect).toX:=dx;
   TQTXMoveAnimation(mEffect).toY:=dy;
-  TQTXMoveAnimation(mEffect).Timing:=atEaseInOut;
+  TQTXMoveAnimation(mEffect).Timing:=atLinear;
   mEffect.onAnimationEnds:=Procedure (sender:TObject)
     Begin
       self.left:=dx;

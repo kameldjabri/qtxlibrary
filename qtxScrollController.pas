@@ -374,7 +374,7 @@ Begin
   FScroller:=TQTXScrollController.Create(self.Handle);
  
   (* Attach IScroll when DOM element ready *)
-  w3_ExecuteOnElementReady(Handle,
+  QTX_ExecuteOnElementReady(Handle,
     procedure ()
     begin
       FScroller.Attach;
