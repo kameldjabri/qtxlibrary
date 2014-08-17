@@ -42,7 +42,7 @@ begin
 
   FContent.handle.style.background:='transparent';
 
-  QTX_ExecuteOnElementReady(Handle, procedure ()
+  TQTXTools.ExecuteOnElementReady(Handle, procedure ()
     Begin
       Font.Name:='verdana';
       Font.Size:=16;
@@ -112,7 +112,7 @@ Begin
       FContent.handle.style['font']:='22px Verdana';
       FContent.handle.style.background:='transparent';
 
-      mMetrics:=TQTXControlTools.calcTextMetrics(FText,'Verdana',22);
+      mMetrics:=TQTXTools.calcTextMetrics(FText,'Verdana',22);
       FContent.Width:=mMetrics.tmWidth;
       FContent.Height:=mMetrics.tmHeight;
 
@@ -128,8 +128,8 @@ Begin
   inherited;
 
   if assigned(FContent)
-  and qtxutils.QTX_ElementInDOM(FContent.handle)
-  and qtxutils.qtx_elementInDOM(Handle) then
+  and TQTXTools.getElementInDOM(FContent.handle)
+  and TQTXTools.getElementInDOM(Handle) then
   begin
     if not FActive then
     Begin
