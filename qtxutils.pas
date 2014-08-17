@@ -42,11 +42,25 @@ type
     class function CreateGUID:String;
   end;
 
+  TQTXAttrAccess = Class(TObject)
+  private
+    FHandle:  THandle;
+  public
+    Property  Handle:THandle read FHandle;
+
+    function  Exists(aName:String):Boolean;
+    function  Read(aName:String):Variant;
+    procedure Write(aName:String;const aValue:Variant);
+
+    Constructor Create(Const aHandle:THandle);virtual;
+  End;
+
+
   TW3CustomControl = partial class(TW3MovableControl)
   private
-    FCtrlData:  Variant;
+    FAccess:    TQTXAttrAccess;
   public
-    Property    ControlData:Variant read FCtrlData write FCtrlData;
+    Property    ElementData:TQTXAttrAccess read FAccess;
     Constructor Create(AOwner:TW3Component);override;
     Destructor  Destroy;Override;
   end;
@@ -79,16 +93,52 @@ implementation
 // TW3CustomControl
 //############################################################################
 
+Constructor TQTXAttrAccess.Create(Const aHandle:THandle);
+Begin
+  inherited Create;
+  FHandle:=aHandle;
+end;
+
+function  TQTXAttrAccess.Exists(aName:String):Boolean;
+var
+  mName:  String;
+begin
+  mName:=lowercase('data-' + aName);
+  result:=FHandle.hasAttribute(mName);
+end;
+
+function  TQTXAttrAccess.Read(aName:String):Variant;
+var
+  mName:  String;
+begin
+  mName:=lowercase('data-' + aName);
+  if FHandle.hasAttribute(mName) then
+  Result := FHandle.getAttribute(mName) else
+  result:=null;
+end;
+
+procedure TQTXAttrAccess.Write(aName:String;const aValue:Variant);
+var
+  mName:  String;
+begin
+  mName:=lowercase('data-' + aName);
+  FHandle.setAttribute(mName, aValue);
+end;
+
+//############################################################################
+// TW3CustomControl
+//############################################################################
+
 Constructor TW3CustomControl.Create(AOwner:TW3Component);
 Begin
-  FCtrlData:=TVariant.CreateObject;
   inherited Create(AOwner);
+  FAccess:=TQTXAttrAccess.Create(self.Handle);
 end;
 
 Destructor TW3CustomControl.Destroy;
 Begin
+  FAccess.free;
   inherited;
-  FCtrlData:=null;
 end;
 
 //############################################################################
