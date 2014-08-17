@@ -27,7 +27,7 @@ unit qtxutils;
 interface
 
 uses 
-  W3System;
+  W3System, w3Components;
 
 type
 
@@ -42,37 +42,54 @@ type
     class function CreateGUID:String;
   end;
 
-  TQTXControlTools = Class
+  TW3CustomControl = partial class(TW3MovableControl)
+  private
+    FCtrlData:  Variant;
+  public
+    Property    ControlData:Variant read FCtrlData write FCtrlData;
+    Constructor Create(AOwner:TW3Component);override;
+    Destructor  Destroy;Override;
+  end;
+
+  TQTXTools = Class
   public
     class function calcTextMetrics(const aText:String;
-          const aFontName:String;const aFontSize:Integer):TQTXTextMetric;
+          const aFontName:String;
+          const aFontSize:Integer):TQTXTextMetric;
 
     class function calcTextAverage(const aFontName:String;
           const aFontSize:Integer):TQTXTextMetric;
 
-          (*
     class function getElementRootAncestor(const aElement:THandle):THandle;
     class function getElementInDOM(const aElement:THandle):Boolean;
-    class function ExecuteOnElementReady(const aElement:THandle;
+    class procedure ExecuteOnElementReady(const aElement:THandle;
           const aFunc:TProcedureRef);
-    class procedure RepeatExecute(const aFunc:TProcedureRef;
+
+    class procedure ExecuteRepeat(const aFunc:TProcedureRef;
           const aCount:Integer;
-          const aDelay:Integer); *)
+          const aDelay:Integer);
+
+    class function  getHandleReady(const aHandle:THandle):Boolean;
   end;
 
-(* Helper functions *)
-function  QTX_FindElementRootAncestor(const aElement:THandle):THandle;
-function  QTX_ElementInDOM(const aElement:THandle):Boolean;
-procedure QTX_ExecuteOnElementReady(const aElement:THandle;
-          Const aFunc:TProcedureRef);
-
-Procedure QTX_ExecuteRepeat(const aFunc:TProcedureRef;
-          const Count:Integer;const aDelayMS:Integer);
-
-function  QTX_HandleReady(const aHandle:THandle):Boolean;
 
 implementation
 
+//############################################################################
+// TW3CustomControl
+//############################################################################
+
+Constructor TW3CustomControl.Create(AOwner:TW3Component);
+Begin
+  FCtrlData:=TVariant.CreateObject;
+  inherited Create(AOwner);
+end;
+
+Destructor TW3CustomControl.Destroy;
+Begin
+  inherited;
+  FCtrlData:=null;
+end;
 
 //############################################################################
 // TQTXTextMetric
@@ -84,16 +101,86 @@ Begin
 end;
 
 //############################################################################
-// TQTXControlTools
+// TQTXTools
 //############################################################################
 
-class function TQTXControlTools.calcTextAverage(const aFontName:String;
-      const aFontSize:Integer):TQTXTextMetric;
+class function TQTXTools.getHandleReady(const aHandle:THandle):Boolean;
 Begin
-  result:=calcTextMetrics('gWÅzj§',afontName,aFontSize);
+  if (aHandle) then
+  result:=getElementInDOM(aHandle);
 end;
 
-class function TQTXControlTools.calcTextMetrics(const aText:String;
+class function TQTXTools.getElementRootAncestor(const aElement:THandle):THandle;
+var
+  mAncestor:  THandle;
+Begin
+  if (aElement) then
+  Begin
+    mAncestor:=aElement;
+    while (mAncestor.parentNode) do
+    mAncestor:=mAncestor.parentNode;
+    result:=mAncestor;
+  end;
+end;
+
+class function TQTXTools.getElementInDOM(const aElement:THandle):Boolean;
+var
+  mRef: THandle;
+begin
+  if (aElement) then
+  Begin
+    (* Check that top-level ancestor is window->document->body *)
+    mRef:=getElementRootAncestor(aElement);
+    result:=(mRef.body);
+  end;
+end;
+
+class procedure TQTXTools.ExecuteOnElementReady(const aElement:THandle;
+      const aFunc:TProcedureRef);
+Begin
+  if (aElement) then
+  begin
+    if assigned(aFunc) then
+    Begin
+      if TQTXTools.getElementInDOM(aElement) then
+      aFunc() else
+      w3_callback(
+        procedure ()
+        begin
+          TQTXTools.ExecuteOnElementReady(aElement,aFunc);
+        end,
+        100);
+    end;
+  end;
+end;
+
+class procedure TQTXTools.ExecuteRepeat(const aFunc:TProcedureRef;
+      const aCount:Integer;
+      const aDelay:Integer);
+Begin
+  if assigned(aFunc) then
+  begin
+    if aCount>0 then
+    begin
+      aFunc();
+      if aCount>1 then
+      w3_callback(
+        procedure ()
+        begin
+          ExecuteRepeat(aFunc,aCount-1,aDelay);
+        end,
+        aDelay);
+    end;
+  end;
+end;
+
+class function TQTXTools.calcTextAverage(const aFontName:String;
+      const aFontSize:Integer):TQTXTextMetric;
+Begin
+  result:=calcTextMetrics('mmMMMwwWWW',afontName,aFontSize);
+end;
+
+class function TQTXTools.calcTextMetrics(const aText:String;
   const aFontName:String;const aFontSize:Integer):TQTXTextMetric;
 var
   mHandle:  THandle;
@@ -136,79 +223,6 @@ Begin
 
   asm
     document.body.removeChild(@mHandle);
-  end;
-end;
-
-//############################################################################
-// QTX UTIL METHODS
-//############################################################################
-
-function  QTX_HandleReady(const aHandle:THandle):Boolean;
-Begin
-  if (aHandle) then
-  result:=QTX_ElementInDOM(aHandle);
-end;
-
-function QTX_FindElementRootAncestor(const aElement:THandle):THandle;
-var
-  mAncestor:  THandle;
-Begin
-  if (aElement) then
-  Begin
-    mAncestor:=aElement;
-    while (mAncestor.parentNode) do
-    mAncestor:=mAncestor.parentNode;
-    result:=mAncestor;
-  end;
-end;
-
-function QTX_ElementInDOM(const aElement:THandle):Boolean;
-var
-  mRef: THandle;
-begin
-  if (aElement) then
-  Begin
-    (* Check that top-level ancestor is window->document->body *)
-    mRef:=QTX_FindElementRootAncestor(aElement);
-    result:=(mRef.body);
-  end;
-end;
-
-procedure QTX_ExecuteOnElementReady(const aElement:THandle;
-          Const aFunc:TProcedureRef);
-Begin
-  if (aElement) then
-  begin
-    if assigned(aFunc) then
-    Begin
-      if QTX_ElementInDOM(aElement) then
-      aFunc() else
-      w3_callback(
-        procedure ()
-        begin
-          QTX_ExecuteOnElementReady(aElement,aFunc);
-        end,
-        100);
-    end;
-  end;
-end;
-
-Procedure QTX_ExecuteRepeat(const aFunc:TProcedureRef;
-          const Count:Integer;const aDelayMS:Integer);
-Begin
-  if assigned(aFunc) then
-  begin
-    if Count>0 then
-    begin
-      aFunc();
-      if Count>1 then
-      w3_callback(
-        procedure ()
-        begin
-          QTX_ExecuteRepeat(aFunc,Count-1,aDelayMS);
-        end,
-        aDelayMS);
-    end;
   end;
 end;
 
