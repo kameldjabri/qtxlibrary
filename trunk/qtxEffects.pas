@@ -41,12 +41,6 @@ uses
 
 type
 
-  TQTXAnimInfo = Record
-    aiOriginalPos:  TRect;    //original position/size of element
-    aiScaled:       Boolean;  //scale effect applied?
-  End;
-
-
   TQTXMoveAnimation = class(TW3TransitionAnimation)
   private
     FFromX: Integer;
@@ -114,16 +108,9 @@ type
 
     function  fxBusy:Boolean;
     Procedure fxSetBusy(const aValue:Boolean);
-    function  fxGetStorage:Variant;
-    Procedure fxSetStorage(aValue:Variant);
-
-
   End;
 
 implementation
-
-var
-_Busy:  Array of THandle;
 
 //############################################################################
 // TQTXMoveAnimation
@@ -167,69 +154,30 @@ end;
 //############################################################################
 
 function TQTXEffectsHelper.fxBusy:Boolean;
-const
-  CNT_ATTRIB  = 'data-fxBusy';
 Begin
-  if handle.hasAttribute(CNT_ATTRIB) then
-  result:=StrToBool( w3system.w3_getAttrib(handle,CNT_ATTRIB) ) else
-  w3system.w3_setAttrib(Handle,CNT_ATTRIB,false);
-  //result:=_busy.indexOf(self.handle)>=0;
+  if self.elementData.exists('fxBusy') then
+  result:=StrToBool( self.ElementData.read('fxBusy') ) else
+  self.elementData.write('fxBusy',false);
 end;
 
 Procedure TQTXEffectsHelper.fxSetBusy(const aValue:Boolean);
-const
-  CNT_ATTRIB  = 'data-fxBusy';
 Begin
-  w3system.w3_setAttrib(Handle,CNT_ATTRIB,BoolToStr(aValue));
-end;
-
-function TQTXEffectsHelper.fxGetStorage:Variant;
-const
-  CNT_ATTRIB  = 'data-fxInfo';
-var
-  mText:  String;
-Begin
-  if handle.hasAttribute(CNT_ATTRIB) then
-  Begin
-    mText:=w3system.w3_getAttribAsStr(handle,CNT_ATTRIB);
-    asm
-      @result = JSON.parse(@mText);
-    end;
-  end else
-  Begin
-    result:=TVariant.CreateObject;
-    result.pos:=TVariant.CreateObject;
-  end;
-end;
-
-Procedure TQTXEffectsHelper.fxSetStorage(aValue:Variant);
-const
-  CNT_ATTRIB  = 'data-fxInfo';
-var
-  mText:  String;
-Begin
-  if not (aValue) then
-  Begin
-    aValue:=TVariant.CreateObject;
-    aValue.pos:=TVariant.CreateObject;
-  end;
-
-  asm
-    @mText = JSON.stringify(@aValue);
-  end;
-  w3system.w3_setAttrib(handle,CNT_ATTRIB,mText);
+  self.elementdata.write('fxBusy',BoolToStr(aValue));
 end;
 
 Procedure TQTXEffectsHelper.fxAbort;
 Begin
   if fxBusy then
   begin
-    fxSetBusy(False);
-    Handle.style.webkitAnimationPlayState:='stop';
-    Handle.style.removeProperty("-webkit-animation");
-    Handle.style.removeProperty("-webkit-animation-fill-mode");
-    Handle.style.removeProperty("animation");
-    Handle.style.removeProperty("animation-fill-mode");
+    try
+      Handle.style.webkitAnimationPlayState:='stop';
+      Handle.style.removeProperty("-webkit-animation");
+      Handle.style.removeProperty("-webkit-animation-fill-mode");
+      Handle.style.removeProperty("animation");
+      Handle.style.removeProperty("animation-fill-mode");
+    finally
+      fxSetBusy(False);
+    end;
   end;
 end;
 
@@ -243,15 +191,6 @@ Begin
   begin
     (* Mark element as managed *)
     fxsetBusy(True);
-
-    (* keep original position and size *)
-    mData:=fxGetStorage;
-    mData.pos.applied:=True;
-    mData.pos.left:=self.left;
-    mData.pos.top:=self.top;
-    mData.pos.width:=self.width;
-    mData.pos.height:=self.Height;
-    fxSetStorage(mData);
 
     mEffect:=TQTXSizeAnimation.Create;
     mEffect.duration:=Duration;
@@ -279,14 +218,18 @@ Begin
 
         w3_callback( Procedure ()
         Begin
-          _busy.remove(self.handle);
+
           TW3CustomAnimation(sender).free;
           fxSetBusy(False);
         end, 25);
       end;
-    _busy.push(self.handle);
     mEffect.execute(self);
-  end;
+  end else
+  w3_callback( procedure ()
+    Begin
+      fxScaleUp(afactor,duration);
+    end,
+    100);
 end;
 
 procedure TQTXEffectsHelper.fxScaleDown(aFactor:Integer;
@@ -321,14 +264,17 @@ Begin
           TQTXSizeAnimation(mEffect).toHeight);
         w3_callback( Procedure ()
         Begin
-          _busy.remove(self.handle);
           TW3CustomAnimation(sender).free;
           fxSetBusy(False);
         end, 25);
       end;
-    _busy.push(self.handle);
     mEffect.execute(self);
-  end;
+  end else
+  w3_callback( procedure ()
+    Begin
+      fxScaleDown(aFactor,duration);
+    end,
+    100);
 end;
 
 Procedure TQTXEffectsHelper.fxSizeTo(const aWidth,aHeight:Integer;
@@ -336,83 +282,106 @@ Procedure TQTXEffectsHelper.fxSizeTo(const aWidth,aHeight:Integer;
 var
   mEffect: TW3CustomAnimation;
 Begin
+  if not fxBusy then
+  Begin
+    fxSetBusy(true);
+    mEffect:=TQTXSizeAnimation.Create;
+    mEffect.duration:=Duration;
 
-  mEffect:=TQTXSizeAnimation.Create;
-  mEffect.duration:=Duration;
+    TQTXSizeAnimation(mEffect).fromLeft:=self.Left;
+    TQTXSizeAnimation(mEffect).fromTop:=self.top;
+    TQTXSizeAnimation(mEffect).fromWidth:=self.width;
+    TQTXSizeAnimation(mEffect).fromHeight:=self.Height;
 
-  TQTXSizeAnimation(mEffect).fromLeft:=self.Left;
-  TQTXSizeAnimation(mEffect).fromTop:=self.top;
-  TQTXSizeAnimation(mEffect).fromWidth:=self.width;
-  TQTXSizeAnimation(mEffect).fromHeight:=self.Height;
+    TQTXSizeAnimation(mEffect).toLeft:=self.left;
+    TQTXSizeAnimation(mEffect).toTop:=self.top;
+    TQTXSizeAnimation(mEffect).toWidth:=aWidth;
+    TQTXSizeAnimation(mEffect).toHeight:=aHeight;
 
-  TQTXSizeAnimation(mEffect).toLeft:=self.left;
-  TQTXSizeAnimation(mEffect).toTop:=self.top;
-  TQTXSizeAnimation(mEffect).toWidth:=aWidth;
-  TQTXSizeAnimation(mEffect).toHeight:=aHeight;
-
-  TQTXSizeAnimation(mEffect).Timing:=atEaseInOut;
-  mEffect.onAnimationEnds:=Procedure (sender:TObject)
-    Begin
-      setbounds(TQTXSizeAnimation(mEffect).toLeft,
-        TQTXSizeAnimation(mEffect).toTop,
-        TQTXSizeAnimation(mEffect).toWidth,
-        TQTXSizeAnimation(mEffect).toHeight);
-      w3_callback( Procedure ()
+    TQTXSizeAnimation(mEffect).Timing:=atEaseInOut;
+    mEffect.onAnimationEnds:=Procedure (sender:TObject)
       Begin
-        _busy.remove(self.handle);
-        TW3CustomAnimation(sender).free;
-      end, 10);
-    end;
-  _busy.push(self.handle);
-  mEffect.execute(self);
+        setbounds(TQTXSizeAnimation(mEffect).toLeft,
+          TQTXSizeAnimation(mEffect).toTop,
+          TQTXSizeAnimation(mEffect).toWidth,
+          TQTXSizeAnimation(mEffect).toHeight);
+        w3_callback( Procedure ()
+        Begin
+          TW3CustomAnimation(sender).free;
+          fxSetBusy(False);
+        end, 10);
+      end;
+    mEffect.execute(self);
+  end else
+  w3_callback( procedure ()
+    Begin
+      fxSizeTo(aWidth,aHeight,duration);
+    end,
+    100);
 end;
 
 Procedure TQTXEffectsHelper.fxMoveUp(const Duration:Float);
 var
   mEffect: TW3CustomAnimation;
 Begin
-  mEffect:=TQTXMoveAnimation.Create;
-  mEffect.duration:=Duration;
-  TQTXMoveAnimation(mEffect).fromX:=self.left;
-  TQTXMoveAnimation(mEffect).fromY:=self.top;
-  TQTXMoveAnimation(mEffect).toX:=self.left;
-  TQTXMoveAnimation(mEffect).toY:=0;
-  TQTXMoveAnimation(mEffect).Timing:=atEaseInOut;
-  mEffect.onAnimationEnds:=Procedure (sender:TObject)
-    Begin
-      self.top:=0;
-      w3_callback( Procedure ()
+  if not fxBusy then
+  begin
+    fxSetBusy(true);
+    mEffect:=TQTXMoveAnimation.Create;
+    mEffect.duration:=Duration;
+    TQTXMoveAnimation(mEffect).fromX:=self.left;
+    TQTXMoveAnimation(mEffect).fromY:=self.top;
+    TQTXMoveAnimation(mEffect).toX:=self.left;
+    TQTXMoveAnimation(mEffect).toY:=0;
+    TQTXMoveAnimation(mEffect).Timing:=atEaseInOut;
+    mEffect.onAnimationEnds:=Procedure (sender:TObject)
       Begin
-        _busy.remove(self.handle);
-        TW3CustomAnimation(sender).free;
-      end, 10);
-    end;
-  _busy.push(self.handle);
-  mEffect.execute(self);
+        self.top:=0;
+        w3_callback( Procedure ()
+        Begin
+          TW3CustomAnimation(sender).free;
+          fxSetBusy(False);
+        end, 10);
+      end;
+    mEffect.execute(self);
+  end else
+  w3_callback( procedure ()
+    Begin
+      fxMoveUp(duration);
+    end,
+    100);
 end;
 
 Procedure TQTXEffectsHelper.fxMoveDown(const Duration:Float);
 var
   mEffect: TW3CustomAnimation;
 Begin
-  mEffect:=TQTXMoveAnimation.Create;
-  mEffect.duration:=Duration;
-  TQTXMoveAnimation(mEffect).fromX:=self.left;
-  TQTXMoveAnimation(mEffect).fromY:=self.top;
-  TQTXMoveAnimation(mEffect).toX:=self.left;
-  TQTXMoveAnimation(mEffect).toY:=TW3MovableControl(self.Parent).Height-Self.Height;
-  TQTXMoveAnimation(mEffect).Timing:=atEaseInOut;
-  mEffect.onAnimationEnds:=Procedure (sender:TObject)
-    Begin
-      self.top:=TW3MovableControl(self.Parent).Height-Self.Height;;
-      w3_callback( Procedure ()
+  if not fxBusy then
+  Begin
+    fxSetBusy(True);
+    mEffect:=TQTXMoveAnimation.Create;
+    mEffect.duration:=Duration;
+    TQTXMoveAnimation(mEffect).fromX:=self.left;
+    TQTXMoveAnimation(mEffect).fromY:=self.top;
+    TQTXMoveAnimation(mEffect).toX:=self.left;
+    TQTXMoveAnimation(mEffect).toY:=TW3MovableControl(self.Parent).Height-Self.Height;
+    TQTXMoveAnimation(mEffect).Timing:=atEaseInOut;
+    mEffect.onAnimationEnds:=Procedure (sender:TObject)
       Begin
-        _busy.remove(self.handle);
-        TW3CustomAnimation(sender).free;
-      end, 10);
-    end;
-  _busy.push(self.handle);
-  mEffect.execute(self);
+        self.top:=TW3MovableControl(self.Parent).Height-Self.Height;;
+        w3_callback( Procedure ()
+        Begin
+          TW3CustomAnimation(sender).free;
+          fxSetBusy(False);
+        end, 10);
+      end;
+    mEffect.execute(self);
+  end else
+  w3_callback( procedure ()
+    Begin
+      fxMoveDown(duration);
+    end,
+    100);
 end;
 
 Procedure TQTXEffectsHelper.fxMoveBy(const dx,dy:Integer;
@@ -420,25 +389,33 @@ Procedure TQTXEffectsHelper.fxMoveBy(const dx,dy:Integer;
 var
   mEffect: TW3CustomAnimation;
 Begin
-  mEffect:=TQTXMoveAnimation.Create;
-  mEffect.duration:=Duration;
-  TQTXMoveAnimation(mEffect).fromX:=self.left;
-  TQTXMoveAnimation(mEffect).fromY:=self.top;
-  TQTXMoveAnimation(mEffect).toX:=self.left + dx;
-  TQTXMoveAnimation(mEffect).toY:=self.top + dy;
-  TQTXMoveAnimation(mEffect).Timing:=atEaseInOut;
-  mEffect.onAnimationEnds:=Procedure (sender:TObject)
-    Begin
-      self.left:=dx;
-      self.top:=dy;
-      w3_callback( Procedure ()
+  if not fxBusy then
+  begin
+    fxSetBusy(True);
+    mEffect:=TQTXMoveAnimation.Create;
+    mEffect.duration:=Duration;
+    TQTXMoveAnimation(mEffect).fromX:=self.left;
+    TQTXMoveAnimation(mEffect).fromY:=self.top;
+    TQTXMoveAnimation(mEffect).toX:=self.left + dx;
+    TQTXMoveAnimation(mEffect).toY:=self.top + dy;
+    TQTXMoveAnimation(mEffect).Timing:=atEaseInOut;
+    mEffect.onAnimationEnds:=Procedure (sender:TObject)
       Begin
-        _busy.remove(self.handle);
-        TW3CustomAnimation(sender).free;
-      end, 10);
-    end;
-  _busy.push(self.handle);
-  mEffect.execute(self);
+        self.left:=dx;
+        self.top:=dy;
+        w3_callback( Procedure ()
+        Begin
+          TW3CustomAnimation(sender).free;
+          fxSetBusy(false);
+        end, 10);
+      end;
+    mEffect.execute(self);
+  end else
+  w3_callback( procedure ()
+    Begin
+      fxMoveBy(dx,dy,duration);
+    end,
+    100);
 end;
 
 Procedure TQTXEffectsHelper.fxMoveTo(const dx,dy:Integer;
@@ -447,29 +424,37 @@ Procedure TQTXEffectsHelper.fxMoveTo(const dx,dy:Integer;
 var
   mEffect: TW3CustomAnimation;
 Begin
-  mEffect:=TQTXMoveAnimation.Create;
-  mEffect.duration:=Duration;
-  TQTXMoveAnimation(mEffect).fromX:=self.left;
-  TQTXMoveAnimation(mEffect).fromY:=self.top;
-  TQTXMoveAnimation(mEffect).toX:=dx;
-  TQTXMoveAnimation(mEffect).toY:=dy;
-  TQTXMoveAnimation(mEffect).Timing:=atLinear;
-  mEffect.onAnimationEnds:=Procedure (sender:TObject)
-    Begin
-      self.left:=dx;
-      self.top:=dy;
-
-      if assigned(callBack) then
-      callback();
-
-      w3_callback( Procedure ()
+  if not fxBusy then
+  begin
+    fxSetBusy(True);
+    mEffect:=TQTXMoveAnimation.Create;
+    mEffect.duration:=Duration;
+    TQTXMoveAnimation(mEffect).fromX:=self.left;
+    TQTXMoveAnimation(mEffect).fromY:=self.top;
+    TQTXMoveAnimation(mEffect).toX:=dx;
+    TQTXMoveAnimation(mEffect).toY:=dy;
+    TQTXMoveAnimation(mEffect).Timing:=atLinear;
+    mEffect.onAnimationEnds:=Procedure (sender:TObject)
       Begin
-        _busy.remove(self.handle);
-        TW3CustomAnimation(sender).free;
-      end, 10);
-    end;
-  _busy.push(self.handle);
-  mEffect.execute(self);
+        self.left:=dx;
+        self.top:=dy;
+
+        if assigned(callBack) then
+        callback();
+
+        w3_callback( Procedure ()
+        Begin
+          TW3CustomAnimation(sender).free;
+          fxSetBusy(false);
+        end, 10);
+      end;
+    mEffect.execute(self);
+  end else
+  w3_callback( procedure ()
+    Begin
+      fxMoveTo(dx,dy,duration,callback);
+    end,
+    100);
 end;
 
 
@@ -477,143 +462,199 @@ Procedure TQTXEffectsHelper.fxMoveTo(const dx,dy:Integer;const Duration:Float);
 var
   mEffect: TW3CustomAnimation;
 Begin
-  mEffect:=TQTXMoveAnimation.Create;
-  mEffect.duration:=Duration;
-  TQTXMoveAnimation(mEffect).fromX:=self.left;
-  TQTXMoveAnimation(mEffect).fromY:=self.top;
-  TQTXMoveAnimation(mEffect).toX:=dx;
-  TQTXMoveAnimation(mEffect).toY:=dy;
-  TQTXMoveAnimation(mEffect).Timing:=atLinear;
-  mEffect.onAnimationEnds:=Procedure (sender:TObject)
-    Begin
-      self.left:=dx;
-      self.top:=dy;
-      w3_callback( Procedure ()
+  if not fxBusy then
+  Begin
+    fxSetBusy(true);
+    mEffect:=TQTXMoveAnimation.Create;
+    mEffect.duration:=Duration;
+    TQTXMoveAnimation(mEffect).fromX:=self.left;
+    TQTXMoveAnimation(mEffect).fromY:=self.top;
+    TQTXMoveAnimation(mEffect).toX:=dx;
+    TQTXMoveAnimation(mEffect).toY:=dy;
+    TQTXMoveAnimation(mEffect).Timing:=atLinear;
+    mEffect.onAnimationEnds:=Procedure (sender:TObject)
       Begin
-        _busy.remove(self.handle);
-        TW3CustomAnimation(sender).free;
-      end, 10);
-    end;
-  _busy.push(self.handle);
-  mEffect.execute(self);
+        self.left:=dx;
+        self.top:=dy;
+        w3_callback( Procedure ()
+        Begin
+          TW3CustomAnimation(sender).free;
+          fxSetBusy(false);
+        end, 10);
+      end;
+    mEffect.execute(self);
+  end else
+  w3_callback( procedure ()
+    Begin
+      fxMoveTo(dx,dy,duration);
+    end,
+    100);
 end;
 
 Procedure TQTXEffectsHelper.fxZoomIn(const Duration:Float);
 var
   mEffect: TW3CustomAnimation;
 Begin
-  mEffect:=TW3ZoomInTransition.Create;
-  mEffect.Duration:=Duration;
-  mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
+  if not fxBusy then
+  Begin
+    fxSetBusy(true);
+    mEffect:=TW3ZoomInTransition.Create;
+    mEffect.Duration:=Duration;
+    mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
+      Begin
+        w3_callback( Procedure ()
+          Begin
+            TW3CustomAnimation(sender).free;
+            fxSetBusy(False);
+          end, 10);
+      end;
+    self.Visible:=true;
+    mEffect.Execute(self);
+  end else
+  w3_callback( procedure ()
     Begin
-      w3_callback( Procedure ()
-        Begin
-          _busy.remove(self.handle);
-          TW3CustomAnimation(sender).free;
-        end, 10);
-    end;
-  _busy.push(self.handle);
-  self.Visible:=true;
-  mEffect.Execute(self);
+      fxZoomIn(duration);
+    end,
+    100);
 end;
 
 Procedure TQTXEffectsHelper.fxZoomOut(const Duration:Float);
 var
   mEffect: TW3CustomAnimation;
 Begin
-  mEffect:=TW3ZoomOutTransition.Create;
-  mEffect.Duration:=Duration;
-  mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
+  if not fxBusy then
+  Begin
+    fxSetBusy(True);
+    mEffect:=TW3ZoomOutTransition.Create;
+    mEffect.Duration:=Duration;
+    mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
+      Begin
+        self.Visible:=false;
+        w3_callback( Procedure ()
+          Begin
+            TW3CustomAnimation(sender).free;
+            fxSetBusy(false);
+          end, 10);
+      end;
+    mEffect.Execute(self);
+  end else
+  w3_callback( procedure ()
     Begin
-      self.Visible:=false;
-      w3_callback( Procedure ()
-        Begin
-          _busy.remove(self.handle);
-          TW3CustomAnimation(sender).free;
-        end, 10);
-    end;
-  _busy.push(self.handle);
-  mEffect.Execute(self);
+      fxZoomOut(duration);
+    end,
+    100);
 end;
 
 Procedure TQTXEffectsHelper.fxWarpOut(const Duration:Float);
 var
   mEffect: TW3CustomAnimation;
 Begin
-  mEffect:=TW3WarpOutTransition.Create;
-  mEffect.Duration:=Duration;
-  mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
+  if not fxBusy then
+  begin
+    fxSetBusy(true);
+    mEffect:=TW3WarpOutTransition.Create;
+    mEffect.Duration:=Duration;
+    mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
+      Begin
+        self.Visible:=false;
+        w3_callback( Procedure ()
+          Begin
+            TW3CustomAnimation(sender).free;
+            fxSetBusy(false);
+          end, 10);
+      end;
+    mEffect.Execute(self);
+  end else
+  w3_callback( procedure ()
     Begin
-      self.Visible:=false;
-      w3_callback( Procedure ()
-        Begin
-          _busy.remove(self.handle);
-          TW3CustomAnimation(sender).free;
-        end, 10);
-    end;
-  _busy.push(self.handle);
-  mEffect.Execute(self);
+      fxWarpOut(duration);
+    end,
+    100);
 end;
 
 procedure TQTXEffectsHelper.fxWarpIn(const Duration:Float);
 var
   mEffect: TW3CustomAnimation;
 Begin
-  mEffect:=TW3WarpInTransition.Create;
-  mEffect.Duration:=Duration;
-  mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
+  if not fxBusy then
+  Begin
+    fxSetBusy(true);
+    mEffect:=TW3WarpInTransition.Create;
+    mEffect.Duration:=Duration;
+    mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
+      Begin
+        w3_callback( Procedure ()
+          Begin
+            TW3CustomAnimation(sender).free;
+            fxSetBusy(False);
+          end, 10);
+      end;
+    self.Visible:=true;
+    mEffect.Execute(self);
+  end else
+  w3_callback( procedure ()
     Begin
-      w3_callback( Procedure ()
-        Begin
-          _busy.remove(self.handle);
-          TW3CustomAnimation(sender).free;
-        end, 10);
-    end;
-  _busy.push(self.handle);
-  self.Visible:=true;
-  mEffect.Execute(self);
+      fxWarpIn(duration);
+    end,
+    100);
 end;
 
 Procedure TQTXEffectsHelper.fxFadeIn(const Duration:Float);
 var
   mEffect: TW3CustomAnimation;
 Begin
-  mEffect:=TW3FadeSlideTransition.Create;
-  TW3FadeSlideTransition(mEffect).fromOpacity:=0.0;
-  TW3FadeSlideTransition(mEffect).toOpacity:=1.0;
-  mEffect.Duration:=Duration;
-  mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
+  if not fxBusy then
+  begin
+    fxSetBusy(true);
+    mEffect:=TW3FadeSlideTransition.Create;
+    TW3FadeSlideTransition(mEffect).fromOpacity:=0.0;
+    TW3FadeSlideTransition(mEffect).toOpacity:=1.0;
+    mEffect.Duration:=Duration;
+    mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
+      Begin
+        w3_callback( Procedure ()
+          Begin
+            TW3CustomAnimation(sender).free;
+            fxSetBusy(False);
+          end, 10);
+      end;
+    self.Visible:=true;
+    mEffect.Execute(self);
+  end else
+  w3_callback( procedure ()
     Begin
-      w3_callback( Procedure ()
-        Begin
-          _busy.remove(self.handle);
-          TW3CustomAnimation(sender).free;
-        end, 10);
-    end;
-  _busy.push(self.handle);
-  self.Visible:=true;
-  mEffect.Execute(self);
+      fxFadeIn(duration);
+    end,
+    100);
 end;
 
 Procedure TQTXEffectsHelper.fxFadeOut(const Duration:Float);
 var
   mEffect: TW3CustomAnimation;
 Begin
-  mEffect:=TW3FadeSlideTransition.Create;
-  TW3FadeSlideTransition(mEffect).fromOpacity:=1.0;
-  TW3FadeSlideTransition(mEffect).toOpacity:=0.0;
-  mEffect.Duration:=Duration;
-  mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
+  if not fxBusy then
+  begin
+    fxSetBusy(true);
+    mEffect:=TW3FadeSlideTransition.Create;
+    TW3FadeSlideTransition(mEffect).fromOpacity:=1.0;
+    TW3FadeSlideTransition(mEffect).toOpacity:=0.0;
+    mEffect.Duration:=Duration;
+    mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
+      Begin
+        self.Visible:=False;
+        w3_callback( Procedure ()
+          Begin
+            TW3CustomAnimation(sender).free;
+            fxSetBusy(False);
+          end, 10);
+      end;
+    mEffect.Execute(self);
+  end else
+  w3_callback( procedure ()
     Begin
-      self.Visible:=False;
-      w3_callback( Procedure ()
-        Begin
-          _busy.remove(self.handle);
-          TW3CustomAnimation(sender).free;
-        end, 10);
-    end;
-  _busy.push(self.handle);
-  mEffect.Execute(self);
+      fxFadeOut(duration);
+    end,
+    100);
 end;
 
 
