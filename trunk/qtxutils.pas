@@ -55,7 +55,6 @@ type
     Constructor Create(Const aHandle:THandle);virtual;
   End;
 
-
   TW3CustomControl = partial class(TW3MovableControl)
   private
     FAccess:    TQTXAttrAccess;
