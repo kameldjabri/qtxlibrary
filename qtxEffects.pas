@@ -39,6 +39,10 @@ uses
   w3System, w3Components, w3Effects,
   qtxutils;
 
+const
+CNT_RELEASE_DELAY = 10;
+CNT_CACHE_DELAY   = 50;
+
 type
 
   TQTXMoveAnimation = class(TW3TransitionAnimation)
@@ -80,27 +84,51 @@ type
   End;
 
   TQTXEffectsHelper = Class helper for TW3CustomControl
-    Procedure fxFadeOut(const Duration:Float);
-    Procedure fxFadeIn(const Duration:Float);
-    Procedure fxWarpOut(const Duration:Float);
-    procedure fxWarpIn(const Duration:Float);
-    Procedure fxZoomIn(const Duration:Float);
-    Procedure fxZoomOut(const Duration:Float);
+    Procedure fxFadeOut(const Duration:Float);overload;
+    Procedure fxFadeOut(const Duration:Float;
+              const OnFinished:TProcedureRef);overload;
+
+    Procedure fxFadeIn(const Duration:Float);overload;
+    Procedure fxFadeIn(const Duration:Float;
+              const OnFinished:TProcedureRef);overload;
+
+    Procedure fxWarpOut(const Duration:Float);overload;
+    Procedure fxWarpOut(const Duration:Float;
+              const OnFinished:TProcedureRef);overload;
+
+    procedure fxWarpIn(const Duration:Float);overload;
+    procedure fxWarpIn(const Duration:Float;
+              const OnFinished:TProcedureRef);overload;
+
+    Procedure fxZoomIn(const Duration:Float);overload;
+    Procedure fxZoomIn(const Duration:Float;
+              const OnFinished:TProcedureRef);overload;
+
+    Procedure fxZoomOut(const Duration:Float);overload;
+    Procedure fxZoomOut(const Duration:Float;
+              const OnFinished:TProcedureRef);overload;
 
     Procedure fxMoveTo(const dx,dy:Integer;
               const Duration:Float);overload;
 
     Procedure fxMoveTo(const dx,dy:Integer;
               const Duration:Float;
-              const callback:TProcedureRef);overload;
+              const OnFinished:TProcedureRef);overload;
 
     Procedure fxMoveBy(const dx,dy:Integer;
-              const Duration:Float);
+              const Duration:Float);overload;
+
+    Procedure fxMoveBy(const dx,dy:Integer;
+              const Duration:Float;
+              const OnFinished:TProcedureRef);overload;
+
+
     Procedure fxMoveUp(const Duration:Float);
     Procedure fxMoveDown(const Duration:Float);
 
     Procedure fxSizeTo(const aWidth,aHeight:Integer;
               const Duration:Float);
+
     procedure fxScaleDown(aFactor:Integer;const Duration:Float);
     Procedure fxScaleUp(aFactor:Integer;const Duration:Float);
 
@@ -221,7 +249,7 @@ Begin
 
           TW3CustomAnimation(sender).free;
           fxSetBusy(False);
-        end, 25);
+        end, CNT_RELEASE_DELAY);
       end;
     mEffect.execute(self);
   end else
@@ -229,7 +257,7 @@ Begin
     Begin
       fxScaleUp(afactor,duration);
     end,
-    100);
+    CNT_CACHE_DELAY);
 end;
 
 procedure TQTXEffectsHelper.fxScaleDown(aFactor:Integer;
@@ -266,7 +294,7 @@ Begin
         Begin
           TW3CustomAnimation(sender).free;
           fxSetBusy(False);
-        end, 25);
+        end, CNT_RELEASE_DELAY);
       end;
     mEffect.execute(self);
   end else
@@ -274,7 +302,7 @@ Begin
     Begin
       fxScaleDown(aFactor,duration);
     end,
-    100);
+    CNT_CACHE_DELAY);
 end;
 
 Procedure TQTXEffectsHelper.fxSizeTo(const aWidth,aHeight:Integer;
@@ -309,7 +337,7 @@ Begin
         Begin
           TW3CustomAnimation(sender).free;
           fxSetBusy(False);
-        end, 10);
+        end, CNT_RELEASE_DELAY);
       end;
     mEffect.execute(self);
   end else
@@ -317,7 +345,7 @@ Begin
     Begin
       fxSizeTo(aWidth,aHeight,duration);
     end,
-    100);
+    CNT_CACHE_DELAY);
 end;
 
 Procedure TQTXEffectsHelper.fxMoveUp(const Duration:Float);
@@ -341,7 +369,7 @@ Begin
         Begin
           TW3CustomAnimation(sender).free;
           fxSetBusy(False);
-        end, 10);
+        end, CNT_RELEASE_DELAY);
       end;
     mEffect.execute(self);
   end else
@@ -349,7 +377,7 @@ Begin
     Begin
       fxMoveUp(duration);
     end,
-    100);
+    CNT_CACHE_DELAY);
 end;
 
 Procedure TQTXEffectsHelper.fxMoveDown(const Duration:Float);
@@ -373,7 +401,7 @@ Begin
         Begin
           TW3CustomAnimation(sender).free;
           fxSetBusy(False);
-        end, 10);
+        end, CNT_RELEASE_DELAY);
       end;
     mEffect.execute(self);
   end else
@@ -381,11 +409,18 @@ Begin
     Begin
       fxMoveDown(duration);
     end,
-    100);
+    CNT_CACHE_DELAY);
 end;
 
 Procedure TQTXEffectsHelper.fxMoveBy(const dx,dy:Integer;
               const Duration:Float);
+Begin
+  fxMoveBy(dx,dy,Duration,NIL);
+end;
+
+Procedure TQTXEffectsHelper.fxMoveBy(const dx,dy:Integer;
+          const Duration:Float;
+          const OnFinished:TProcedureRef);
 var
   mEffect: TW3CustomAnimation;
 Begin
@@ -407,20 +442,28 @@ Begin
         Begin
           TW3CustomAnimation(sender).free;
           fxSetBusy(false);
-        end, 10);
+          if assigned(OnFinished) then
+          OnFinished();
+        end, CNT_RELEASE_DELAY);
       end;
     mEffect.execute(self);
   end else
   w3_callback( procedure ()
     Begin
-      fxMoveBy(dx,dy,duration);
+      fxMoveBy(dx,dy,duration,OnFinished);
     end,
-    100);
+    CNT_CACHE_DELAY);
+end;
+
+
+Procedure TQTXEffectsHelper.fxMoveTo(const dx,dy:Integer;const Duration:Float);
+Begin
+  fxMoveTo(dx,dy,Duration,NIL);
 end;
 
 Procedure TQTXEffectsHelper.fxMoveTo(const dx,dy:Integer;
           const Duration:Float;
-          const callback:TProcedureRef);
+          const OnFinished:TProcedureRef);
 var
   mEffect: TW3CustomAnimation;
 Begin
@@ -438,60 +481,30 @@ Begin
       Begin
         self.left:=dx;
         self.top:=dy;
-
-        if assigned(callBack) then
-        callback();
-
         w3_callback( Procedure ()
         Begin
           TW3CustomAnimation(sender).free;
           fxSetBusy(false);
-        end, 10);
+          if assigned(OnFinished) then
+          OnFinished();
+        end, CNT_RELEASE_DELAY);
       end;
     mEffect.execute(self);
   end else
   w3_callback( procedure ()
     Begin
-      fxMoveTo(dx,dy,duration,callback);
+      fxMoveTo(dx,dy,duration,OnFinished);
     end,
-    100);
-end;
-
-
-Procedure TQTXEffectsHelper.fxMoveTo(const dx,dy:Integer;const Duration:Float);
-var
-  mEffect: TW3CustomAnimation;
-Begin
-  if not fxBusy then
-  Begin
-    fxSetBusy(true);
-    mEffect:=TQTXMoveAnimation.Create;
-    mEffect.duration:=Duration;
-    TQTXMoveAnimation(mEffect).fromX:=self.left;
-    TQTXMoveAnimation(mEffect).fromY:=self.top;
-    TQTXMoveAnimation(mEffect).toX:=dx;
-    TQTXMoveAnimation(mEffect).toY:=dy;
-    TQTXMoveAnimation(mEffect).Timing:=atLinear;
-    mEffect.onAnimationEnds:=Procedure (sender:TObject)
-      Begin
-        self.left:=dx;
-        self.top:=dy;
-        w3_callback( Procedure ()
-        Begin
-          TW3CustomAnimation(sender).free;
-          fxSetBusy(false);
-        end, 10);
-      end;
-    mEffect.execute(self);
-  end else
-  w3_callback( procedure ()
-    Begin
-      fxMoveTo(dx,dy,duration);
-    end,
-    100);
+    CNT_CACHE_DELAY);
 end;
 
 Procedure TQTXEffectsHelper.fxZoomIn(const Duration:Float);
+Begin
+  fxZoomIn(Duration,NIL);
+end;
+
+Procedure TQTXEffectsHelper.fxZoomIn(const Duration:Float;
+          const OnFinished:TProcedureRef);
 var
   mEffect: TW3CustomAnimation;
 Begin
@@ -506,7 +519,7 @@ Begin
           Begin
             TW3CustomAnimation(sender).free;
             fxSetBusy(False);
-          end, 10);
+          end, CNT_RELEASE_DELAY);
       end;
     self.Visible:=true;
     mEffect.Execute(self);
@@ -519,6 +532,12 @@ Begin
 end;
 
 Procedure TQTXEffectsHelper.fxZoomOut(const Duration:Float);
+Begin
+  fxZoomOut(Duration,NIL);
+end;
+
+Procedure TQTXEffectsHelper.fxZoomOut(const Duration:Float;
+          const OnFinished:TProcedureRef);
 var
   mEffect: TW3CustomAnimation;
 Begin
@@ -534,7 +553,9 @@ Begin
           Begin
             TW3CustomAnimation(sender).free;
             fxSetBusy(false);
-          end, 10);
+            if assigned(OnFinished) then
+            OnFinished();
+          end, CNT_RELEASE_DELAY);
       end;
     mEffect.Execute(self);
   end else
@@ -542,10 +563,16 @@ Begin
     Begin
       fxZoomOut(duration);
     end,
-    100);
+    CNT_CACHE_DELAY);
 end;
 
 Procedure TQTXEffectsHelper.fxWarpOut(const Duration:Float);
+begin
+  fxWarpOut(Duration,NIL);
+end;
+
+Procedure TQTXEffectsHelper.fxWarpOut(const Duration:Float;
+              const OnFinished:TProcedureRef);
 var
   mEffect: TW3CustomAnimation;
 Begin
@@ -561,7 +588,9 @@ Begin
           Begin
             TW3CustomAnimation(sender).free;
             fxSetBusy(false);
-          end, 10);
+            if assigned(OnFinished) then
+            OnFinished();
+          end, CNT_RELEASE_DELAY);
       end;
     mEffect.Execute(self);
   end else
@@ -569,10 +598,16 @@ Begin
     Begin
       fxWarpOut(duration);
     end,
-    100);
+    CNT_CACHE_DELAY);
 end;
 
 procedure TQTXEffectsHelper.fxWarpIn(const Duration:Float);
+Begin
+  fxWarpIn(Duration,NIL);
+end;
+
+procedure TQTXEffectsHelper.fxWarpIn(const Duration:Float;
+          const OnFinished:TProcedureRef);
 var
   mEffect: TW3CustomAnimation;
 Begin
@@ -587,7 +622,9 @@ Begin
           Begin
             TW3CustomAnimation(sender).free;
             fxSetBusy(False);
-          end, 10);
+            if assigned(OnFinished) then
+            OnFinished();
+          end, CNT_RELEASE_DELAY);
       end;
     self.Visible:=true;
     mEffect.Execute(self);
@@ -596,10 +633,17 @@ Begin
     Begin
       fxWarpIn(duration);
     end,
-    100);
+    CNT_CACHE_DELAY);
 end;
 
+
 Procedure TQTXEffectsHelper.fxFadeIn(const Duration:Float);
+Begin
+  fxFadeIn(Duration,NIL);
+end;
+
+Procedure TQTXEffectsHelper.fxFadeIn(const Duration:Float;
+          const OnFinished:TProcedureRef);
 var
   mEffect: TW3CustomAnimation;
 Begin
@@ -616,7 +660,9 @@ Begin
           Begin
             TW3CustomAnimation(sender).free;
             fxSetBusy(False);
-          end, 10);
+            if assigned(OnFinished) then
+            OnFinished();
+          end, CNT_RELEASE_DELAY);
       end;
     self.Visible:=true;
     mEffect.Execute(self);
@@ -625,10 +671,42 @@ Begin
     Begin
       fxFadeIn(duration);
     end,
-    100);
+    CNT_CACHE_DELAY);
 end;
 
 Procedure TQTXEffectsHelper.fxFadeOut(const Duration:Float);
+(* var
+  mEffect: TW3CustomAnimation; *)
+Begin
+  fxFadeOut(Duration,NIL);
+  (*
+  if not fxBusy then
+  begin
+    fxSetBusy(true);
+    mEffect:=TW3FadeSlideTransition.Create;
+    TW3FadeSlideTransition(mEffect).fromOpacity:=1.0;
+    TW3FadeSlideTransition(mEffect).toOpacity:=0.0;
+    mEffect.Duration:=Duration;
+    mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
+      Begin
+        self.Visible:=False;
+        w3_callback( Procedure ()
+          Begin
+            TW3CustomAnimation(sender).free;
+            fxSetBusy(False);
+          end, CNT_RELEASE_DELAY);
+      end;
+    mEffect.Execute(self);
+  end else
+  w3_callback( procedure ()
+    Begin
+      fxFadeOut(duration);
+    end,
+    CNT_CACHE_DELAY); *)
+end;
+
+Procedure TQTXEffectsHelper.fxFadeOut(const Duration:Float;
+          const OnFinished:TProcedureRef);
 var
   mEffect: TW3CustomAnimation;
 Begin
@@ -646,7 +724,9 @@ Begin
           Begin
             TW3CustomAnimation(sender).free;
             fxSetBusy(False);
-          end, 10);
+            if assigned(OnFinished) then
+            OnFinished();
+          end, CNT_RELEASE_DELAY);
       end;
     mEffect.Execute(self);
   end else
@@ -654,8 +734,9 @@ Begin
     Begin
       fxFadeOut(duration);
     end,
-    100);
+    CNT_CACHE_DELAY);
 end;
+
 
 
 end.

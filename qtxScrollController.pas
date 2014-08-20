@@ -335,7 +335,7 @@ Begin
   Momentum:=True;
   ZoomMax:=4;
   VerticalScrollbar:=True;
-  HorizontalScrollbar:=True;
+  HorizontalScrollbar:=false;
   HideScrollbar:=false;
 end;
  
