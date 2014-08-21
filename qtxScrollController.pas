@@ -52,6 +52,7 @@ uses
     Property    Zoom:Boolean;
     Property    ZoomMax:Integer;
     Property    ScrollBarClass:String;
+    Property    Click:Boolean;
     function    toJSON:Variant;virtual;
     constructor Create;virtual;
   End;
@@ -337,6 +338,7 @@ Begin
   VerticalScrollbar:=True;
   HorizontalScrollbar:=false;
   HideScrollbar:=false;
+  Click:=true;
 end;
  
 function TQTXScrollOptions.toJSON:Variant;
@@ -355,6 +357,9 @@ Begin
   result.zoomMax:=ZoomMax;
   result.scrollbarClass:=ScrollBarClass;
   result.lockDirection:=lockDirection;
+  if Click then
+  result.click:='true';
+
 end;
  
 //############################################################################

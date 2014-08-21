@@ -83,13 +83,16 @@ type
           const aDelay:Integer);
 
     class function  getHandleReady(const aHandle:THandle):Boolean;
+
+    class function addLinkToHead(const aRel,aHref:String):THandle;
+
   end;
 
 
 implementation
 
 //############################################################################
-// TW3CustomControl
+// TQTXAttrAccess
 //############################################################################
 
 Constructor TQTXAttrAccess.Create(Const aHandle:THandle);
@@ -152,6 +155,22 @@ end;
 //############################################################################
 // TQTXTools
 //############################################################################
+
+class function TQTXTools.addLinkToHead(const aRel,aHref:String):THandle;
+var
+  mLink:  THandle;
+Begin
+  //REL: Can be "stylesheet" and many more values.
+  //     See http://www.w3schools.com/tags/att_link_rel.asp
+  //     for a list of all options
+  asm
+    @mLink = document.createElement('link');
+    (@mLink).href = @aHref;
+    (@mLink).rel=@aRel;
+    document.head.appendChild(@mLink);
+  end;
+  result:=mLink;
+end;
 
 class function TQTXTools.getHandleReady(const aHandle:THandle):Boolean;
 Begin
