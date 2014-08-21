@@ -185,14 +185,16 @@ begin
   end;
 end;       *)
 
-Procedure BeforeEffect(const aElement:THandle;
+Procedure BeforeEffect(const aControl:TW3CustomControl;
           const aEffectObj:TW3CustomAnimation);
 Begin
+  aControl.fxSetBusy(True);
 end;
 
-Procedure AfterEffect(const aElement:THandle;
+Procedure AfterEffect(const aControl:TW3CustomControl;
           const aEffectObj:TW3CustomAnimation);
 begin
+  aControl.fxSetBusy(False);
 end;
 
 //############################################################################
@@ -273,7 +275,7 @@ Begin
   if not fxBusy then
   begin
     (* Mark element as managed *)
-    fxsetBusy(True);
+    //fxsetBusy(True);
 
     mEffect:=TQTXSizeAnimation.Create;
     mEffect.duration:=Duration;
@@ -301,10 +303,18 @@ Begin
 
         w3_callback( Procedure ()
         Begin
+          (* Release effect object *)
           TW3CustomAnimation(sender).free;
-          fxSetBusy(False);
+
+          (* register effect done *)
+          AfterEffect(self,TW3CustomAnimation(sender));
         end, CNT_RELEASE_DELAY);
       end;
+
+    (* Register effect begins *)
+    BeforeEffect(self,mEffect);
+
+    (* Execute effect *)
     mEffect.execute(self);
   end else
   w3_callback( procedure ()
@@ -321,7 +331,7 @@ var
 Begin
   if not fxBusy then
   Begin
-    fxsetBusy(True);
+    //fxsetBusy(True);
 
     mEffect:=TQTXSizeAnimation.Create;
     mEffect.duration:=Duration;
@@ -346,10 +356,14 @@ Begin
           TQTXSizeAnimation(mEffect).toHeight);
         w3_callback( Procedure ()
         Begin
+          (* Release effect object *)
           TW3CustomAnimation(sender).free;
-          fxSetBusy(False);
+
+          (* register effect done *)
+          AfterEffect(self,TW3CustomAnimation(sender));
         end, CNT_RELEASE_DELAY);
       end;
+    BeforeEffect(self,mEffect);
     mEffect.execute(self);
   end else
   w3_callback( procedure ()
@@ -366,7 +380,7 @@ var
 Begin
   if not fxBusy then
   Begin
-    fxSetBusy(true);
+    //fxSetBusy(true);
     mEffect:=TQTXSizeAnimation.Create;
     mEffect.duration:=Duration;
 
@@ -389,10 +403,14 @@ Begin
           TQTXSizeAnimation(mEffect).toHeight);
         w3_callback( Procedure ()
         Begin
+          (* Release effect object *)
           TW3CustomAnimation(sender).free;
-          fxSetBusy(False);
+
+          (* register effect done *)
+          AfterEffect(self,TW3CustomAnimation(sender));
         end, CNT_RELEASE_DELAY);
       end;
+    BeforeEffect(self,mEffect);
     mEffect.execute(self);
   end else
   w3_callback( procedure ()
@@ -408,7 +426,7 @@ var
 Begin
   if not fxBusy then
   begin
-    fxSetBusy(true);
+    //fxSetBusy(true);
     mEffect:=TQTXMoveAnimation.Create;
     mEffect.duration:=Duration;
     TQTXMoveAnimation(mEffect).fromX:=self.left;
@@ -421,10 +439,14 @@ Begin
         self.top:=0;
         w3_callback( Procedure ()
         Begin
+          (* Release effect object *)
           TW3CustomAnimation(sender).free;
-          fxSetBusy(False);
+
+          (* register effect done *)
+          AfterEffect(self,TW3CustomAnimation(sender));
         end, CNT_RELEASE_DELAY);
       end;
+    BeforeEffect(self,mEffect);
     mEffect.execute(self);
   end else
   w3_callback( procedure ()
@@ -440,7 +462,7 @@ var
 Begin
   if not fxBusy then
   Begin
-    fxSetBusy(True);
+    //fxSetBusy(True);
     mEffect:=TQTXMoveAnimation.Create;
     mEffect.duration:=Duration;
     TQTXMoveAnimation(mEffect).fromX:=self.left;
@@ -453,10 +475,14 @@ Begin
         self.top:=TW3MovableControl(self.Parent).Height-Self.Height;;
         w3_callback( Procedure ()
         Begin
-          TW3CustomAnimation(sender).free;
-          fxSetBusy(False);
+            (* Release effect object *)
+            TW3CustomAnimation(sender).free;
+
+            (* register effect done *)
+            AfterEffect(self,TW3CustomAnimation(sender));
         end, CNT_RELEASE_DELAY);
       end;
+    BeforeEffect(self,mEffect);
     mEffect.execute(self);
   end else
   w3_callback( procedure ()
@@ -480,7 +506,7 @@ var
 Begin
   if not fxBusy then
   begin
-    fxSetBusy(True);
+    //fxSetBusy(True);
     mEffect:=TQTXMoveAnimation.Create;
     mEffect.duration:=Duration;
     TQTXMoveAnimation(mEffect).fromX:=self.left;
@@ -494,12 +520,18 @@ Begin
         self.top:=dy;
         w3_callback( Procedure ()
         Begin
+          (* Release effect object *)
           TW3CustomAnimation(sender).free;
-          fxSetBusy(false);
+
+          (* register effect done *)
+          AfterEffect(self,TW3CustomAnimation(sender));
+
+          (* signal callback if valid *)
           if assigned(OnFinished) then
           OnFinished();
         end, CNT_RELEASE_DELAY);
       end;
+    BeforeEffect(self,mEffect);
     mEffect.execute(self);
   end else
   w3_callback( procedure ()
@@ -523,7 +555,7 @@ var
 Begin
   if not fxBusy then
   begin
-    fxSetBusy(True);
+    //fxSetBusy(True);
     mEffect:=TQTXMoveAnimation.Create;
     mEffect.duration:=Duration;
     TQTXMoveAnimation(mEffect).fromX:=self.left;
@@ -537,12 +569,18 @@ Begin
         self.top:=dy;
         w3_callback( Procedure ()
         Begin
+          (* Release effect object *)
           TW3CustomAnimation(sender).free;
-          fxSetBusy(false);
+
+          (* register effect done *)
+          AfterEffect(self,TW3CustomAnimation(sender));
+
+          (* signal callback if valid *)
           if assigned(OnFinished) then
           OnFinished();
         end, CNT_RELEASE_DELAY);
       end;
+    BeforeEffect(self,mEffect);
     mEffect.execute(self);
   end else
   w3_callback( procedure ()
@@ -564,18 +602,26 @@ var
 Begin
   if not fxBusy then
   Begin
-    fxSetBusy(true);
+    //fxSetBusy(true);
     mEffect:=TW3ZoomInTransition.Create;
     mEffect.Duration:=Duration;
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
       Begin
         w3_callback( Procedure ()
           Begin
+            (* Release effect object *)
             TW3CustomAnimation(sender).free;
-            fxSetBusy(False);
+
+            (* register effect done *)
+            AfterEffect(self,TW3CustomAnimation(sender));
+
+            (* signal callback if valid *)
+            if assigned(OnFinished) then
+            OnFinished();
           end, CNT_RELEASE_DELAY);
       end;
     self.Visible:=true;
+    BeforeEffect(self,mEffect);
     mEffect.Execute(self);
   end else
   w3_callback( procedure ()
@@ -597,7 +643,7 @@ var
 Begin
   if not fxBusy then
   Begin
-    fxSetBusy(True);
+    //fxSetBusy(True);
     mEffect:=TW3ZoomOutTransition.Create;
     mEffect.Duration:=Duration;
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
@@ -605,12 +651,18 @@ Begin
         self.Visible:=false;
         w3_callback( Procedure ()
           Begin
+            (* Release effect object *)
             TW3CustomAnimation(sender).free;
-            fxSetBusy(false);
+
+            (* register effect done *)
+            AfterEffect(self,TW3CustomAnimation(sender));
+
+            (* signal callback if valid *)
             if assigned(OnFinished) then
             OnFinished();
           end, CNT_RELEASE_DELAY);
       end;
+    BeforeEffect(self,mEffect);
     mEffect.Execute(self);
   end else
   w3_callback( procedure ()
@@ -632,7 +684,7 @@ var
 Begin
   if not fxBusy then
   begin
-    fxSetBusy(true);
+    //fxSetBusy(true);
     mEffect:=TW3WarpOutTransition.Create;
     mEffect.Duration:=Duration;
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
@@ -640,12 +692,18 @@ Begin
         self.Visible:=false;
         w3_callback( Procedure ()
           Begin
+            (* Release effect object *)
             TW3CustomAnimation(sender).free;
-            fxSetBusy(false);
+
+            (* register effect done *)
+            AfterEffect(self,TW3CustomAnimation(sender));
+
+            (* signal callback if valid *)
             if assigned(OnFinished) then
             OnFinished();
           end, CNT_RELEASE_DELAY);
       end;
+    BeforeEffect(self,mEffect);
     mEffect.Execute(self);
   end else
   w3_callback( procedure ()
@@ -667,19 +725,25 @@ var
 Begin
   if not fxBusy then
   Begin
-    fxSetBusy(true);
+    //fxSetBusy(true);
     mEffect:=TW3WarpInTransition.Create;
     mEffect.Duration:=Duration;
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
       Begin
         w3_callback( Procedure ()
           Begin
+            (* Release effect object *)
             TW3CustomAnimation(sender).free;
-            fxSetBusy(False);
+
+            (* register effect done *)
+            AfterEffect(self,TW3CustomAnimation(sender));
+
+            (* signal callback if valid *)
             if assigned(OnFinished) then
             OnFinished();
           end, CNT_RELEASE_DELAY);
       end;
+    BeforeEffect(self,mEffect);
     self.Visible:=true;
     mEffect.Execute(self);
   end else
@@ -689,7 +753,6 @@ Begin
     end,
     CNT_CACHE_DELAY);
 end;
-
 
 Procedure TQTXEffectsHelper.fxFadeIn(const Duration:Float);
 Begin
@@ -703,7 +766,7 @@ var
 Begin
   if not fxBusy then
   begin
-    fxSetBusy(true);
+    //fxSetBusy(true);
     mEffect:=TW3FadeSlideTransition.Create;
     TW3FadeSlideTransition(mEffect).fromOpacity:=0.0;
     TW3FadeSlideTransition(mEffect).toOpacity:=1.0;
@@ -712,12 +775,18 @@ Begin
       Begin
         w3_callback( Procedure ()
           Begin
+            (* Release effect object *)
             TW3CustomAnimation(sender).free;
-            fxSetBusy(False);
+
+            (* register effect done *)
+            AfterEffect(self,TW3CustomAnimation(sender));
+
+            (* signal callback if valid *)
             if assigned(OnFinished) then
             OnFinished();
           end, CNT_RELEASE_DELAY);
       end;
+    BeforeEffect(self,mEffect);
     self.Visible:=true;
     mEffect.Execute(self);
   end else
@@ -740,8 +809,7 @@ var
 Begin
   if not fxBusy then
   begin
-    fxSetBusy(true);
-
+    //fxSetBusy(true);
     mEffect:=TW3FadeSlideTransition.Create;
     TW3FadeSlideTransition(mEffect).fromOpacity:=1.0;
     TW3FadeSlideTransition(mEffect).toOpacity:=0.0;
@@ -751,12 +819,18 @@ Begin
         self.Visible:=False;
         w3_callback( Procedure ()
           Begin
+            (* Release effect object *)
             TW3CustomAnimation(sender).free;
-            fxSetBusy(False);
+
+            (* register effect done *)
+            AfterEffect(self,TW3CustomAnimation(sender));
+
+            (* signal callback if valid *)
             if assigned(OnFinished) then
             OnFinished();
           end, CNT_RELEASE_DELAY);
       end;
+    BeforeEffect(self,mEffect);
     mEffect.Execute(self);
   end else
   w3_callback( procedure ()
