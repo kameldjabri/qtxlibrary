@@ -140,6 +140,61 @@ type
 
 implementation
 
+(*
+
+uses w3Dictionaries;
+
+var
+_FActive: TW3ObjDictionary;
+
+Initialization
+begin
+  _FActive:=TW3ObjDictionary.Create;
+end;
+
+Finalization
+begin
+  if assigned(_FActive) then
+  _FActive.free;
+end;
+
+Procedure RegisterActiveEffect(const aElement:THandle;const aEffect:TW3CustomAnimation);
+var
+  mRef: String;
+begin
+  mRef:=IntToStr(aElement);
+  _FActive.values[mRef]:=aEffect;
+end;
+
+Procedure UnRegisterEffect(const aElement:THandle);
+var
+  mRef: String;
+begin
+  mRef:=IntToStr(aElement);
+  _FActive.delete(mRef);
+end;
+
+Procedure CancelEffect(const aElement:THandle);
+var
+  mRef: String;
+begin
+  mRef:=IntToStr(aElement);
+  if _FActive.ValueExists(mRef) then
+  begin
+    //
+  end;
+end;       *)
+
+Procedure BeforeEffect(const aElement:THandle;
+          const aEffectObj:TW3CustomAnimation);
+Begin
+end;
+
+Procedure AfterEffect(const aElement:THandle;
+          const aEffectObj:TW3CustomAnimation);
+begin
+end;
+
 //############################################################################
 // TQTXMoveAnimation
 //############################################################################
@@ -198,7 +253,7 @@ Begin
   if fxBusy then
   begin
     try
-      Handle.style.webkitAnimationPlayState:='stop';
+      handle.style.webkitAnimationPlayState:='paused';
       Handle.style.removeProperty("-webkit-animation");
       Handle.style.removeProperty("-webkit-animation-fill-mode");
       Handle.style.removeProperty("animation");
@@ -246,7 +301,6 @@ Begin
 
         w3_callback( Procedure ()
         Begin
-
           TW3CustomAnimation(sender).free;
           fxSetBusy(False);
         end, CNT_RELEASE_DELAY);
@@ -526,7 +580,7 @@ Begin
   end else
   w3_callback( procedure ()
     Begin
-      fxZoomIn(duration);
+      fxZoomIn(duration,OnFinished);
     end,
     100);
 end;
@@ -561,7 +615,7 @@ Begin
   end else
   w3_callback( procedure ()
     Begin
-      fxZoomOut(duration);
+      fxZoomOut(duration,OnFinished);
     end,
     CNT_CACHE_DELAY);
 end;
@@ -596,7 +650,7 @@ Begin
   end else
   w3_callback( procedure ()
     Begin
-      fxWarpOut(duration);
+      fxWarpOut(duration,OnFinished);
     end,
     CNT_CACHE_DELAY);
 end;
@@ -631,7 +685,7 @@ Begin
   end else
   w3_callback( procedure ()
     Begin
-      fxWarpIn(duration);
+      fxWarpIn(duration,OnFinished);
     end,
     CNT_CACHE_DELAY);
 end;
@@ -669,40 +723,14 @@ Begin
   end else
   w3_callback( procedure ()
     Begin
-      fxFadeIn(duration);
+      fxFadeIn(duration,OnFinished);
     end,
     CNT_CACHE_DELAY);
 end;
 
 Procedure TQTXEffectsHelper.fxFadeOut(const Duration:Float);
-(* var
-  mEffect: TW3CustomAnimation; *)
 Begin
   fxFadeOut(Duration,NIL);
-  (*
-  if not fxBusy then
-  begin
-    fxSetBusy(true);
-    mEffect:=TW3FadeSlideTransition.Create;
-    TW3FadeSlideTransition(mEffect).fromOpacity:=1.0;
-    TW3FadeSlideTransition(mEffect).toOpacity:=0.0;
-    mEffect.Duration:=Duration;
-    mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
-      Begin
-        self.Visible:=False;
-        w3_callback( Procedure ()
-          Begin
-            TW3CustomAnimation(sender).free;
-            fxSetBusy(False);
-          end, CNT_RELEASE_DELAY);
-      end;
-    mEffect.Execute(self);
-  end else
-  w3_callback( procedure ()
-    Begin
-      fxFadeOut(duration);
-    end,
-    CNT_CACHE_DELAY); *)
 end;
 
 Procedure TQTXEffectsHelper.fxFadeOut(const Duration:Float;
@@ -713,6 +741,7 @@ Begin
   if not fxBusy then
   begin
     fxSetBusy(true);
+
     mEffect:=TW3FadeSlideTransition.Create;
     TW3FadeSlideTransition(mEffect).fromOpacity:=1.0;
     TW3FadeSlideTransition(mEffect).toOpacity:=0.0;
@@ -732,7 +761,7 @@ Begin
   end else
   w3_callback( procedure ()
     Begin
-      fxFadeOut(duration);
+      fxFadeOut(duration,OnFinished);
     end,
     CNT_CACHE_DELAY);
 end;
