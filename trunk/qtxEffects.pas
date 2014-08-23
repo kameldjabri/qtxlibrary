@@ -129,8 +129,14 @@ type
     Procedure fxSizeTo(const aWidth,aHeight:Integer;
               const Duration:Float);
 
-    procedure fxScaleDown(aFactor:Integer;const Duration:Float);
-    Procedure fxScaleUp(aFactor:Integer;const Duration:Float);
+    procedure fxScaleDown(aFactor:Integer;const Duration:Float);overload;
+    procedure fxScaleDown(aFactor:Integer;const Duration:Float;
+              const OnFinished:TProcedureRef);overload;
+
+    Procedure fxScaleUp(aFactor:Integer;const Duration:Float);overload;
+    Procedure fxScaleUp(aFactor:Integer;const Duration:Float;
+              const OnFinished:TProcedureRef);overload;
+
 
     Procedure fxAbort;
 
@@ -268,15 +274,18 @@ end;
 
 Procedure TQTXEffectsHelper.fxScaleUp(aFactor:Integer;
           const Duration:Float);
+Begin
+  fxScaleUp(aFactor,Duration,NIL);
+end;
+
+Procedure TQTXEffectsHelper.fxScaleUp(aFactor:Integer;const Duration:Float;
+              const OnFinished:TProcedureRef);
 var
   mEffect: TW3CustomAnimation;
   mData:  Variant;
 Begin
   if not fxBusy then
   begin
-    (* Mark element as managed *)
-    //fxsetBusy(True);
-
     mEffect:=TQTXSizeAnimation.Create;
     mEffect.duration:=Duration;
 
@@ -308,6 +317,10 @@ Begin
 
           (* register effect done *)
           AfterEffect(self,TW3CustomAnimation(sender));
+
+          if assigned(OnFinished) then
+          OnFinished();
+
         end, CNT_RELEASE_DELAY);
       end;
 
@@ -319,13 +332,19 @@ Begin
   end else
   w3_callback( procedure ()
     Begin
-      fxScaleUp(afactor,duration);
+      fxScaleUp(afactor,duration,OnFinished);
     end,
     CNT_CACHE_DELAY);
 end;
 
 procedure TQTXEffectsHelper.fxScaleDown(aFactor:Integer;
           const Duration:Float);
+Begin
+  fxScaleDown(aFactor,Duration,NIL);
+end;
+
+procedure TQTXEffectsHelper.fxScaleDown(aFactor:Integer;const Duration:Float;
+          const OnFinished:TProcedureRef);
 var
   mEffect: TW3CustomAnimation;
 Begin
@@ -361,6 +380,10 @@ Begin
 
           (* register effect done *)
           AfterEffect(self,TW3CustomAnimation(sender));
+
+          if assigned(OnFinished) then
+          OnFinished();
+
         end, CNT_RELEASE_DELAY);
       end;
     BeforeEffect(self,mEffect);
@@ -368,7 +391,7 @@ Begin
   end else
   w3_callback( procedure ()
     Begin
-      fxScaleDown(aFactor,duration);
+      fxScaleDown(aFactor,duration,OnFinished);
     end,
     CNT_CACHE_DELAY);
 end;
