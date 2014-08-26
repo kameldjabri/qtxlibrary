@@ -119,6 +119,12 @@ type
     Procedure fxZoomOut(const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
+    Procedure fxScaleTo(const aToX,aToY,aToWidth,aToHeight:Integer;
+              const Duration:Float);overload;
+    Procedure fxScaleTo(const aToX,aToY,aToWidth,aToHeight:Integer;
+              const Duration:Float;
+              const OnFinished:TProcedureRef);overload;
+
     Procedure fxMoveTo(const dx,dy:Integer;
               const Duration:Float);overload;
 
@@ -601,6 +607,59 @@ Begin
     CNT_CACHE_DELAY);
 end;
 
+Procedure TQTXEffectsHelper.fxScaleTo(const aToX,aToY,aToWidth,aToHeight:Integer;
+          const Duration:Float);
+Begin
+  fxScaleTo(aToX,aToY,aToWidth,aToHeight,Duration,NIL);
+end;
+
+Procedure TQTXEffectsHelper.fxScaleTo(const aToX,aToY,aToWidth,aToHeight:Integer;
+          const Duration:Float;
+          const OnFinished:TProcedureRef);
+var
+  mEffect: TW3CustomAnimation;
+Begin
+  if not fxBusy then
+  begin
+    //fxSetBusy(True);
+    mEffect:=TQTXSizeAnimation.Create;
+    mEffect.duration:=Duration;
+    TQTXSizeAnimation(mEffect).fromLeft:=self.left;
+    TQTXSizeAnimation(mEffect).fromTop:=self.top;
+    TQTXSizeAnimation(mEffect).fromWidth:=self.Width;
+    TQTXSizeAnimation(mEffect).fromHeight:=self.Height;
+
+    TQTXSizeAnimation(mEffect).toLeft:=aToX;
+    TQTXSizeAnimation(mEffect).toTop:=aToY;
+    TQTXSizeAnimation(mEffect).toWidth:=aToWidth;
+    TQTXSizeAnimation(mEffect).toHeight:=aToHeight;
+
+    TQTXSizeAnimation(mEffect).Timing:=atEaseInOut;
+    mEffect.onAnimationEnds:=Procedure (sender:TObject)
+      Begin
+        self.setBounds(aToX,aToY,aToWidth,aToHeight);
+        w3_callback( Procedure ()
+        Begin
+          (* Release effect object *)
+          TW3CustomAnimation(sender).free;
+
+          (* register effect done *)
+          AfterEffect(self,TW3CustomAnimation(sender));
+
+          (* signal callback if valid *)
+          if assigned(OnFinished) then
+          OnFinished();
+        end, CNT_RELEASE_DELAY);
+      end;
+    BeforeEffect(self,mEffect);
+    mEffect.execute(self);
+  end else
+  w3_callback( procedure ()
+    Begin
+      fxScaleTo(aToX,aToY,aToWidth,aToHeight,duration,OnFinished);
+    end,
+    CNT_CACHE_DELAY);
+end;
 
 Procedure TQTXEffectsHelper.fxMoveTo(const dx,dy:Integer;const Duration:Float);
 Begin
