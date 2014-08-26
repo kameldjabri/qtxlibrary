@@ -75,12 +75,17 @@ type
 
     class function getElementRootAncestor(const aElement:THandle):THandle;
     class function getElementInDOM(const aElement:THandle):Boolean;
+
     class procedure ExecuteOnElementReady(const aElement:THandle;
           const aFunc:TProcedureRef);
 
     class procedure ExecuteRepeat(const aFunc:TProcedureRef;
           const aCount:Integer;
           const aDelay:Integer);
+
+    class procedure ExecuteOnDocumentReady(const aFunc:TProcedureRef);
+
+    class function getDocumentReady:Boolean;
 
     class function  getHandleReady(const aHandle:THandle):Boolean;
 
@@ -172,6 +177,13 @@ Begin
   result:=mLink;
 end;
 
+class function TQTXTools.getDocumentReady:Boolean;
+begin
+  asm
+    @result = document.readyState == "complete";
+  end;
+end;
+
 class function TQTXTools.getHandleReady(const aHandle:THandle):Boolean;
 Begin
   if (aHandle) then
@@ -202,6 +214,20 @@ begin
     result:=(mRef.body);
   end;
 end;
+
+class procedure TQTXTools.ExecuteOnDocumentReady(const aFunc:TProcedureRef)
+Begin
+  if getDocumentReady then
+  aFunc() else
+  Begin
+    w3_callback( procedure ()
+      begin
+        ExecuteOnDocumentReady(aFunc);
+      end,
+      100);
+  end;
+end;
+
 
 class procedure TQTXTools.ExecuteOnElementReady(const aElement:THandle;
       const aFunc:TProcedureRef);
@@ -288,6 +314,8 @@ Begin
   (* get calculated width/height *)
   result.tmWidth := mHandle.scrollWidth;
   result.tmHeight :=mHandle.scrollHeight;
+
+  inc(result.tmHeight,4);
 
   asm
     document.body.removeChild(@mHandle);
