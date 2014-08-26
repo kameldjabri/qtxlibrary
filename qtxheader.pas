@@ -138,16 +138,20 @@ Begin
 
     if aValue<>getVisible then
     begin
+
       case aValue of
       false:
         Begin
           if mParent.ObjectReady
           and TQTXTools.getElementInDOM(mParent.Handle) then
           Begin
-            self.fxMoveTo(-width,top,0.3,
-            procedure ()
+            w3_requestAnimationFrame( procedure ()
             begin
-              setInheritedVisible(false);
+              self.fxMoveTo(-width,top,0.3,
+              procedure ()
+              begin
+                setInheritedVisible(false);
+              end);
             end);
           end else
           setInheritedVisible(false);
@@ -158,15 +162,19 @@ Begin
 
           if mParent.ObjectReady
           and TQTXTools.getElementInDOM(mParent.Handle) then
-          self.fxMoveTo(mParent.margin,
-          (mParent.ClientHeight div 2) - self.height div 2,
-          0.3);
+          w3_requestAnimationFrame( procedure ()
+          Begin
+            self.fxMoveTo(mParent.margin,
+            (mParent.ClientHeight div 2) - self.height div 2,0.3);
+          end);
+
         end;
       end;
 
       if assigned(OnVisibleChange)
       and TQTXTools.getElementInDOM(mParent.Handle) then
       OnVisibleChange(self,aValue);
+
     end;
   end else
   inherited setVisible(aValue);
@@ -233,7 +241,6 @@ begin
     inherited setCaption(aValue);
     exit;
 
-
     self.fxWarpOut(0.5,
       procedure ()
       Begin
@@ -272,11 +279,7 @@ Begin
   FCaption:=TQTXHeaderTitle.Create(self);
   FCaption.Autosize:=False;
   FCaption.Caption:='Welcome';
-  //FCaption.Background.FromColor(clRed);
-  (* FCaption.OnClick:=Procedure (sender:TObject)
-    Begin
-      FNextButton.Visible:=not FNextButton.Visible;
-    end; *)
+  FCaption.Background.FromColor(clRed);
 
   (* hook up events when element is injected in the DOM *)
   TQTXTools.ExecuteOnElementReady(Handle, procedure ()
@@ -284,6 +287,7 @@ Begin
       FBackButton.OnVisibleChange:=HandleBackButtonVisibleChange;
       FNextButton.OnVisibleChange:=HandleNextButtonVisibleChange;
       resize;
+      LayoutChildren;
     end);
 end;
 
@@ -383,6 +387,8 @@ Begin
   case aVisible of
   false:
     Begin
+      w3_requestAnimationFrame( procedure ()
+      Begin
       FCaption.fxMoveTo(FMargin, (clientHeight div 2) - (FCaption.height div 2), 0.3,
         procedure ()
         Begin
@@ -395,13 +401,18 @@ Begin
             dec(wd,FMargin);
           end;
 
-          FCaption.fxSizeTo(wd,FCaption.Height,0.3);
+          w3_requestAnimationFrame( procedure ()
+          begin
+            FCaption.fxSizeTo(wd,FCaption.Height,0.3);
+          end);
+
         end);
+      end);
     end;
   true:
     Begin
 
-      FBackButton.Top:=(ClientHeight div 2) - FBackButton.height div 2;
+      //FBackButton.Top:=(ClientHeight div 2) - FBackButton.height div 2;
 
       dx:=FMargin + BackButton.Width + FMargin;
 
@@ -415,12 +426,19 @@ Begin
       end else
       dec(wd,FMargin);
 
-      FCaption.fxMoveTo(dx,
-        (clientHeight div 2) - (FCaption.height div 2), 0.3,
-        procedure ()
-        begin
-          FCaption.fxSizeTo(wd,FCaption.Height,0.3);
-        end);
+      w3_requestAnimationFrame( procedure ()
+      Begin
+
+          FCaption.fxMoveTo(dx,
+            (clientHeight div 2) - (FCaption.height div 2), 0.3,
+            procedure ()
+            begin
+              w3_requestAnimationFrame( procedure ()
+              begin
+                FCaption.fxSizeTo(wd,FCaption.Height,0.3);
+              end);
+          end);
+      end);
     end;
   end;
 end;

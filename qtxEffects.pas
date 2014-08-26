@@ -40,7 +40,7 @@ uses
   qtxutils;
 
 const
-CNT_RELEASE_DELAY = 10;
+CNT_RELEASE_DELAY = 50;
 CNT_CACHE_DELAY   = 50;
 
 type
