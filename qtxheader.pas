@@ -30,10 +30,15 @@ unit qtxheader;
 interface
 
 uses 
-  W3System, w3components, w3graphics, w3ToolButton,
+  W3System, w3components, w3graphics, w3ToolButton, w3borders,
   qtxutils,
   qtxeffects,
   qtxlabel;
+
+{.$DEFINE USE_ANIMFRAME_SYNC}
+
+const
+CNT_ANIM_DELAY  = 0.22;
 
 type
 
@@ -96,22 +101,7 @@ type
     property  NextButton:TQTXNextButton read FNextButton;
   End;
 
-(*
-.TQTXHeaderTitle, .Headings
-{
-            color: #FFFFFF;
-            font-name: "Verdana";
-            font-weight: none;
-            text-shadow: 0 1px 1px #000000;
-            font-size: 18px;
-            text-align: center;
-            font-weight: bold;
-            border: none;
-}
-*)
-
 implementation
-
 
 //#############################################################################
 // TQTXHeaderButton
@@ -129,6 +119,7 @@ end;
 procedure TQTXBackButton.setVisible(const aValue:Boolean);
 var
   mParent:  TQTXHeaderBar;
+  dx: Integer;
 Begin
   if  ObjectReady
   and TQTXTools.getElementInDOM(Handle) then
@@ -145,28 +136,45 @@ Begin
           if mParent.ObjectReady
           and TQTXTools.getElementInDOM(mParent.Handle) then
           Begin
+
+            dx:=-Width;
+
+            {$IFDEF USE_ANIMFRAME_SYNC}
             w3_requestAnimationFrame( procedure ()
             begin
-              self.fxMoveTo(-width,top,0.3,
+            {$ENDIF}
+              self.fxMoveTo(dx,top,CNT_ANIM_DELAY,
               procedure ()
               begin
                 setInheritedVisible(false);
               end);
+            {$IFDEF USE_ANIMFRAME_SYNC}
             end);
+            {$ENDIF}
+
           end else
           setInheritedVisible(false);
         end;
       True:
         Begin
           setInheritedVisible(true);
+          self.MoveTo(-Width,
+           (mParent.ClientHeight div 2) - self.height div 2);
 
           if mParent.ObjectReady
           and TQTXTools.getElementInDOM(mParent.Handle) then
+          {$IFDEF USE_ANIMFRAME_SYNC}
           w3_requestAnimationFrame( procedure ()
+          {$ENDIF}
           Begin
             self.fxMoveTo(mParent.margin,
-            (mParent.ClientHeight div 2) - self.height div 2,0.3);
+            (mParent.ClientHeight div 2) - self.height div 2,CNT_ANIM_DELAY);
+          {$IFDEF USE_ANIMFRAME_SYNC}
           end);
+          {$ELSE}
+          end;
+          {$ENDIF}
+
 
         end;
       end;
@@ -201,7 +209,7 @@ Begin
 
       if not aValue then
       Begin
-        self.fxMoveTo(mParent.width,dy,0.5,
+        self.fxMoveTo(mParent.width,dy,CNT_ANIM_DELAY,
         procedure ()
         begin
           setInheritedVisible(false);
@@ -214,7 +222,7 @@ Begin
         and (parent is TW3CustomControl) then
         dx:=(mParent.ClientWidth - mParent.Margin) - self.width else
         dx:=2 + width;
-        self.fxMoveTo(dx,dy,0.5);
+        self.fxMoveTo(dx,dy,CNT_ANIM_DELAY);
       end;
 
       if assigned(OnVisibleChange) then
@@ -241,11 +249,11 @@ begin
     inherited setCaption(aValue);
     exit;
 
-    self.fxWarpOut(0.5,
+    self.fxWarpOut(CNT_ANIM_DELAY,
       procedure ()
       Begin
         setInheritedCaption(aValue);
-        self.fxWarpIn(0.3);
+        self.fxWarpIn(CNT_ANIM_DELAY);
       end);
   end else
   inherited setCaption(aValue);
@@ -263,7 +271,6 @@ Begin
 
   FBackButton:=TQTXBackButton.Create(self);
   FBackButton.setInheritedVisible(false);
-  //FBackbutton.Visible:=False;
   FBackbutton.styleClass:='TW3ToolButton';
   FBackbutton.Caption:='Back';
   FBackbutton.Height:=28;
@@ -271,7 +278,6 @@ Begin
 
   FNextButton:=TQTXNextButton.Create(self);
   FNextButton.setInheritedVisible(false);
-  //FNextButton.Visible:=False;
   FNextButton.styleClass:='TW3ToolButton';
   FNextButton.Caption:='Next';
   FNextButton.height:=28;
@@ -279,7 +285,8 @@ Begin
   FCaption:=TQTXHeaderTitle.Create(self);
   FCaption.Autosize:=False;
   FCaption.Caption:='Welcome';
-  FCaption.Background.FromColor(clRed);
+  (* FCaption.handle.style['border']:='1px solid #444444';
+  FCaption.handle.style['background-color']:='rgba(255,255,255,0.3)'; *)
 
   (* hook up events when element is injected in the DOM *)
   TQTXTools.ExecuteOnElementReady(Handle, procedure ()
@@ -307,10 +314,14 @@ Begin
 
     if ObjectReady
     and TQTXTools.getElementInDOM(Handle) then
+    {$IFDEF USE_ANIMFRAME_SYNC}
     w3_requestAnimationFrame( procedure ()
       Begin
         Resize;
       end);
+    {$ELSE}
+    Resize;
+    {$ENDIF}
 
   end;
 end;
@@ -334,16 +345,22 @@ Begin
 
       if ObjectReady
       and TQTXTools.getElementInDOM(Handle) then
+      {$IFDEF USE_ANIMFRAME_SYNC}
       w3_requestAnimationFrame( procedure ()
+      {$ENDIF}
       Begin
         FCaption.fxMoveTo(dx,
-          (clientHeight div 2) - FCaption.Height div 2, 0.3,
+          (clientHeight div 2) - FCaption.Height div 2, CNT_ANIM_DELAY,
           Procedure ()
           Begin
             wd:=wd - FMargin;
-            FCaption.fxSizeTo(wd,FCaption.Height,0.3);
+            FCaption.fxSizeTo(wd,FCaption.Height,CNT_ANIM_DELAY);
           end);
+      {$IFDEF USE_ANIMFRAME_SYNC}
       end);
+      {$ELSE}
+      end;
+      {$ENDIF}
 
 
     end;
@@ -360,11 +377,11 @@ Begin
         dec(wd,FNextButton.Width);
 
             dec(wd,FMargin * 2);
-        FCaption.fxSizeTo(wd,FCaption.Height,0.3,
+        FCaption.fxSizeTo(wd,FCaption.Height,CNT_ANIM_DELAY,
         procedure ()
         Begin
           FCaption.fxMoveTo(dx,
-          (clientHeight div 2) - FCaption.Height div 2, 0.3);
+          (clientHeight div 2) - FCaption.Height div 2, CNT_ANIM_DELAY);
         end);
 
     end;
@@ -372,10 +389,14 @@ Begin
 
   if ObjectReady
   and TQTXTools.getElementInDOM(Handle) then
+  {$IFDEF USE_ANIMFRAME_SYNC}
   w3_requestAnimationFrame( procedure ()
   Begin
     Resize;
   end);
+  {$ELSE}
+  Resize;
+  {$ENDIF}
 end;
 
 Procedure TQTXHeaderBar.HandleBackButtonVisibleChange
@@ -384,30 +405,52 @@ var
   dx: Integer;
   wd: Integer;
 Begin
+
+  case aVisible of
+  false:
+    begin
+      FBackButton.fxMoveTo(-FBackButton.width,
+        (clientheight div 2) - FBackButton.height div 2,
+        CNT_ANIM_DELAY);
+    end;
+  true:
+    Begin
+      FBackButton.fxMoveTo(FMargin,
+        (clientheight div 2) - FBackButton.height div 2,
+        CNT_ANIM_DELAY);
+    end;
+  end;
+
   case aVisible of
   false:
     Begin
+      {$IFDEF USE_ANIMFRAME_SYNC}
       w3_requestAnimationFrame( procedure ()
       Begin
-      FCaption.fxMoveTo(FMargin, (clientHeight div 2) - (FCaption.height div 2), 0.3,
+      {$ENDIF}
+
+        wd:=ClientWidth - (FMargin * 2);
+        //dec(wd,FBackButton.width);
+
+        if FNextButton.Visible then
+        Begin
+          dec(wd,FNextButton.Width);
+          dec(wd,FMargin);
+        end;
+
+        FCaption.fxMoveTo(FMargin, (clientHeight div 2) - (FCaption.height div 2), CNT_ANIM_DELAY,
         procedure ()
         Begin
-          wd:=ClientWidth - (FMargin * 2);
-          dec(wd,FBackButton.width);
-
-          if FNextButton.Visible then
-          Begin
-            dec(wd,FNextButton.Width);
-            dec(wd,FMargin);
-          end;
-
+          (*
           w3_requestAnimationFrame( procedure ()
-          begin
-            FCaption.fxSizeTo(wd,FCaption.Height,0.3);
-          end);
-
+          begin *)
+            FCaption.fxSizeTo(wd,FCaption.Height,CNT_ANIM_DELAY);
+          //end);
         end);
+
+      {$IFDEF USE_ANIMFRAME_SYNC}
       end);
+      {$ENDIF}
     end;
   true:
     Begin
@@ -426,19 +469,23 @@ Begin
       end else
       dec(wd,FMargin);
 
+      {$IFDEF USE_ANIMFRAME_SYNC}
       w3_requestAnimationFrame( procedure ()
       Begin
-
+      {$ENDIF}
           FCaption.fxMoveTo(dx,
-            (clientHeight div 2) - (FCaption.height div 2), 0.3,
+            (clientHeight div 2) - (FCaption.height div 2), CNT_ANIM_DELAY,
             procedure ()
             begin
               w3_requestAnimationFrame( procedure ()
               begin
-                FCaption.fxSizeTo(wd,FCaption.Height,0.3);
+                FCaption.fxSizeTo(wd,FCaption.Height,CNT_ANIM_DELAY);
               end);
           end);
+      {$IFDEF USE_ANIMFRAME_SYNC}
       end);
+      {$ENDIF}
+
     end;
   end;
 end;
