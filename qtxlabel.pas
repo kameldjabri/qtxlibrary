@@ -37,9 +37,9 @@ type
     FAuto:    Boolean;
   protected
     procedure AdjustSize;virtual;
-    procedure setAuto(const aValue:Boolean);
-    function  getCaption:String;
-    Procedure setCaption(Const aValue:String);
+    procedure setAuto(const aValue:Boolean);virtual;
+    function  getCaption:String;virtual;
+    Procedure setCaption(Const aValue:String);virtual;
     function  MakeElementTagId: String; override;
     procedure InitializeObject;override;
   published

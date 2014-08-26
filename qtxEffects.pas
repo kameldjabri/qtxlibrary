@@ -60,6 +60,17 @@ type
     Property  ToY:Integer read FToY write FToY;
   end;
 
+  TQTXFadeAnimation = Class(TW3TransitionAnimation)
+  private
+    FFrom:    Float;
+    FTo:      Float;
+  protected
+    function KeyFramesCSS: String; override;
+  public
+    Property  FromOpacity:Float read FFrom write FFrom;
+    property  ToOpacity:Float read FTo write FTo;
+  End;
+
   TQTXSizeAnimation = Class(TW3TransitionAnimation)
   private
     FFromWidth:   Integer;
@@ -127,7 +138,10 @@ type
     Procedure fxMoveDown(const Duration:Float);
 
     Procedure fxSizeTo(const aWidth,aHeight:Integer;
-              const Duration:Float);
+              const Duration:Float);overload;
+    Procedure fxSizeTo(const aWidth,aHeight:Integer;
+              const Duration:Float;
+              const OnFinished:TProcedureRef);overload;
 
     procedure fxScaleDown(aFactor:Integer;const Duration:Float);overload;
     procedure fxScaleDown(aFactor:Integer;const Duration:Float;
@@ -204,6 +218,17 @@ begin
 end;
 
 //############################################################################
+// TQTXFadeAnimation
+//############################################################################
+
+function TQTXFadeAnimation.KeyFramesCSS: String;
+begin
+  result:= "
+    0% { opacity: " + FFrom.toString + "; }
+    100% { opacity: " + FTo.toString + "; }";
+end;
+
+//############################################################################
 // TQTXMoveAnimation
 //############################################################################
 
@@ -247,13 +272,13 @@ end;
 function TQTXEffectsHelper.fxBusy:Boolean;
 Begin
   if self.elementData.exists('fxBusy') then
-  result:=StrToBool( self.ElementData.read('fxBusy') ) else
-  self.elementData.write('fxBusy',false);
+  result:=self.ElementData.read('fxBusy')='yes';
+  self.elementData.write('fxBusy','no');
 end;
 
 Procedure TQTXEffectsHelper.fxSetBusy(const aValue:Boolean);
 Begin
-  self.elementdata.write('fxBusy',BoolToStr(aValue));
+  self.elementdata.write('fxBusy','yes');
 end;
 
 Procedure TQTXEffectsHelper.fxAbort;
@@ -282,7 +307,6 @@ Procedure TQTXEffectsHelper.fxScaleUp(aFactor:Integer;const Duration:Float;
               const OnFinished:TProcedureRef);
 var
   mEffect: TW3CustomAnimation;
-  mData:  Variant;
 Begin
   if not fxBusy then
   begin
@@ -398,6 +422,14 @@ end;
 
 Procedure TQTXEffectsHelper.fxSizeTo(const aWidth,aHeight:Integer;
           const Duration:Float);
+Begin
+  fxSizeTo(aWidth,aHeight,Duration,NIL);
+end;
+
+Procedure TQTXEffectsHelper.fxSizeTo(const aWidth,aHeight:Integer;
+          const Duration:Float;
+          const OnFinished:TProcedureRef);
+Begin
 var
   mEffect: TW3CustomAnimation;
 Begin
@@ -431,6 +463,10 @@ Begin
 
           (* register effect done *)
           AfterEffect(self,TW3CustomAnimation(sender));
+
+          if assigned(OnFinished) then
+          OnFinished();
+
         end, CNT_RELEASE_DELAY);
       end;
     BeforeEffect(self,mEffect);
@@ -438,9 +474,10 @@ Begin
   end else
   w3_callback( procedure ()
     Begin
-      fxSizeTo(aWidth,aHeight,duration);
+      fxSizeTo(aWidth,aHeight,duration,OnFinished);
     end,
     CNT_CACHE_DELAY);
+  end;
 end;
 
 Procedure TQTXEffectsHelper.fxMoveUp(const Duration:Float);
@@ -585,6 +622,7 @@ Begin
     TQTXMoveAnimation(mEffect).fromY:=self.top;
     TQTXMoveAnimation(mEffect).toX:=dx;
     TQTXMoveAnimation(mEffect).toY:=dy;
+
     TQTXMoveAnimation(mEffect).Timing:=atLinear;
     mEffect.onAnimationEnds:=Procedure (sender:TObject)
       Begin
@@ -790,9 +828,10 @@ Begin
   if not fxBusy then
   begin
     //fxSetBusy(true);
-    mEffect:=TW3FadeSlideTransition.Create;
-    TW3FadeSlideTransition(mEffect).fromOpacity:=0.0;
-    TW3FadeSlideTransition(mEffect).toOpacity:=1.0;
+    mEffect:=TQTXFadeAnimation.Create;
+
+    TQTXFadeAnimation(mEffect).fromOpacity:=0.0;
+    TQTXFadeAnimation(mEffect).toOpacity:=1.0;
     mEffect.Duration:=Duration;
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
       Begin
@@ -833,9 +872,10 @@ Begin
   if not fxBusy then
   begin
     //fxSetBusy(true);
-    mEffect:=TW3FadeSlideTransition.Create;
-    TW3FadeSlideTransition(mEffect).fromOpacity:=1.0;
-    TW3FadeSlideTransition(mEffect).toOpacity:=0.0;
+    //mEffect:=TW3FadeSlideTransition.Create;
+    mEffect:=TQTXFadeAnimation.Create;
+    TQTXFadeAnimation(mEffect).fromOpacity:=1.0;
+    TQTXFadeAnimation(mEffect).toOpacity:=0.0;
     mEffect.Duration:=Duration;
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
       Begin
