@@ -349,13 +349,23 @@ Begin
       w3_requestAnimationFrame( procedure ()
       {$ENDIF}
       Begin
+
+        wd:=wd - FMargin;
+
+        FCaption.fxScaleTo(dx,
+          (clientHeight div 2) - FCaption.Height div 2,
+          wd,
+          FCaption.height,
+          CNT_ANIM_DELAY,
+          NIL);
+        (*
         FCaption.fxMoveTo(dx,
           (clientHeight div 2) - FCaption.Height div 2, CNT_ANIM_DELAY,
           Procedure ()
           Begin
             wd:=wd - FMargin;
             FCaption.fxSizeTo(wd,FCaption.Height,CNT_ANIM_DELAY);
-          end);
+          end); *)
       {$IFDEF USE_ANIMFRAME_SYNC}
       end);
       {$ELSE}
@@ -430,7 +440,6 @@ Begin
       {$ENDIF}
 
         wd:=ClientWidth - (FMargin * 2);
-        //dec(wd,FBackButton.width);
 
         if FNextButton.Visible then
         Begin
@@ -438,15 +447,16 @@ Begin
           dec(wd,FMargin);
         end;
 
+        FCaption.fxScaleTo(Fmargin,
+        (clientHeight div 2) - (FCaption.height div 2),
+        wd,FCaption.Height,CNT_ANIM_DELAY,NIL);
+
+        (*
         FCaption.fxMoveTo(FMargin, (clientHeight div 2) - (FCaption.height div 2), CNT_ANIM_DELAY,
         procedure ()
         Begin
-          (*
-          w3_requestAnimationFrame( procedure ()
-          begin *)
             FCaption.fxSizeTo(wd,FCaption.Height,CNT_ANIM_DELAY);
-          //end);
-        end);
+        end);  *)
 
       {$IFDEF USE_ANIMFRAME_SYNC}
       end);
@@ -454,9 +464,6 @@ Begin
     end;
   true:
     Begin
-
-      //FBackButton.Top:=(ClientHeight div 2) - FBackButton.height div 2;
-
       dx:=FMargin + BackButton.Width + FMargin;
 
       wd:=ClientWidth - (FMargin * 2);
@@ -473,6 +480,14 @@ Begin
       w3_requestAnimationFrame( procedure ()
       Begin
       {$ENDIF}
+
+        FCaption.fxScaleTo(dx,
+          (clientHeight div 2) - (FCaption.height div 2),
+          wd,FCaption.Height,
+          CNT_ANIM_DELAY,
+          NIL);
+
+          (*
           FCaption.fxMoveTo(dx,
             (clientHeight div 2) - (FCaption.height div 2), CNT_ANIM_DELAY,
             procedure ()
@@ -481,7 +496,7 @@ Begin
               begin
                 FCaption.fxSizeTo(wd,FCaption.Height,CNT_ANIM_DELAY);
               end);
-          end);
+          end);     *)
       {$IFDEF USE_ANIMFRAME_SYNC}
       end);
       {$ENDIF}
