@@ -27,7 +27,7 @@ unit qtxutils;
 interface
 
 uses 
-  W3System, w3Components;
+  W3System, w3Components, w3effects;
 
 type
 
@@ -41,6 +41,35 @@ type
   public
     class function CreateGUID:String;
   end;
+
+  TQTXHandleHelper = helper for THandle
+  public
+    function  Valid:Boolean;
+    function  Ready:Boolean;
+    procedure ReadyExecute(OnReady:TProcedureRef);
+
+    Function  Defined:Boolean;
+    function  Equals(const aHandle:THandle):Boolean;
+    function  Parent:THandle;
+    function  Root:THandle;
+  end;
+
+
+  TQTXAnimationHelper = helper for TW3CustomAnimation
+  public
+    procedure Pause;
+    procedure Resume;
+    procedure Stop;
+  End;
+
+
+  (* TQTXCustomAnimation = partial class(TW3CustomAnimation)
+  public
+    procedure Pause;virtual;
+    procedure Resume;virtual;
+    procedure Stop;virtual;
+  End;   *)
+
 
   TQTXAttrAccess = Class(TObject)
   private
@@ -73,8 +102,8 @@ type
     class function calcTextAverage(const aFontName:String;
           const aFontSize:Integer):TQTXTextMetric;
 
-    class function getElementRootAncestor(const aElement:THandle):THandle;
-    class function getElementInDOM(const aElement:THandle):Boolean;
+    //class function getElementRootAncestor(const aElement:THandle):THandle;
+    //class function getElementInDOM(const aElement:THandle):Boolean;
 
     class procedure ExecuteOnElementReady(const aElement:THandle;
           const aFunc:TProcedureRef);
@@ -87,7 +116,7 @@ type
 
     class function getDocumentReady:Boolean;
 
-    class function  getHandleReady(const aHandle:THandle):Boolean;
+    //class function  getHandleReady(const aHandle:THandle):Boolean;
 
     class function addLinkToHead(const aRel,aHref:String):THandle;
 
@@ -96,6 +125,110 @@ type
 
 implementation
 
+
+procedure TQTXAnimationHelper.Pause;
+begin
+  if self.Active then
+  Begin
+    self.target.handle.style['-webkit-animation-play-state']:='paused';
+  end;
+end;
+
+procedure TQTXAnimationHelper.Resume;
+Begin
+  if self.active then
+  begin
+    if self.target.handle.style['-webkit-animation-play-state']='paused' then
+    self.target.handle.style['-webkit-animation-play-state']:='running';
+  end;
+end;
+
+procedure TQTXAnimationHelper.Stop;
+begin
+  if Active then
+  begin
+    FinalizeTransition;
+  end;
+end;
+
+//############################################################################
+// TQTXHandleHelper
+//############################################################################
+
+function TQTXHandleHelper.Root:THandle;
+var
+  mAncestor:  THandle;
+Begin
+  if valid then
+  Begin
+    mAncestor:=self;
+    while (mAncestor.parentNode) do
+    mAncestor:=mAncestor.parentNode;
+    result:=mAncestor;
+  end else
+  result:=null;
+end;
+
+Function TQTXHandleHelper.Defined:Boolean;
+Begin
+  asm
+    @result = !(self == undefined);
+  end;
+end;
+
+function TQTXHandleHelper.Valid:Boolean;
+Begin
+  asm
+    @Result = !( (@self == undefined) || (@self == null) );
+  end;
+end;
+
+function TQTXHandleHelper.Parent:THandle;
+Begin
+  if self.valid then
+  result:=self.parentNode else
+  result:=null;
+end;
+
+function TQTXHandleHelper.Ready:Boolean;
+var
+  mRef: THandle;
+begin
+  if valid then
+  begin
+    mRef:=root;
+    result:=mRef.valid and (mRef.body);
+  end;
+end;
+
+function TQTXHandleHelper.Equals(const aHandle:THandle):Boolean;
+Begin
+  asm
+    @result = (@self == @aHandle);
+  end;
+end;
+
+procedure TQTXHandleHelper.ReadyExecute(OnReady:TProcedureRef);
+Begin
+  if Valid then
+  begin
+    if assigned(OnReady) then
+    Begin
+      (* Element already in DOM? Execute now *)
+      if Ready then
+      OnReady() else
+
+      (* Try again in 100ms *)
+      w3_callback(
+        procedure ()
+        begin
+          self.ReadyExecute(OnReady);
+        end,100);
+    end;
+  end;
+end;
+
+
 //############################################################################
 // TQTXAttrAccess
 //############################################################################
@@ -103,7 +236,10 @@ implementation
 Constructor TQTXAttrAccess.Create(Const aHandle:THandle);
 Begin
   inherited Create;
-  FHandle:=aHandle;
+  if aHandle.valid then
+  FHandle:=aHandle else
+  raise Exception.Create
+  ('Failed to create attribute access, invalid handle error');
 end;
 
 function  TQTXAttrAccess.Exists(aName:String):Boolean;
@@ -118,18 +254,30 @@ function  TQTXAttrAccess.Read(aName:String):Variant;
 var
   mName:  String;
 begin
-  mName:=lowercase('data-' + aName);
-  if FHandle.hasAttribute(mName) then
-  Result := FHandle.getAttribute(mName) else
-  result:=null;
+  try
+    mName:=lowercase('data-' + aName);
+    if FHandle.hasAttribute(mName) then
+    Result := FHandle.getAttribute(mName) else
+    result:=null;
+  except
+    on e: exception do
+    raise EW3Exception.CreateFmt('Failed to read attribute: %s',
+      [e.message]);
+  end;
 end;
 
 procedure TQTXAttrAccess.Write(aName:String;const aValue:Variant);
 var
   mName:  String;
 begin
-  mName:=lowercase('data-' + aName);
-  FHandle.setAttribute(mName, aValue);
+  try
+    mName:=lowercase('data-' + aName);
+    FHandle.setAttribute(mName, aValue);
+  except
+    on e: exception do
+    raise EW3Exception.CreateFmt('Failed to write attribute: %s',
+      [e.message]);
+  end;
 end;
 
 //############################################################################
@@ -184,6 +332,7 @@ begin
   end;
 end;
 
+{
 class function TQTXTools.getHandleReady(const aHandle:THandle):Boolean;
 Begin
   if (aHandle) then
@@ -213,7 +362,7 @@ begin
     mRef:=getElementRootAncestor(aElement);
     result:=(mRef.body);
   end;
-end;
+end;       }
 
 class procedure TQTXTools.ExecuteOnDocumentReady(const aFunc:TProcedureRef)
 Begin
@@ -236,12 +385,14 @@ Begin
   begin
     if assigned(aFunc) then
     Begin
-      if TQTXTools.getElementInDOM(aElement) then
+      //if TQTXTools.getElementInDOM(aElement) then
+      if aElement.ready then
       aFunc() else
       w3_callback(
         procedure ()
         begin
-          TQTXTools.ExecuteOnElementReady(aElement,aFunc);
+          aElement.readyExecute(aFunc);
+          //TQTXTools.ExecuteOnElementReady(aElement,aFunc);
         end,
         100);
     end;
