@@ -10439,6 +10439,7 @@ var TForm1 = {
    }
    /// procedure TForm1.FormActivated()
    ,FormActivated:function(Self) {
+      var mX = null;
       TW3CustomForm.FormActivated(Self);
       WriteLn("Form1 activated");
       TQTXLabel.setCaption$($As(Application(),TApplication).FHeader$1.FCaption,"CaseBook");
@@ -10450,6 +10451,9 @@ var TForm1 = {
                TW3CustomApplication.ShowDialog(Application(),"Display warning","This application was built for<br>\r\niPhone 5. Your display is presently<br>\r\nnot compatible with the layout",3);
             }
          },1000);
+         mX = TCBNotifierPlack.Create$55$($New(TCBNotifierPlack),Self);
+         TW3TagObj.SetInnerHTML(mX.FBox,"<br><center><b>Welcome to CaseBook</b><br>CaseBook was coded in <a href=\"http://www.smartmobilestudio.com\">Smart Mobile Studio</a><br>The number one HTML5 authoring tool for<br>creating rich, object oriented HTML5 apps!");
+         TCBNotifierPlack.Show(mX);
       }
    }
    /// procedure TForm1.InitializeForm()
@@ -10488,9 +10492,9 @@ var TForm1 = {
             TQTXLabel.setCaption$(Self.FNewButton.FCaption$3,"Post");
             TW3TagObj.SetInnerHTML(Self.FNewButton.FGlyph,"<i class=\"fa fa-file fa-2x\">");
             TW3CustomControl.SetOnMouseTouchRelease(Self.FNewButton,function (Sender$6, Button$1, Shift, X$3, Y$3) {
-               mDialog = TCBDialogInfo.Create$55$($New(TCBDialogInfo));
+               mDialog = TCBDialogInfo.Create$56$($New(TCBDialogInfo));
                TW3CustomControl.SetOnMouseTouchRelease(mDialog.FPost,function (Sender$7, Button$2, Shift$1, X$4, Y$4) {
-                  TQTXEffectsHelper$fxZoomOut(mDialog.FBox,0.3,function () {
+                  TQTXEffectsHelper$fxZoomOut(mDialog.FBox$1,0.3,function () {
                      var mText$9 = "";
                      mText$9 = Trim$_String_(TW3Memo.getText$1$(mDialog.FEditor));
                      TObject.Free(mDialog);
@@ -10692,16 +10696,52 @@ var TForm1 = {
    ,FormDeactivated:TW3CustomForm.FormDeactivated
    ,InitializeForm$:function($){return $.ClassType.InitializeForm($)}
 };
+/// TCBNotifierPlack = class (TObject)
+var TCBNotifierPlack = {
+   $ClassName:"TCBNotifierPlack",
+   $Parent:TObject
+   ,$Init:function ($) {
+      TObject.$Init($);
+      $.FBox = null;
+   }
+   /// procedure TCBNotifierPlack.Show()
+   ,Show:function(Self) {
+      TQTXEffectsHelper$fxFadeIn$1(Self.FBox,0.5,function () {
+         TQTXEffectsHelper$fxMoveTo(Self.FBox,TW3MovableControl.GetLeft$(Self.FBox),(TW3MovableControl.ClientHeight($As(Self.FBox.FParent,TW3CustomControl))-TW3MovableControl.GetHeight$1$(Self.FBox)),0.6,function () {
+            w3_Callback(function () {
+               TQTXEffectsHelper$fxFadeOut(Self.FBox,0.3,function () {
+                  TObject.Free(Self);
+               });
+            },3000);
+         });
+      });
+   }
+   /// constructor TCBNotifierPlack.Create(AOwner: TW3CustomControl)
+   ,Create$55:function(Self, AOwner$8) {
+      TObject.Create(Self);
+      Self.FBox = TW3Component.Create$36$($New(TW3Panel),AOwner$8);
+      TW3MovableControl.SetVisible$(Self.FBox,false);
+      TW3MovableControl.SetBounds$2$(Self.FBox,($Div(TW3MovableControl.ClientWidth(AOwner$8),2))-140,TW3MovableControl.ClientHeight(AOwner$8)+100,280,100);
+      return Self
+   }
+   /// destructor TCBNotifierPlack.Destroy()
+   ,Destroy:function(Self) {
+      TObject.Free(Self.FBox);
+      TObject.Destroy(Self);
+   }
+   ,Destroy$:function($){return $.ClassType.Destroy($)}
+   ,Create$55$:function($){return $.ClassType.Create$55.apply($.ClassType, arguments)}
+};
 /// TCBDialogInfo = class (TObject)
 var TCBDialogInfo = {
    $ClassName:"TCBDialogInfo",
    $Parent:TObject
    ,$Init:function ($) {
       TObject.$Init($);
-      $.FBlocker = $.FBox = $.FCancel = $.FEditor = $.FPost = $.FTitle$1 = null;
+      $.FBlocker = $.FBox$1 = $.FCancel = $.FEditor = $.FPost = $.FTitle$1 = null;
    }
    /// constructor TCBDialogInfo.Create()
-   ,Create$55:function(Self) {
+   ,Create$56:function(Self) {
       var dx$15 = 0;
       var dy$17 = 0;
       var wd$9 = 0;
@@ -10709,17 +10749,17 @@ var TCBDialogInfo = {
       Self.FBlocker = TW3Component.Create$36$($New(TW3BlockBox),Application().FDisplay);
       TW3MovableControl.SetBounds$2$(Self.FBlocker,0,0,TW3MovableControl.GetWidth$1$(Application().FDisplay),TW3MovableControl.GetHeight$1$(Application().FDisplay));
       TW3CustomControl.BringToFront(Self.FBlocker);
-      Self.FBox = TW3Component.Create$36$($New(TW3Panel),Self.FBlocker);
-      TW3MovableControl.SetBounds$2$(Self.FBox,10,20,300,280);
-      TW3MovableControl.MoveTo$1$(Self.FBox,($Div(TW3MovableControl.ClientWidth(Application().FDisplay),2))-($Div(TW3MovableControl.GetWidth$1$(Self.FBox),2)),($Div(TW3MovableControl.ClientHeight(Application().FDisplay),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FBox),2)));
-      Self.FEditor = TW3Component.Create$36$($New(TW3Memo),Self.FBox);
-      TW3MovableControl.SetBounds$2$(Self.FEditor,10,40,TW3MovableControl.ClientWidth(Self.FBox)-20,TW3MovableControl.ClientHeight(Self.FBox)-20-80);
-      Self.FTitle$1 = TW3Component.Create$36$($New(TQTXLabel),Self.FBox);
+      Self.FBox$1 = TW3Component.Create$36$($New(TW3Panel),Self.FBlocker);
+      TW3MovableControl.SetBounds$2$(Self.FBox$1,10,20,300,280);
+      TW3MovableControl.MoveTo$1$(Self.FBox$1,($Div(TW3MovableControl.ClientWidth(Application().FDisplay),2))-($Div(TW3MovableControl.GetWidth$1$(Self.FBox$1),2)),($Div(TW3MovableControl.ClientHeight(Application().FDisplay),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FBox$1),2)));
+      Self.FEditor = TW3Component.Create$36$($New(TW3Memo),Self.FBox$1);
+      TW3MovableControl.SetBounds$2$(Self.FEditor,10,40,TW3MovableControl.ClientWidth(Self.FBox$1)-20,TW3MovableControl.ClientHeight(Self.FBox$1)-20-80);
+      Self.FTitle$1 = TW3Component.Create$36$($New(TQTXLabel),Self.FBox$1);
       TW3MovableControl.MoveTo$1$(Self.FTitle$1,10,10);
       TQTXLabel.setCaption$(Self.FTitle$1,"Add new post");
-      dy$17 = TW3MovableControl.ClientHeight(Self.FBox)-40;
-      wd$9 = ($Div(TW3MovableControl.ClientWidth(Self.FBox)-40,2))-20;
-      Self.FPost = TW3Component.Create$36$($New(TCBGlyphButton),Self.FBox);
+      dy$17 = TW3MovableControl.ClientHeight(Self.FBox$1)-40;
+      wd$9 = ($Div(TW3MovableControl.ClientWidth(Self.FBox$1)-40,2))-20;
+      Self.FPost = TW3Component.Create$36$($New(TCBGlyphButton),Self.FBox$1);
       TW3MovableControl.SetBounds$2$(Self.FPost,10,dy$17,wd$9,26);
       TQTXLabel.setAuto$(Self.FPost.FCaption$3,false);
       TW3MovableControl.setHeight$(Self.FPost.FCaption$3,16);
@@ -10727,8 +10767,8 @@ var TCBDialogInfo = {
       TW3TagObj.SetInnerHTML(Self.FPost.FGlyph,"<i class=\"fa fa-bolt fa-2x\">");
       TW3CustomControl.LayoutChildren$(Self.FPost);
       TW3MovableControl.setHeight$(Self.FPost.FGlyph,26);
-      dx$15 = TW3MovableControl.ClientWidth(Self.FBox)-10-wd$9;
-      Self.FCancel = TW3Component.Create$36$($New(TCBGlyphButton),Self.FBox);
+      dx$15 = TW3MovableControl.ClientWidth(Self.FBox$1)-10-wd$9;
+      Self.FCancel = TW3Component.Create$36$($New(TCBGlyphButton),Self.FBox$1);
       TW3MovableControl.SetBounds$2$(Self.FCancel,dx$15,dy$17,wd$9,26);
       TQTXLabel.setAuto$(Self.FCancel.FCaption$3,false);
       TW3MovableControl.setHeight$(Self.FCancel.FCaption$3,16);
@@ -10737,11 +10777,11 @@ var TCBDialogInfo = {
       TW3CustomControl.LayoutChildren$(Self.FCancel);
       TW3MovableControl.setHeight$(Self.FCancel.FGlyph,26);
       TW3CustomControl.SetOnMouseTouchRelease(Self.FCancel,function (Sender$11, Button$5, Shift$4, X$7, Y$7) {
-         TQTXEffectsHelper$fxZoomOut(Self.FBox,0.3,function () {
+         TQTXEffectsHelper$fxZoomOut(Self.FBox$1,0.3,function () {
             TObject.Free(Self);
          });
       });
-      TQTXEffectsHelper$fxZoomIn(Self.FBox,0.3);
+      TQTXEffectsHelper$fxZoomIn(Self.FBox$1,0.3);
       return Self
    }
    /// destructor TCBDialogInfo.Destroy()
@@ -10749,12 +10789,12 @@ var TCBDialogInfo = {
       TObject.Free(Self.FPost);
       TObject.Free(Self.FTitle$1);
       TObject.Free(Self.FEditor);
-      TObject.Free(Self.FBox);
+      TObject.Free(Self.FBox$1);
       TObject.Free(Self.FBlocker);
       TObject.Destroy(Self);
    }
    ,Destroy$:function($){return $.ClassType.Destroy($)}
-   ,Create$55$:function($){return $.ClassType.Create$55($)}
+   ,Create$56$:function($){return $.ClassType.Create$56($)}
 };
 /// TW3Panel = class (TW3CustomControl)
 var TW3Panel = {
@@ -11880,7 +11920,7 @@ var TQTXScrollWindow = {
       w3_setStyle(Self.FContent$1.FHandle$3,"postion","relative");
       w3_setStyle(Self.FContent$1.FHandle$3,"min-width","100%");
       w3_setStyle(Self.FContent$1.FHandle$3,"min-height","0px");
-      Self.FScroller = TQTXScrollController.Create$57$($New(TQTXScrollController),Self.FHandle$3);
+      Self.FScroller = TQTXScrollController.Create$58$($New(TQTXScrollController),Self.FHandle$3);
       TQTXTools.ExecuteOnElementReady(TQTXTools,Self.FHandle$3,function () {
          TQTXScrollController.Attach(Self.FScroller);
       });
@@ -12054,7 +12094,7 @@ var TW3StyleRule = {
       return Self.FRule.style;
    }
    /// constructor TW3StyleRule.Create(cssSelector: String; cssProperties: String = '')
-   ,Create$58:function(Self, cssSelector, cssProperties) {
+   ,Create$59:function(Self, cssSelector, cssProperties) {
       var sheet$1 = null;
       var i$3 = 0;
       sheet$1 = TW3StyleRule.CSSStyleSheet();
@@ -12620,7 +12660,7 @@ var TQTXScrollOptions = {
       $.a$52 = 0;
    }
    /// constructor TQTXScrollOptions.Create()
-   ,Create$56:function(Self) {
+   ,Create$57:function(Self) {
       TObject.Create(Self);
       Self.a$42 = true;
       Self.a$48 = true;
@@ -12654,7 +12694,7 @@ var TQTXScrollOptions = {
       return Result
    }
    ,Destroy:TObject.Destroy
-   ,Create$56$:function($){return $.ClassType.Create$56($)}
+   ,Create$57$:function($){return $.ClassType.Create$57($)}
    ,toJSON$:function($){return $.ClassType.toJSON($)}
 };
 /// TQTXScrollController = class (TObject)
@@ -12694,9 +12734,9 @@ var TQTXScrollController = {
       }
    }
    /// constructor TQTXScrollController.Create(const aHandle: THandle)
-   ,Create$57:function(Self, aHandle$4) {
+   ,Create$58:function(Self, aHandle$4) {
       TObject.Create(Self);
-      Self.FOptions$1 = TQTXScrollOptions.Create$56$($New(TQTXScrollOptions));
+      Self.FOptions$1 = TQTXScrollOptions.Create$57$($New(TQTXScrollOptions));
       Self.FControl = aHandle$4;
       return Self
    }
@@ -12826,7 +12866,7 @@ var TQTXScrollController = {
       }
    }
    ,Destroy$:function($){return $.ClassType.Destroy($)}
-   ,Create$57$:function($){return $.ClassType.Create$57.apply($.ClassType, arguments)}
+   ,Create$58$:function($){return $.ClassType.Create$58.apply($.ClassType, arguments)}
 };
 /// TQTXSizeAnimation = class (TW3TransitionAnimation)
 var TQTXSizeAnimation = {
@@ -12925,15 +12965,15 @@ function TQTXEffectsHelper$fxFadeIn$1(Self$86, Duration$2, OnFinished) {
    }
 }
 /// procedure TQTXEffectsHelper.fxFadeOut(Self: TW3CustomControl; const Duration: Float)
-function TQTXEffectsHelper$fxFadeOut(Self$87, Duration$3) {
-   TQTXEffectsHelper$fxFadeOut$1(Self$87,Duration$3,null);
+function TQTXEffectsHelper$fxFadeOut$1(Self$87, Duration$3) {
+   TQTXEffectsHelper$fxFadeOut(Self$87,Duration$3,null);
 }
 /// procedure TQTXEffectsHelper.fxFadeOut(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxFadeOut$1(Self$88, Duration$4, OnFinished$1) {
+function TQTXEffectsHelper$fxFadeOut(Self$88, Duration$4, OnFinished$1) {
    var mEffect$1 = null;
    if (TQTXEffectsHelper$fxBusy(Self$88)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxFadeOut$1(Self$88,Duration$4,OnFinished$1);
+         TQTXEffectsHelper$fxFadeOut(Self$88,Duration$4,OnFinished$1);
       },50);
    } else {
       mEffect$1 = TW3CustomAnimation.Create$39$($New(TQTXFadeAnimation));
@@ -13995,7 +14035,7 @@ var TQTXHeaderTitle = {
       if ((Self.FObjReady&&TQTXTools.getDocumentReady(TQTXTools))&&TQTXHandleHelper$Ready$3(Self.FHandle$3)) {
          if (Self.FParent!==null) {
             if ($As(Self.FParent,TQTXHeaderBar).FFader) {
-               TQTXEffectsHelper$fxFadeOut$1(Self,0.22,function () {
+               TQTXEffectsHelper$fxFadeOut(Self,0.22,function () {
                   TQTXHeaderTitle.SetInheritedCaption(Self,aValue$126);
                   TQTXEffectsHelper$fxFadeIn(Self,0.22);
                });
@@ -14570,10 +14610,10 @@ var TformLogin = {
    ,W3Button1Click$1:function(Self, Sender$20) {
       w3_Callback(function () {
          Self.FFirst$1 = false;
-         TQTXEffectsHelper$fxFadeOut(Self.W3Label2$1,0.5);
+         TQTXEffectsHelper$fxFadeOut$1(Self.W3Label2$1,0.5);
          TQTXEffectsHelper$fxWarpOut$1(Self.W3Label1$1,0.3);
          TW3CustomControl.SetEnabled$(Self.W3Button1$1,false);
-         TQTXEffectsHelper$fxFadeOut(Self.W3Button1$1,0.5);
+         TQTXEffectsHelper$fxFadeOut$1(Self.W3Button1$1,0.5);
          w3_Callback(function () {
             TW3CustomApplication.GotoForm(Application(),"mainForm",1);
          },600);
@@ -16543,8 +16583,8 @@ var TW3ListItems = {
       TObjectList.Clear(Self.FObjects$1);
    }
    /// constructor TW3ListItems.Create(AOwner: TObject)
-   ,Create$5:function(Self, AOwner$8) {
-      TW3OwnedObject.Create$5(Self,AOwner$8);
+   ,Create$5:function(Self, AOwner$9) {
+      TW3OwnedObject.Create$5(Self,AOwner$9);
       Self.FObjects$1 = TObjectList.Create$15$($New(TObjectList));
       return Self
    }
