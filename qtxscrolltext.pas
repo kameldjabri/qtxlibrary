@@ -128,8 +128,10 @@ Begin
   inherited;
 
   if assigned(FContent)
-  and TQTXTools.getElementInDOM(FContent.handle)
-  and TQTXTools.getElementInDOM(Handle) then
+  and FContent.handle.Ready
+  and Handle.Ready then
+  //and TQTXTools.getElementInDOM(FContent.handle)
+  //and TQTXTools.getElementInDOM(Handle) then
   begin
     if not FActive then
     Begin

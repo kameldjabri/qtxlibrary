@@ -1,5 +1,8 @@
 unit qtxEffects;
 
+{$DEFINE USE_ANIM_HELPER}
+{.$DEFINE USE_ANIM_REGISTRY}
+
 //#############################################################################
 //
 //  Unit:       qtxEffects.pas
@@ -25,13 +28,42 @@ unit qtxEffects;
 //
 //
 //#############################################################################
+(* Note:
 
-(*
-  fadein(0.4);
-  moveTo(100,100,0.4);
-  rotate(90,57);
-  fadeout(0.5);
-*)
+   This unit can use a dictionary-object for keeping track of active
+   animations. This is essentially not required for just executing X
+   number of animations on an element (component), but if you want
+   to stop or pause an animation presently running - then this is
+   the way to do it.
+
+   So if you enable "USE_ANIM_REGISTRY" above, you can use the function
+   GetEffectObj() to get the TW3CustomAnimation object active
+   for the current element, e.g:
+
+   var mAnim:TW3CustomAnimation := GetEffectObj(self.handle);
+
+   I should also note that the laws of css animations are pure-evil:
+     "Once an animation is started, it cannot be paused or stopped
+      until it reaches an end-point"
+
+   An "end-point" being a step in the animation, or - as is the case for
+   animations that goes from X1 to X2, that it has to run entirely until
+   the end until it responds. I suspect animations run in their own thread
+   inside the webkit/moz engine, hence the "careful" API.
+
+   So animations are notoriously hard to work with.
+
+   This is exactly why libraries like Tween.js is used more and more
+   in games and multimedia, because it deploys an update mechanism which
+   you control. As opposed to the hardware accellerated, shoot
+   and forget nature of CSS3 animations.
+
+   Having said that, animations are great for giving otherwise static
+   forms some "life", for moving buttons and elements around in response
+   to user-influence -- so when used well they can really be a great
+   bonus to your apps.
+
+   *)
 
 interface
 
@@ -40,7 +72,7 @@ uses
   qtxutils;
 
 const
-CNT_RELEASE_DELAY = 50;
+CNT_RELEASE_DELAY = 25;
 CNT_CACHE_DELAY   = 50;
 
 type
@@ -139,9 +171,13 @@ type
               const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
+    Procedure fxMoveUp(const Duration:Float);overload;
+    Procedure fxMoveUp(const Duration:Float;
+              const OnFinished:TProcedureRef);overload;
 
-    Procedure fxMoveUp(const Duration:Float);
-    Procedure fxMoveDown(const Duration:Float);
+    Procedure fxMoveDown(const Duration:Float);overload;
+    procedure fxMoveDown(const Duration:Float;
+              const OnFinished:TProcedureRef);overload;
 
     Procedure fxSizeTo(const aWidth,aHeight:Integer;
               const Duration:Float);overload;
@@ -157,19 +193,32 @@ type
     Procedure fxScaleUp(aFactor:Integer;const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
-
-    Procedure fxAbort;
-
     function  fxBusy:Boolean;
     Procedure fxSetBusy(const aValue:Boolean);
   End;
 
+  {$IFDEF USE_ANIM_HELPER}
+  TQTXAnimationHelper = helper for TW3CustomAnimation
+  public
+    procedure Pause;
+    procedure Resume;
+    procedure Stop;
+  End;
+  {$ENDIF}
+
+{$IFDEF USE_ANIM_REGISTRY}
+Procedure RegisterActiveEffect(const aElement:THandle;const aEffect:TW3CustomAnimation);
+Procedure UnRegisterEffect(const aElement:THandle);
+function GetEffectObj(const aElement:THandle):TW3CustomAnimation;
+{$ENDIF}
+
 implementation
 
-(*
-
+{$IFDEF USE_ANIM_REGISTRY}
 uses w3Dictionaries;
+{$ENDIF}
 
+{$IFDEF USE_ANIM_REGISTRY}
 var
 _FActive: TW3ObjDictionary;
 
@@ -200,28 +249,70 @@ begin
   _FActive.delete(mRef);
 end;
 
-Procedure CancelEffect(const aElement:THandle);
+function GetEffectObj(const aElement:THandle):TW3CustomAnimation;
 var
   mRef: String;
 begin
   mRef:=IntToStr(aElement);
-  if _FActive.ValueExists(mRef) then
-  begin
-    //
-  end;
-end;       *)
+  result:=TW3CustomAnimation(_FActive.Values[mRef]);
+end;
+{$ENDIF}
+
+//############################################################################
+//
+//############################################################################
+
 
 Procedure BeforeEffect(const aControl:TW3CustomControl;
           const aEffectObj:TW3CustomAnimation);
 Begin
   aControl.fxSetBusy(True);
+  {$IFDEF USE_ANIM_REGISTRY}
+  RegisterActiveEffect(aControl.handle,aEffectObj);
+  {$ENDIF}
 end;
 
 Procedure AfterEffect(const aControl:TW3CustomControl;
           const aEffectObj:TW3CustomAnimation);
 begin
   aControl.fxSetBusy(False);
+  {$IFDEF USE_ANIM_REGISTRY}
+  UnRegisterEffect(aControl.handle);
+  {$ENDIF}
 end;
+
+//############################################################################
+// TQTXAnimationHelper
+//############################################################################
+
+{$IFDEF USE_ANIM_HELPER}
+procedure TQTXAnimationHelper.Pause;
+begin
+  if self.Active then
+  self.target.handle.style[w3_CSSPrefix('AnimationPlayState')]:='paused';
+end;
+
+procedure TQTXAnimationHelper.Resume;
+var
+  mRef: THandle;
+  mId:  String;
+Begin
+  if self.active then
+  begin
+    mId:=w3_CSSPrefix('AnimationPlayState');
+    mRef:=self.target.handle;
+    if (mRef.style[mID]) then
+    if mRef.style[mId]<>'running' then
+    mRef.style[mId]:='running';
+  end;
+end;
+
+procedure TQTXAnimationHelper.Stop;
+begin
+  if self.active then
+  self.target.handle.style[w3_CSSPrefix('AnimationPlayState')]:='stopped';
+end;
+{$ENDIF}
 
 //############################################################################
 // TQTXFadeAnimation
@@ -285,22 +376,6 @@ end;
 Procedure TQTXEffectsHelper.fxSetBusy(const aValue:Boolean);
 Begin
   self.elementdata.write('fxBusy','yes');
-end;
-
-Procedure TQTXEffectsHelper.fxAbort;
-Begin
-  if fxBusy then
-  begin
-    try
-      handle.style.webkitAnimationPlayState:='paused';
-      Handle.style.removeProperty("-webkit-animation");
-      Handle.style.removeProperty("-webkit-animation-fill-mode");
-      Handle.style.removeProperty("animation");
-      Handle.style.removeProperty("animation-fill-mode");
-    finally
-      fxSetBusy(False);
-    end;
-  end;
 end;
 
 Procedure TQTXEffectsHelper.fxScaleUp(aFactor:Integer;
@@ -380,8 +455,6 @@ var
 Begin
   if not fxBusy then
   Begin
-    //fxsetBusy(True);
-
     mEffect:=TQTXSizeAnimation.Create;
     mEffect.duration:=Duration;
 
@@ -441,7 +514,6 @@ var
 Begin
   if not fxBusy then
   Begin
-    //fxSetBusy(true);
     mEffect:=TQTXSizeAnimation.Create;
     mEffect.duration:=Duration;
 
@@ -486,13 +558,13 @@ Begin
   end;
 end;
 
-Procedure TQTXEffectsHelper.fxMoveUp(const Duration:Float);
+Procedure TQTXEffectsHelper.fxMoveUp(const Duration:Float;
+          const OnFinished:TProcedureRef);
 var
   mEffect: TW3CustomAnimation;
 Begin
   if not fxBusy then
   begin
-    //fxSetBusy(true);
     mEffect:=TQTXMoveAnimation.Create;
     mEffect.duration:=Duration;
     TQTXMoveAnimation(mEffect).fromX:=self.left;
@@ -510,6 +582,10 @@ Begin
 
           (* register effect done *)
           AfterEffect(self,TW3CustomAnimation(sender));
+
+          if assigned(OnFinished) then
+          OnFinished;
+
         end, CNT_RELEASE_DELAY);
       end;
     BeforeEffect(self,mEffect);
@@ -517,18 +593,23 @@ Begin
   end else
   w3_callback( procedure ()
     Begin
-      fxMoveUp(duration);
+      fxMoveUp(duration,OnFinished);
     end,
     CNT_CACHE_DELAY);
 end;
 
-Procedure TQTXEffectsHelper.fxMoveDown(const Duration:Float);
+Procedure TQTXEffectsHelper.fxMoveUp(const Duration:Float);
+begin
+  fxMoveUp(Duration,NIL);
+end;
+
+procedure TQTXEffectsHelper.fxMoveDown(const Duration:Float;
+          const OnFinished:TProcedureRef);
 var
   mEffect: TW3CustomAnimation;
 Begin
   if not fxBusy then
   Begin
-    //fxSetBusy(True);
     mEffect:=TQTXMoveAnimation.Create;
     mEffect.duration:=Duration;
     TQTXMoveAnimation(mEffect).fromX:=self.left;
@@ -546,6 +627,9 @@ Begin
 
             (* register effect done *)
             AfterEffect(self,TW3CustomAnimation(sender));
+
+            if assigned(OnFinished) then
+            OnFinished();
         end, CNT_RELEASE_DELAY);
       end;
     BeforeEffect(self,mEffect);
@@ -553,9 +637,14 @@ Begin
   end else
   w3_callback( procedure ()
     Begin
-      fxMoveDown(duration);
+      fxMoveDown(duration,OnFinished);
     end,
     CNT_CACHE_DELAY);
+end;
+
+Procedure TQTXEffectsHelper.fxMoveDown(const Duration:Float);
+Begin
+  fxMoveDown(Duration,NIL);
 end;
 
 Procedure TQTXEffectsHelper.fxMoveBy(const dx,dy:Integer;
@@ -572,7 +661,6 @@ var
 Begin
   if not fxBusy then
   begin
-    //fxSetBusy(True);
     mEffect:=TQTXMoveAnimation.Create;
     mEffect.duration:=Duration;
     TQTXMoveAnimation(mEffect).fromX:=self.left;
@@ -621,7 +709,6 @@ var
 Begin
   if not fxBusy then
   begin
-    //fxSetBusy(True);
     mEffect:=TQTXSizeAnimation.Create;
     mEffect.duration:=Duration;
     TQTXSizeAnimation(mEffect).fromLeft:=self.left;
@@ -674,7 +761,6 @@ var
 Begin
   if not fxBusy then
   begin
-    //fxSetBusy(True);
     mEffect:=TQTXMoveAnimation.Create;
     mEffect.duration:=Duration;
     TQTXMoveAnimation(mEffect).fromX:=self.left;
@@ -722,7 +808,6 @@ var
 Begin
   if not fxBusy then
   Begin
-    //fxSetBusy(true);
     mEffect:=TW3ZoomInTransition.Create;
     mEffect.Duration:=Duration;
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
@@ -763,7 +848,6 @@ var
 Begin
   if not fxBusy then
   Begin
-    //fxSetBusy(True);
     mEffect:=TW3ZoomOutTransition.Create;
     mEffect.Duration:=Duration;
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
@@ -804,7 +888,6 @@ var
 Begin
   if not fxBusy then
   begin
-    //fxSetBusy(true);
     mEffect:=TW3WarpOutTransition.Create;
     mEffect.Duration:=Duration;
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
@@ -845,7 +928,6 @@ var
 Begin
   if not fxBusy then
   Begin
-    //fxSetBusy(true);
     mEffect:=TW3WarpInTransition.Create;
     mEffect.Duration:=Duration;
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
@@ -886,7 +968,6 @@ var
 Begin
   if not fxBusy then
   begin
-    //fxSetBusy(true);
     mEffect:=TQTXFadeAnimation.Create;
 
     TQTXFadeAnimation(mEffect).fromOpacity:=0.0;
@@ -930,8 +1011,6 @@ var
 Begin
   if not fxBusy then
   begin
-    //fxSetBusy(true);
-    //mEffect:=TW3FadeSlideTransition.Create;
     mEffect:=TQTXFadeAnimation.Create;
     TQTXFadeAnimation(mEffect).fromOpacity:=1.0;
     TQTXFadeAnimation(mEffect).toOpacity:=0.0;
