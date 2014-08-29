@@ -35,6 +35,17 @@ type
     Destructor  Destroy;Override;
   End;
 
+  TCBNotifierPlack = Class(TObject)
+  private
+    FBox:       TW3Panel;
+  public
+    Property    Box:TW3Panel read FBox;
+    procedure   Show;
+    Constructor Create(AOwner:TW3CustomControl);virtual;
+    Destructor  Destroy;Override;
+  End;
+
+
   TForm1=class(TW3form)
   private
     {$I 'mainForm:intf'}
@@ -60,6 +71,58 @@ implementation
 
 { TForm1}
 uses casebook, W3MouseTouch;
+
+//#############################################################################
+// TCBNotifierPlack
+//#############################################################################
+
+Constructor TCBNotifierPlack.Create(AOwner:TW3CustomControl);
+const
+  CNT_Width   = 280;
+  CNT_Height  = 100;
+Begin
+  inherited Create;
+  FBox:=TW3Panel.Create(aOwner);
+  FBox.visible:=False;
+  FBox.setBounds(
+    (AOwner.ClientWidth div 2) - (CNT_WIDTH div 2),
+    //(AOwner.clientHeight - CNT_HEIGHT),
+    AOwner.ClientHeight + CNT_HEIGHT,
+    CNT_WIDTH,
+    CNT_HEIGHT);
+end;
+
+Destructor TCBNotifierPlack.Destroy;
+Begin
+  FBox.free;
+  inherited;
+end;
+
+procedure TCBNotifierPlack.Show;
+Begin
+  FBox.fxFadeIn(0.5, procedure ()
+  begin
+    FBox.fxMoveTo(FBox.Left,
+    (TW3CustomControl(FBox.Parent).ClientHeight - FBox.Height),
+    //(TW3CustomControl(FBox.Parent).ClientHeight div 2) - FBox.height div 2,
+    0.6, procedure ()
+      begin
+        w3_callback( procedure ()
+          Begin
+            FBox.fxFadeOut(0.3,
+              procedure ()
+              begin
+                self.free;
+              end);
+          end,
+          1000 * 3);
+      end);
+  end);
+end;
+
+//#############################################################################
+// TCBDialogInfo
+//#############################################################################
 
 Constructor TCBDialogInfo.Create;
 var
@@ -154,6 +217,18 @@ Begin
         end;
       end,
       1000);
+
+
+      (* Show welcome plack *)
+      var mX:=TCBNotifierPlack.Create(self);
+      mx.Box.InnerHTML:='<br><center><b>Welcome to CaseBook</b><br>'
+        + 'CaseBook was coded in <a href="http://www.smartmobilestudio.com">Smart Mobile Studio</a><br>'
+        + 'The number one HTML5 authoring tool for<br>'
+        + 'creating rich, object oriented HTML5 apps!';
+      mX.Show;
+
+
+
   end;
 
 end;
@@ -290,7 +365,6 @@ begin
     FPanel.EndUpdate;
     FPanel.fxFadeIn(0.1);
   end;
-
 end;
  
 procedure TForm1.Resize;

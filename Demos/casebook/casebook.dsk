@@ -1,20 +1,20 @@
 <SMART>
   <state>
     <editor>
-      <tab filename="casebook" fullname="casebook.pas" topline="63" col="15" row="83" />
-      <tab filename="mainForm" fullname="mainForm.pas" topline="277" col="30" row="290">
-        <bookmark id="7" x="3" y="131" />
+      <tab filename="casebook" fullname="casebook.pas" topline="63" col="83" row="15" />
+      <tab filename="mainForm" fullname="mainForm.pas" topline="292" col="36" row="309">
+        <bookmark id="7" x="3" y="194" />
       </tab>
-      <tab filename="qtxEffects" fullname="..\..\qtxEffects.pas" topline="184" col="196" row="55" />
-      <tab filename="qtxheader" fullname="..\..\qtxheader.pas" topline="297" col="4" row="299" />
-      <tab filename="qtxutils" fullname="..\..\qtxutils.pas" topline="169" col="56" row="1" />
-      <tab filename="formProfile" fullname="formProfile.pas" topline="34" col="18" row="51" />
-      <tab filename="formNew" fullname="formNew.pas" topline="20" col="57" row="18" />
-      <tab filename="formLogin" fullname="formLogin.pas" topline="1" col="35" row="32" />
-      <tab filename="iOS.css" topline="90" col="15" row="120" />
-      <tab filename="caseList" fullname="caseList.pas" topline="1" col="8" row="8" />
-      <tab filename="W3Components" fullname="..\..\..\..\RTL\W3Components.pas" topline="107" col="125" row="12" />
-      <activetab>caseList</activetab>
+      <tab filename="qtxEffects" fullname="..\..\qtxEffects.pas" topline="184" col="55" row="196" />
+      <tab filename="qtxheader" fullname="..\..\qtxheader.pas" topline="297" col="299" row="4" />
+      <tab filename="qtxutils" fullname="..\..\qtxutils.pas" topline="169" col="1" row="56" />
+      <tab filename="formProfile" fullname="formProfile.pas" topline="34" col="51" row="18" />
+      <tab filename="formNew" fullname="formNew.pas" topline="20" col="18" row="57" />
+      <tab filename="formLogin" fullname="formLogin.pas" topline="1" col="32" row="35" />
+      <tab filename="iOS.css" topline="649" col="15" row="670" />
+      <tab filename="caseList" fullname="caseList.pas" topline="1" col="26" row="17" />
+      <tab filename="W3Components" fullname="..\..\..\..\RTL\W3Components.pas" topline="107" col="12" row="125" />
+      <activetab>mainForm</activetab>
     </editor>
   </state>
 </SMART>
