@@ -90,6 +90,15 @@ Begin
     AOwner.ClientHeight + CNT_HEIGHT,
     CNT_WIDTH,
     CNT_HEIGHT);
+  FBox.OnMouseTouchClick:=Procedure (Sender: TObject; Button: TMouseButton;
+    Shift: TShiftState; X, Y: Integer)
+    Begin
+      FBox.fxFadeOut(0.3,
+        procedure ()
+        begin
+          FBox.free;
+        end);
+    end;
 end;
 
 Destructor TCBNotifierPlack.Destroy;
@@ -103,7 +112,7 @@ Begin
   FBox.fxFadeIn(0.5, procedure ()
   begin
     FBox.fxMoveTo(FBox.Left,
-    (TW3CustomControl(FBox.Parent).ClientHeight - FBox.Height),
+    (TW3CustomControl(FBox.Parent).ClientHeight div 2) - FBox.Height div 2,
     //(TW3CustomControl(FBox.Parent).ClientHeight div 2) - FBox.height div 2,
     0.6, procedure ()
       begin
@@ -115,7 +124,7 @@ Begin
                 self.free;
               end);
           end,
-          1000 * 3);
+          1000 * 8);
       end);
   end);
 end;
@@ -227,8 +236,6 @@ Begin
         + 'creating rich, object oriented HTML5 apps!';
       mX.Show;
 
-
-
   end;
 
 end;
@@ -255,6 +262,8 @@ begin
 end;
 
 procedure TForm1.InitializeObject;
+const
+  CNT_Height  = 34;
 var
   mButton:  TCBGlyphButton;
   mDialog:  TCBDialogInfo;
@@ -277,9 +286,9 @@ begin
     try
       FNewButton.left:=2;
       FNewButton.width:=80;
-      FNewButton.height:=36;
+      FNewButton.height:=CNT_Height;
       FNewButton.Text.Caption:='Post';
-      FNewButton.Glyph.innerHTML:='<i class="fa fa-file fa-2x">';
+      FNewButton.Glyph.StyleClass:='fa fa-file';
       FNewButton.OnMouseTouchRelease:=Procedure (Sender: TObject; Button: TMouseButton;
         Shift: TShiftState; X, Y: Integer)
         Begin
@@ -308,9 +317,10 @@ begin
     try
       FProfileButton.left:=84;
       FProfilebutton.width:=80;
-      FProfilebutton.height:=36;
+      FProfilebutton.height:=CNT_Height;
       Fprofilebutton.Text.Caption:='Profile';
-      FProfilebutton.Glyph.innerHTML:='<i class="fa fa-user fa-2x">';
+      Fprofilebutton.Text.width:=50;
+      Fprofilebutton.Glyph.StyleClass:="fa fa-user";
       FProfilebutton.OnMouseTouchRelease:=Procedure (Sender: TObject; Button: TMouseButton;
         Shift: TShiftState; X, Y: Integer)
         Begin
@@ -325,13 +335,14 @@ begin
     try
       FHomeButton.left:=166;
       FHomeButton.width:=86;
-      FHomeButton.height:=36;
+      FHomeButton.height:=CNT_Height;
+      FHomeButton.Text.width:=50;
       FHomeButton.Text.Caption:='Logout';
       FHomeButton.Text.Autosize:=False;
       FHomeButton.text.Height:=20;
       FHomeButton.LayoutChildren;
 
-      FHomeButton.Glyph.innerHTML:='<i class="fa fa-arrow-circle-left fa-2x">';
+      FHomeButton.Glyph.StyleClass:="fa fa-arrow-circle-left";
       FHomeButton.OnMouseTouchRelease:=Procedure (Sender: TObject; Button: TMouseButton;
         Shift: TShiftState; X, Y: Integer)
         Begin
@@ -356,11 +367,10 @@ begin
     end;
 
     FMore:=TCBGlyphButton.Create(FPanel);
-    FMore.SetBounds(255 + 26,4,36 - 2,36);
+    FMore.SetBounds(255 + 26,4,CNT_Height - 2,36);
     FMore.Text.Visible:=False;
-    FMore.glyph.handle.style['color']:='#6B87C4';
-    FMore.Glyph.InnerHTML:='<i class="fa fa-bars fa-2x">';
-
+    FMore.glyph.handle.style['color']:='#2d3642';
+    FMore.Glyph.StyleClass:='fa fa-bars';
   finally
     FPanel.EndUpdate;
     FPanel.fxFadeIn(0.1);
@@ -400,8 +410,7 @@ Begin
   HTML5 based, client-server application development is the future.
   Finally a “write once, run anywhere” solution that delivers!
   Presenting <a href="http://www.smartmobilestudio.com">Smart Mobile Studio</a> ..';
-  item.Height:=128 + 6 + 4;
-  item.text.Background.FromColor(RGBToColor($EF,$EF,$EF));
+  item.Height:=138;
   end else
   if (TCBNewsItem.Index mod 5)=1 then
   Begin
@@ -414,8 +423,7 @@ Begin
     +'Materials: 80% Polyester, 20% Cotton<br>'
     +'Style: With Hood '
     +'Features: Anti-Pilling, Anti-Shrink, Breathable';
-  item.Height:=128 + 16 + 6 + 4;
-  item.text.Background.FromColor(RGBToColor($EF,$EF,$EF));
+  item.Height:=154;
   end else
   if (TCBNewsItem.Index mod 5)=2 then
   Begin
@@ -426,8 +434,7 @@ Begin
           and PS Vita — including three-way cross buy support across
           those platforms. We apologize for any confusion the previous
           version of this post may have caused!';
-  item.Height:=132 + 6 + 4;
-  item.text.Background.FromColor(RGBToColor($EF,$EF,$EF));
+  item.Height:=142;
   end else
   if (TCBNewsItem.Index mod 5)=3 then
   Begin
@@ -441,8 +448,7 @@ Begin
       development environment, component framework with source code and full
       access to platform APIs. Extend your existing Windows applications
       with mobile companion apps.';
-  item.Height:=188 + 4 + 16 + 4;
-  item.text.Background.FromColor(RGBToColor($EF,$EF,$EF));
+  item.Height:=212;
   end else
   if (TCBNewsItem.Index mod 5)=4 then
   begin
@@ -455,9 +461,9 @@ Begin
     want from mobile app development software: a modern programming language,
     code sharing across all platforms, prebuilt backend connectors and
     no-compromise native user interfaces.';
-  item.Height:=188 + 16 + 4 + 4;
-  item.text.Background.FromColor(RGBToColor($EF,$EF,$EF));
+  item.Height:=232 + 10;
   end;
+  item.height:=iTem.Height+10;
   TCBNewsItem.Index:=TCBNewsItem.Index + 1;
 end;
 
@@ -473,7 +479,7 @@ begin
     mItem:=TCBNewsItem.Create(FList.Content);
     mItem.setBounds(2,dy,FList.Content.ClientWidth-4,100);
     Populate(mItem);
-    inc(dy,mItem.Height + 4);
+    inc(dy,mItem.Height + 10);
   end;
   FList.Content.Height:=dy + 16;
   FList.ScrollApi.Refresh;

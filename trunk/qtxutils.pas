@@ -102,9 +102,6 @@ type
     class function calcTextAverage(const aFontName:String;
           const aFontSize:Integer):TQTXTextMetric;
 
-    //class function getElementRootAncestor(const aElement:THandle):THandle;
-    //class function getElementInDOM(const aElement:THandle):Boolean;
-
     class procedure ExecuteOnElementReady(const aElement:THandle;
           const aFunc:TProcedureRef);
 
@@ -116,10 +113,14 @@ type
 
     class function getDocumentReady:Boolean;
 
-    //class function  getHandleReady(const aHandle:THandle):Boolean;
+    class function LoadCSS(const aRel,aHref:String;
+         const aCallback:TProcedureRef):THandle;
 
-    class function addLinkToHead(const aRel,aHref:String):THandle;
+    class Procedure LoadScript(aFilename:String;
+          const aCallback:TProcedureRef);
 
+    class function LoadImage(aFilename:String;
+          const aCallback:TProcedureRef):THandle;
   end;
 
 
@@ -309,7 +310,57 @@ end;
 // TQTXTools
 //############################################################################
 
-class function TQTXTools.addLinkToHead(const aRel,aHref:String):THandle;
+class procedure TQTXTools.LoadScript(aFilename:String;
+      const aCallback:TProcedureRef);
+var
+  mRef: THandle;
+  mLoaded:  Boolean;
+Begin
+  asm
+    @mRef = document.createElement("script");
+  end;
+  if mRef.valid then
+  begin
+    mRef.setAttribute("src",aFilename);
+    if assigned(aCallback) then
+    mRef.onload := procedure ()
+      begin
+        aCallback();
+      end;
+
+    asm
+      document.getElementsByTagName('head')[0].appendChild(@mRef);
+    end;
+
+  end else
+  raise exception.Create('Failed to allocate script element error');
+end;
+
+
+class function TQTXTools.LoadImage(aFilename:String;
+          const aCallback:TProcedureRef):THandle;
+var
+  mRef: THandle;
+Begin
+
+  asm
+    @result = new Image();
+  end;
+
+  if result.valid then
+  Begin
+    if assigned(aCallback) then
+    result.onload := procedure ()
+      begin
+        aCallback();
+      end;
+
+    result.src := aFilename;
+  end;
+end;
+
+class function TQTXTools.LoadCSS(const aRel,aHref:String;
+      const aCallback:TProcedureRef):THandle;
 var
   mLink:  THandle;
 Begin
@@ -322,6 +373,12 @@ Begin
     (@mLink).rel=@aRel;
     document.head.appendChild(@mLink);
   end;
+  if assigned(aCallback) then
+  mLink.onload := procedure ()
+  Begin
+    aCallback();
+  end;
+
   result:=mLink;
 end;
 

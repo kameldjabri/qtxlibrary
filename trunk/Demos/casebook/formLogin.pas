@@ -108,6 +108,27 @@ begin
       UpdateCloud2;
     end,
     500);
+
+  w3_callback( procedure ()
+    var
+      mApp: TApplication;
+      x:  Integer;
+      mSave:  TRect;
+    Begin
+      mApp:=TApplication(application);
+      for x:=0 to mApp.FormCount-1 do
+      Begin
+        if not (self = mApp.forms[x]) then
+        begin
+          mApp.Forms[x].MoveTo(100,100);
+          mApp.forms[x].visible:=True;
+          mapp.forms[x].InitializeForm;
+          mApp.forms[x].LayoutChildren;
+          mApp.forms[x].visible:=False;
+        end;
+      end;
+    end,
+    100);
 end;
 
 Procedure TformLogin.UpdateCloud2;
