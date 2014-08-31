@@ -38,6 +38,8 @@ begin
 end;
 
 procedure TformProfile.InitializeObject;
+var
+  mItem: TW3ListItem;
 begin
   inherited;
   {$I 'formProfile:impl'}
@@ -45,7 +47,13 @@ begin
 
   w3button1.StyleClass:='CaseBookButton';
 
-  w3listmenu1.Items.Add.Text:='Your account';
+  mItem:=w3listmenu1.Items.Add;
+  mItem.Text:='Your account';
+  mItem.OnClick:=Procedure (sender:TObject)
+    begin
+      application.gotoForm('FormAccount',feFromRight);
+    end;
+
   w3listmenu1.Items.add.text:='Network security';
   w3listmenu1.items.add.text:='Registration';
 

@@ -1,4 +1,4 @@
-uses casebook, caseList, qtxEffects, qtxStyles, qtxTransformController, qtxutils, qtxdataset, qtxscrolltext, formLogin, qtxlabel, formProfile, formNew, imgSpartan, qtxheader;
+uses casebook, caseList, qtxEffects, qtxStyles, qtxTransformController, qtxutils, qtxdataset, qtxscrolltext, formLogin, qtxlabel, formProfile, formNew, imgSpartan, qtxheader, formAccount;
 
 {$IFDEF SMART_INTERNAL_HANDLE_EXCEPTIONS}
 uses W3System;

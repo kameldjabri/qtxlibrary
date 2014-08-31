@@ -177,7 +177,6 @@ Begin
   FCancel.glyph.innerHTML:='<i class="fa fa-times fa-2x">';
   FCancel.LayoutChildren;
   FCancel.Glyph.height:=26;
-
   FCancel.OnMouseTouchRelease:=Procedure (Sender: TObject; Button: TMouseButton;
     Shift: TShiftState; X, Y: Integer)
     Begin
@@ -346,6 +345,22 @@ begin
       FHomeButton.OnMouseTouchRelease:=Procedure (Sender: TObject; Button: TMouseButton;
         Shift: TShiftState; X, Y: Integer)
         Begin
+
+
+        var mObj:TQTXFontDetector := TQTXFontDetector.Create;
+        var mTemp:TQTXTextMetric := mObj.MeasureText('verdana',16,'this is cool!');
+        var mInfo:TQTXFontInfo;
+
+        mInfo:=mObj.getFontInfo(FHomeButton.Handle);
+
+          showmessage(mInfo.toString + #13 + mTemp.toString);
+
+
+        exit;
+
+
+
+
           w3_callback( procedure ()
           begin
             TApplication(application).ShowDialog('<li class="fa fa-warning">&nbsp</li>Logout?',
