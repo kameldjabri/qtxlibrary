@@ -41,9 +41,8 @@ var
   mTemp:  TQTXHeaderBar;
 begin
   (* Link to Font-Awesome *)
-  TQTXTools.addLinkToHead('stylesheet',
-  'http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css');
-  //<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+  TQTXTools.loadCSS('stylesheet',
+  'http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css',NIL);
 
 
   (* Setup global header control *)

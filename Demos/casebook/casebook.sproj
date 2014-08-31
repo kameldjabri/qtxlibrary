@@ -735,10 +735,11 @@ to
 {
 	cursor: default;
 	border-bottom: 1px solid #2d3642;
-	border-top: 1px solid #cdd5df;
+	//border-top: 1px solid #cdd5df;
 	box-shadow: 0 1px 1px rgba(33, 33, 33, 0.2);
-	background: rgb(178,187,202);   /* Old browsers */
-  background: -webkit-linear-gradient(top,  rgba(178,187,202,1) 1%,rgba(167,176,195,1) 25%,rgba(144,156,179,1) 47%,rgba(133,147,172,1) 50%,rgba(124,139,165,1) 75%,rgba(115,131,159,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: #425f9e;
+  //background: rgb(178,187,202);   /* Old browsers */
+  //background: -webkit-linear-gradient(top,  rgba(178,187,202,1) 1%,rgba(167,176,195,1) 25%,rgba(144,156,179,1) 47%,rgba(133,147,172,1) 50%,rgba(124,139,165,1) 75%,rgba(115,131,159,1) 100%); /* Chrome10+,Safari5.1+ */
 }
 
 .TW3HeaderControl:disabled {
@@ -760,20 +761,8 @@ to
 	-webkit-user-select: none;
 	user-select: none;
 
-	background-color: #D5DCE1;
-	background-size: 5px 100%;
+	background-color: #e9eaed;
 
-	background-image: -webkit-gradient(linear, left top, right top,
-		from(#c5ccd4),
-		color-stop(0.75, #c5ccd4),
-		color-stop(0.75, transparent),
-		to(transparent));
-
-	background-image: linear-gradient(to left,
-		#c5ccd4 0%,
-		#c5ccd4 75%,
-		transparent 75%,
-		transparent 100%);
 }
 
 /* ##########################################################################

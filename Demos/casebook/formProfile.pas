@@ -35,6 +35,13 @@ begin
   inherited;
   // this is a good place to initialize components
 
+end;
+
+procedure TformProfile.InitializeObject;
+begin
+  inherited;
+  {$I 'formProfile:impl'}
+
 
   w3button1.StyleClass:='CaseBookButton';
 
@@ -46,12 +53,6 @@ begin
   w3listmenu2.Items.add.text:='Push messages';
   w3listmenu2.items.add.text:='Website';
 
-end;
-
-procedure TformProfile.InitializeObject;
-begin
-  inherited;
-  {$I 'formProfile:impl'}
 end;
  
 procedure TformProfile.Resize;

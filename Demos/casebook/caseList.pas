@@ -28,8 +28,8 @@ type
     Procedure FinalizeObject;Override;
   End;
 
-  TCBProfileHeader = Class(TW3CustomControl)
-  End;
+  //TCBProfileHeader = Class(TW3CustomControl)
+  //End;
 
   TCBPanel = Class(TW3CustomControl)
   protected
@@ -120,7 +120,7 @@ Procedure TCBGlyphButton.InitializeObject;
 Begin
   inherited;
   FGlyph:=TW3CustomControl.Create(self);
-  FGlyph.setSize(32,32);
+  FGlyph.setSize(16,16);
   FGlyph.handle.style['background']:='transparent';
   FGlyph.Handle.style['text-align']:='center';
 
@@ -132,8 +132,10 @@ Begin
 
   FCaption:=TQTXLabel.Create(self);
   FCaption.handle.style['background']:='transparent';
-  FCaption.Autosize:=False;
+  FCaption.Autosize:=false;
   FCaption.Height:=18;
+  FCaption.Width:=40;
+  FCaption.Caption:='';
 
   TQTXTools.ExecuteOnElementReady(Handle, procedure ()
     Begin
@@ -150,23 +152,40 @@ end;
 
 procedure TCBGlyphButton.Resize;
 var
+  dx: Integer;
   dy: Integer;
+  mText:  String;
+  wd: Integer;
+  xx: Integer;
 Begin
   inherited;
 
   if FGlyph.handle.ready then
-  //if TQTXTools.getHandleReady(FGlyph.handle) then
   begin
-    dy:=(clientHeight div 2) - (FGlyph.Height div 2);
-    FGlyph.MoveTo(0,dy);
+    mText:=trim(FCaption.Caption);
+    if mText.Length>0 then
+    Begin
+      dy:=(clientHeight div 2) - (FGlyph.Height div 2);
+      FGlyph.MoveTo(1,dy);
+    end else
+    Begin
+      dx:=(ClientWidth div 2) - (FGlyph.width div 2);
+      dy:=(clientHeight div 2) - (FGlyph.Height div 2);
+      FGlyph.MoveTo(dx,dy);
+
+      FCaption.moveto(-FCaption.Width,-FCaption.Height);
+      exit;
+    end;
   end;
 
-  //if TQTXTools.getHandleReady(FCaption.handle) then
   if FCaption.handle.ready then
   begin
+    xx:=FGlyph.left + FGlyph.Width;
     dy:=(clientheight div 2) - (FCaption.height div 2);
-    FCaption.setBounds(FGlyph.width,dy,
-    clientwidth-(FGlyph.width),FCaption.height);
+
+    dx:=((clientWidth-xx) div 2) - (FCaption.width div 2);
+    inc(dx,xx);
+    FCaption.setBounds(dx,dy,FCaption.Width,FCaption.height);
   end;
 
 end;
@@ -181,6 +200,12 @@ Begin
   FImage:=TW3Image.Create(self);
   FTitle:=TQTXLabel.Create(self);
 
+  Handle.style['border-style']:='solid';
+  Handle.style['border-width']:='1px';
+  Handle.style['border-color']:='#cccccc';
+
+  handle.style['background']:='#FFFFFF';
+
   FTimeInfo:=TQTXLabel.Create(self);
   FTimeInfo.Font.size:=12;
   FTimeInfo.font.Color:=clGrey;
@@ -188,11 +213,11 @@ Begin
 
   FText:=TQTXLabel.Create(self);
   FText.font.size:=14;
-  FText.Font.Color:=RGBToColor($55,$55,$55);
+  //FText.Font.Color:=RGBToColor($55,$55,$55);
 
-  FText.Handle.style['border-style']:='solid';
+  (* FText.Handle.style['border-style']:='solid';
   FText.Handle.style['border-width']:='1px';
-  FText.Handle.style['border-color']:='#CECECE';
+  FText.Handle.style['border-color']:='#cccccc';  *)
 
   Handle.ReadyExecute( procedure ()
   //TQTXTools.ExecuteOnElementReady(Handle, procedure ()
@@ -213,7 +238,7 @@ end;
 Procedure TCBNewsItem.StyleTagObject;
 begin
   inherited;
-  Handle.style['border-radius']:='8px';
+  //Handle.style['border-radius']:='8px';
   background.fromColor(clWhite);
 end;
 
@@ -227,7 +252,7 @@ Begin
     FImage.setbounds(4,4,36,36);
     FTitle.setBounds(44,4,clientwidth-(44 + 4),22);
     FTimeInfo.setBounds(44,24,clientwidth-(44 + 4),16);
-    FText.setBounds(4,44,clientwidth-8,clientHeight-49);
+    FText.setBounds(4,44 + 8,clientwidth-8,clientHeight-49);
   end;
 end;
 
