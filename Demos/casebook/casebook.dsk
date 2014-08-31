@@ -1,24 +1,23 @@
 <SMART>
   <state>
     <editor>
-      <tab filename="casebook" fullname="casebook.pas" topline="70" col="23" row="82" />
-      <tab filename="mainForm" fullname="mainForm.pas" topline="199" col="9" row="207">
-        <bookmark id="7" x="3" y="203" />
+      <tab filename="casebook" fullname="casebook.pas" topline="70" col="102" row="1" />
+      <tab filename="mainForm" fullname="mainForm.pas" topline="337" col="80" row="342">
+        <bookmark id="7" x="3" y="202" />
       </tab>
-      <tab filename="qtxEffects" fullname="..\..\qtxEffects.pas" topline="1" col="47" row="257" />
-      <tab filename="qtxheader" fullname="..\..\qtxheader.pas" topline="297" col="4" row="299" />
-      <tab filename="qtxutils" fullname="..\..\qtxutils.pas" topline="500" col="3" row="526" />
-      <tab filename="formProfile" fullname="formProfile.pas" topline="74" col="29" row="45" />
-      <tab filename="formNew" fullname="formNew.pas" topline="20" col="57" row="18" />
-      <tab filename="formLogin" fullname="formLogin.pas" topline="32" col="47" row="50" />
-      <tab filename="iOS.css" topline="629" col="4" row="655" />
-      <tab filename="caseList" fullname="caseList.pas" topline="110" col="22" row="137" />
-      <tab filename="w3header" fullname="..\..\..\..\RTL\W3Header.pas" topline="1" col="24" row="17" />
-      <tab filename="qtxlabel" fullname="..\..\qtxlabel.pas" topline="48" col="33" row="59" />
-      <tab filename="W3Forms" fullname="..\..\..\..\RTL\W3Forms.pas" topline="61" col="26" row="89" />
-      <tab filename="W3Components" fullname="..\..\..\..\RTL\W3Components.pas" topline="2659" col="10" row="2699" />
-      <tab filename="W3MouseTouch" fullname="..\..\..\..\RTL\W3MouseTouch.pas" topline="12" col="49" row="30" />
-      <activetab>formProfile</activetab>
+      <tab filename="qtxEffects" fullname="..\..\qtxEffects.pas" topline="34" col="257" row="47" />
+      <tab filename="qtxheader" fullname="..\..\qtxheader.pas" topline="297" col="299" row="4" />
+      <tab filename="qtxutils" fullname="..\..\qtxutils.pas" topline="24" col="16" row="44" />
+      <tab filename="formProfile" fullname="formProfile.pas" topline="53" col="80" row="24" />
+      <tab filename="formNew" fullname="formNew.pas" topline="20" col="18" row="57" />
+      <tab filename="formLogin" fullname="formLogin.pas" topline="1" col="26" row="1" />
+      <tab filename="iOS.css" topline="102" col="44" row="112" />
+      <tab filename="caseList" fullname="caseList.pas" topline="26" col="97" row="5" />
+      <tab filename="W3Forms" fullname="..\..\..\..\RTL\W3Forms.pas" topline="55" col="89" row="26" />
+      <tab filename="formAccount" fullname="formAccount.pas" topline="1" col="7" row="36" />
+      <tab filename="W3System" fullname="..\..\..\..\RTL\W3System.pas" topline="379" col="26" row="398" />
+      <tab filename="casebookApplication" fullname="casebookApplication.spr" topline="1" col="1" row="1" />
+      <activetab>qtxutils</activetab>
     </editor>
   </state>
 </SMART>

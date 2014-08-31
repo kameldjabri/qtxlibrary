@@ -25,7 +25,7 @@ html, body
 }
 
 *{
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-family: "Segoe UI", "Helvetica neue";
   font-color: Transparent;
 }
 
@@ -56,8 +56,6 @@ html, body
 
 	-webkit-user-select: none;
 	user-select: none;
-
-	font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
 
 
@@ -128,7 +126,6 @@ html, body
             font-weight: bold;
             -webkit-box-shadow: 0 1px 1px 0 #394A6F;
             border: none;
-            //padding: 8px 30px;
             background: -webkit-linear-gradient(#eff0f1, #d1d4d9, #d1d4d9);
 }
 .CaseBookButton:active {
@@ -136,19 +133,11 @@ html, body
 }
 
 .Tardis {
-            //cursor: pointer;
-            //margin-top: 10px;
-            //display: inline-block;
-            //color: #555555;
             text-shadow: 0 1px 1px #FFFFFF;
             font-size: 16px;
             text-align: center;
-            //border-radius: 8px;
             font-weight: bold;
-            //-webkit-box-shadow: 0 1px 1px 0 #394A6F;
             border: none;
-            //padding: 8px 30px;
-            //background: -webkit-linear-gradient(#eff0f1, #d1d4d9, #d1d4d9);
 }
 
 .TQTXHeaderTitle, .Headings
@@ -495,7 +484,6 @@ to
 
 	cursor: default;
 	color: #fff;
-	font-family: "Helvetica Neue", Helvetica, sans-serif;
 	font-size: 12px;
 	border: solid 1px #54617d;
 	border-color: #484e59 #54617d #4c5c7a #54617d;
@@ -544,7 +532,6 @@ to
  * TW3AlertDialog
  * ============================================= */
 .TW3AlertButton {
-	font-family: "Helvetica Neue", Helvetica, sans-serif;
 	font-size: 18px;
 	font-weight: bold;
 	text-align: center;
@@ -583,7 +570,6 @@ to
 	no-repeat 50% 0;
 
 	color: #fff;
-	font-family: Helvetica, Arial, sans-serif;
 	text-align: center;
 	-webkit-border-radius: 15px;
 	border-radius: 15px;
@@ -601,10 +587,7 @@ to
 	margin: 0;
 	padding: 0;
 	border: 0;
-
 	border-right: 2px solid #FFF;
-
-	font-family: "Helvetica Neue", Helvetica, sans-serif;
 	font-size: 12px;
 	text-align: center;
 	color: #FFF;
@@ -651,7 +634,6 @@ to
 	resize: none;
 	-webkit-user-select: text;
 	user-select: text;
-  font-family: "verdana";
   font-size: 16px;
 }
 
@@ -700,7 +682,6 @@ to
 .TW3Label, TW3LabelText {
 	opacity: 1.0;
 	cursor: default;
-	font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
 
 .TW3Label:disabled, TW3LabelText:disabled {
@@ -723,7 +704,6 @@ to
 	background: -webkit-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 52%,rgba(254,254,254,1) 100%); /* Chrome10+,Safari5.1+ */
 	background: linear-gradient(to top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 52%,rgba(254,254,254,1) 100%); /* W3C */
 
-	font-family: "Helvetica Neue", Verdana, sans-serif;
 	font-size: 18px;
 	font-weight: normal;
 	text-shadow: 1px 1px -1px #cecece;
@@ -767,7 +747,6 @@ ul li {
 	border: 1px solid #999;
 	color: #222;
 	cursor: hand;
-	font-family: "Helvetica Neue", Helvetica, sans-serif;
 	font-size: 17px;
 	font-weight: bold;
 	margin-bottom: -1px;
@@ -856,8 +835,6 @@ ul li:active {
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(226,226,226,1)), color-stop(50%,rgba(219,219,219,1)), color-stop(52%,rgba(209,209,209,1)), color-stop(100%,rgba(254,254,254,1))); /* Chrome,Safari4+ */
 	background: -webkit-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 52%,rgba(254,254,254,1) 100%); /* Chrome10+,Safari5.1+ */
 	background: linear-gradient(to top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 52%,rgba(254,254,254,1) 100%); /* W3C */
-
-	font-family: "Helvetica Neue", Verdana, sans-serif;
 	font-size: 14px;
 	font-weight: normal;
 	text-shadow: 1px 1px -1px #cecece;
@@ -1307,7 +1284,7 @@ var TW3CustomApplication = {
       }
    }
    /// constructor TW3CustomApplication.Create()
-   ,Create$51:function(Self) {
+   ,Create$52:function(Self) {
       TObject.Create(Self);
       Self.FBody = TW3Component.Create$36$($New(TDocumentBody),null);
       Self.FDisplay = TW3Component.Create$36$($New(TW3Display),Self.FBody);
@@ -1729,7 +1706,7 @@ var TW3CustomApplication = {
    ,CBOnOrientationChange$:function($){return $.ClassType.CBOnOrientationChange($)}
    ,CBOnReSize$:function($){return $.ClassType.CBOnReSize($)}
    ,CBOnUnLoad$:function($){return $.ClassType.CBOnUnLoad($)}
-   ,Create$51$:function($){return $.ClassType.Create$51($)}
+   ,Create$52$:function($){return $.ClassType.Create$52($)}
    ,HookWindowEvents$:function($){return $.ClassType.HookWindowEvents($)}
 };
 /// TApplication = class (TW3CustomApplication)
@@ -1738,7 +1715,7 @@ var TApplication = {
    $Parent:TW3CustomApplication
    ,$Init:function ($) {
       TW3CustomApplication.$Init($);
-      $.FForm1 = $.FHeader$1 = $.FLogin = $.FNew = $.FProfile = null;
+      $.FAccount = $.FForm1 = $.FHeader$1 = $.FLogin = $.FNew = $.FProfile = null;
    }
    /// procedure TApplication.ApplicationStarting()
    ,ApplicationStarting:function(Self) {
@@ -1762,6 +1739,9 @@ var TApplication = {
       Self.FProfile = TW3Component.Create$36$($New(TformProfile),Self.FDisplay.FView);
       TW3Component.SetName(Self.FProfile,"FormProfile");
       TW3CustomApplication.RegisterFormInstance(Self,Self.FProfile,false);
+      Self.FAccount = TW3Component.Create$36$($New(TformAccount),Self.FDisplay.FView);
+      TW3Component.SetName(Self.FAccount,"FormAccount");
+      TW3CustomApplication.RegisterFormInstance(Self,Self.FAccount,false);
       Self.FNew = TW3Component.Create$36$($New(TformNew),Self.FDisplay.FView);
       TW3Component.SetName(Self.FNew,"FormNew");
       TW3CustomApplication.RegisterFormInstance(Self,Self.FNew,false);
@@ -1775,7 +1755,7 @@ var TApplication = {
    ,CBOnOrientationChange:TW3CustomApplication.CBOnOrientationChange
    ,CBOnReSize:TW3CustomApplication.CBOnReSize
    ,CBOnUnLoad:TW3CustomApplication.CBOnUnLoad
-   ,Create$51:TW3CustomApplication.Create$51
+   ,Create$52:TW3CustomApplication.Create$52
    ,HookWindowEvents:TW3CustomApplication.HookWindowEvents
 };
 function WriteLn(value$2) {
@@ -5000,7 +4980,7 @@ var TW3CustomControl = {
    /// constructor TW3CustomControl.Create(AOwner: TW3Component)
    ,Create$36:function(Self, AOwner$2) {
       TW3Component.Create$36(Self,AOwner$2);
-      Self.FAccess = TQTXAttrAccess.Create$44$($New(TQTXAttrAccess),Self.FHandle$3);
+      Self.FAccess = TQTXAttrAccess.Create$45$($New(TQTXAttrAccess),Self.FHandle$3);
       return Self
    }
    /// destructor TW3CustomControl.Destroy()
@@ -10369,7 +10349,7 @@ var TStopWatch = {
       return vIsHighResolution;
    }
    /// constructor TStopWatch.Create(autoStart: Boolean = False)
-   ,Create$50:function(Self, autoStart) {
+   ,Create$51:function(Self, autoStart) {
       if (autoStart) {
          TStopWatch.Start(Self);
       }
@@ -10440,7 +10420,7 @@ var TForm1 = {
                TW3CustomApplication.ShowDialog(Application(),"Display warning","This application was built for<br>\r\niPhone 5. Your display is presently<br>\r\nnot compatible with the layout",3);
             }
          },1000);
-         mX = TCBNotifierPlack.Create$55$($New(TCBNotifierPlack),Self);
+         mX = TCBNotifierPlack.Create$56$($New(TCBNotifierPlack),Self);
          TW3TagObj.SetInnerHTML(mX.FBox,"<br><center><b>Welcome to CaseBook</b><br>CaseBook was coded in <a href=\"http://www.smartmobilestudio.com\">Smart Mobile Studio</a><br>The number one HTML5 authoring tool for<br>creating rich, object oriented HTML5 apps!");
          TCBNotifierPlack.Show(mX);
       }
@@ -10481,7 +10461,7 @@ var TForm1 = {
             TQTXLabel.setCaption$(Self.FNewButton.FCaption$3,"Post");
             TW3CustomControl.setStyleClass(Self.FNewButton.FGlyph,"fa fa-file");
             TW3CustomControl.SetOnMouseTouchRelease(Self.FNewButton,function (Sender$6, Button$1, Shift, X$3, Y$3) {
-               mDialog = TCBDialogInfo.Create$56$($New(TCBDialogInfo));
+               mDialog = TCBDialogInfo.Create$57$($New(TCBDialogInfo));
                TW3CustomControl.SetOnMouseTouchRelease(mDialog.FPost,function (Sender$7, Button$2, Shift$1, X$4, Y$4) {
                   TQTXEffectsHelper$fxZoomOut(mDialog.FBox$1,0.3,function () {
                      var mText$9 = "";
@@ -10522,6 +10502,14 @@ var TForm1 = {
             TW3CustomControl.LayoutChildren$(Self.FHomeButton);
             TW3CustomControl.setStyleClass(Self.FHomeButton.FGlyph,"fa fa-arrow-circle-left");
             TW3CustomControl.SetOnMouseTouchRelease(Self.FHomeButton,function (Sender$9, Button$4, Shift$3, X$6, Y$6) {
+               var mObj$10 = null;
+               var mTemp$12 = {tmWidth:0,tmHeight:0};
+               var mInfo = {fiName:"",fiSize:0};
+               mObj$10 = TQTXFontDetector.Create$44$($New(TQTXFontDetector));
+               mTemp$12 = TQTXFontDetector.MeasureText$3(mObj$10,"verdana",16,"this is cool!");
+               mInfo = TQTXFontDetector.getFontInfo(mObj$10,Self.FHomeButton.FHandle$3);
+               alert(TQTXFontInfo$toString$3(mInfo)+"\r"+TQTXTextMetric$toString$2(mTemp$12));
+               return;
                w3_Callback(function () {
                   TW3CustomApplication.ShowDialog($As(Application(),TApplication),"<li class=\"fa fa-warning\">&nbsp</li>Logout?","Are you sure you wish to log<br>out of this application?",2);
                   Application().FDialogEvent = function (Sender$10, aResult$1) {
@@ -10704,7 +10692,7 @@ var TCBNotifierPlack = {
       });
    }
    /// constructor TCBNotifierPlack.Create(AOwner: TW3CustomControl)
-   ,Create$55:function(Self, AOwner$8) {
+   ,Create$56:function(Self, AOwner$8) {
       TObject.Create(Self);
       Self.FBox = TW3Component.Create$36$($New(TW3Panel),AOwner$8);
       TW3MovableControl.SetVisible$(Self.FBox,false);
@@ -10722,7 +10710,7 @@ var TCBNotifierPlack = {
       TObject.Destroy(Self);
    }
    ,Destroy$:function($){return $.ClassType.Destroy($)}
-   ,Create$55$:function($){return $.ClassType.Create$55.apply($.ClassType, arguments)}
+   ,Create$56$:function($){return $.ClassType.Create$56.apply($.ClassType, arguments)}
 };
 /// TCBDialogInfo = class (TObject)
 var TCBDialogInfo = {
@@ -10733,7 +10721,7 @@ var TCBDialogInfo = {
       $.FBlocker = $.FBox$1 = $.FCancel = $.FEditor = $.FPost = $.FTitle$1 = null;
    }
    /// constructor TCBDialogInfo.Create()
-   ,Create$56:function(Self) {
+   ,Create$57:function(Self) {
       var dx$15 = 0;
       var dy$17 = 0;
       var wd$9 = 0;
@@ -10786,7 +10774,7 @@ var TCBDialogInfo = {
       TObject.Destroy(Self);
    }
    ,Destroy$:function($){return $.ClassType.Destroy($)}
-   ,Create$56$:function($){return $.ClassType.Create$56($)}
+   ,Create$57$:function($){return $.ClassType.Create$57($)}
 };
 /// TW3Panel = class (TW3CustomControl)
 var TW3Panel = {
@@ -10876,7 +10864,7 @@ var TW3Timer = {
       $.FRepeater = null;
    }
    /// constructor TW3Timer.Create()
-   ,Create$53:function(Self) {
+   ,Create$54:function(Self) {
       TObject.Create(Self);
       Self.FDelay = 1000;
       return Self
@@ -10914,7 +10902,7 @@ var TW3Timer = {
       if (aValue$109!=TW3Timer.GetEnabled$1$(Self)) {
          if (aValue$109) {
             if (Self.a$40) {
-               Self.FRepeater = TW3EventRepeater.Create$54$($New(TW3EventRepeater),$Event1(Self,TW3Timer.HandleEventCallback),Self.FDelay);
+               Self.FRepeater = TW3EventRepeater.Create$55$($New(TW3EventRepeater),$Event1(Self,TW3Timer.HandleEventCallback),Self.FDelay);
             }
          } else {
             TObject.Free(Self.FRepeater);
@@ -10923,7 +10911,7 @@ var TW3Timer = {
       }
    }
    ,Destroy$:function($){return $.ClassType.Destroy($)}
-   ,Create$53$:function($){return $.ClassType.Create$53($)}
+   ,Create$54$:function($){return $.ClassType.Create$54($)}
    ,GetEnabled$1$:function($){return $.ClassType.GetEnabled$1($)}
    ,SetDelay$:function($){return $.ClassType.SetDelay.apply($.ClassType, arguments)}
    ,SetEnabled$1$:function($){return $.ClassType.SetEnabled$1.apply($.ClassType, arguments)}
@@ -10987,7 +10975,7 @@ var TW3EventRepeater = {
       }
    }
    /// constructor TW3EventRepeater.Create(aCallBack: TW3RepeaterEvent; aDelay: Integer)
-   ,Create$54:function(Self, aCallBack, aDelay$1) {
+   ,Create$55:function(Self, aCallBack, aDelay$1) {
       TObject.Create(Self);
       Self.FCallBack = aCallBack;
       TW3CustomRepeater.setDelay(Self,aDelay$1);
@@ -10998,7 +10986,7 @@ var TW3EventRepeater = {
    }
    /// procedure TW3EventRepeater.After(aDelay: Integer; aProc: TProcedureRef)
    ,After:function(Self, aDelay$2, aProc) {
-      GlobalRepeaterList.push(TW3EventRepeater.Create$54$($New(TW3EventRepeater),function (Sender$14) {
+      GlobalRepeaterList.push(TW3EventRepeater.Create$55$($New(TW3EventRepeater),function (Sender$14) {
          var Result = false;
          aProc();
          GlobalRepeaterList.splice(GlobalRepeaterList.indexOf(Sender$14),1)
@@ -11009,7 +10997,7 @@ var TW3EventRepeater = {
    }
    ,Destroy:TW3CustomRepeater.Destroy
    ,CBExecute$:function($){return $.ClassType.CBExecute($)}
-   ,Create$54$:function($){return $.ClassType.Create$54.apply($.ClassType, arguments)}
+   ,Create$55$:function($){return $.ClassType.Create$55.apply($.ClassType, arguments)}
    ,After$:function($){return $.After.apply($.ClassType, arguments)}
 };
 /// EW3EventRepeater = class (EW3Exception)
@@ -11852,7 +11840,7 @@ var TQTXScrollWindow = {
       w3_setStyle(Self.FContent$1.FHandle$3,"postion","relative");
       w3_setStyle(Self.FContent$1.FHandle$3,"min-width","100%");
       w3_setStyle(Self.FContent$1.FHandle$3,"min-height","0px");
-      Self.FScroller = TQTXScrollController.Create$58$($New(TQTXScrollController),Self.FHandle$3);
+      Self.FScroller = TQTXScrollController.Create$59$($New(TQTXScrollController),Self.FHandle$3);
       TQTXTools.ExecuteOnElementReady(TQTXTools,Self.FHandle$3,function () {
          TQTXScrollController.Attach(Self.FScroller);
       });
@@ -12026,7 +12014,7 @@ var TW3StyleRule = {
       return Self.FRule.style;
    }
    /// constructor TW3StyleRule.Create(cssSelector: String; cssProperties: String = '')
-   ,Create$59:function(Self, cssSelector, cssProperties) {
+   ,Create$60:function(Self, cssSelector, cssProperties) {
       var sheet$1 = null;
       var i$3 = 0;
       sheet$1 = TW3StyleRule.CSSStyleSheet();
@@ -12338,6 +12326,175 @@ var TQTXGUID = {
    }
    ,Destroy:TObject.Destroy
 };
+/// TQTXFontInfo = record
+function Copy$TQTXFontInfo(s,d) {
+   d.fiName=s.fiName;
+   d.fiSize=s.fiSize;
+   return d;
+}
+function Clone$TQTXFontInfo($) {
+   return {
+      fiName:$.fiName,
+      fiSize:$.fiSize
+   }
+}
+/// function TQTXFontInfo.toString(var Self: TQTXFontInfo) : String
+function TQTXFontInfo$toString$3(Self$81) {
+   return (Self$81.fiName.toString()+" "+Self$81.fiSize.toString()+"px");
+}
+/// TQTXFontDetector = class (TObject)
+var TQTXFontDetector = {
+   $ClassName:"TQTXFontDetector",
+   $Parent:TObject
+   ,$Init:function ($) {
+      TObject.$Init($);
+      $.FBaseFonts = [];
+      $.FdefaultHeight = $.FdefaultWidth = undefined;
+      $.Fh = undefined;
+      $.Fs = undefined;
+      $.FtestSize = "72px";
+      $.FtestString = "mmmmmmmmmmlli";
+   }
+   /// constructor TQTXFontDetector.Create()
+   ,Create$44:function(Self) {
+      var x$64 = 0;
+      TObject.Create(Self);
+      Self.FBaseFonts.push("monospace");
+      Self.FBaseFonts.push("sans-serif");
+      Self.FBaseFonts.push("serif");
+      Self.Fh = document.body;
+      Self.Fs = document.createElement("span");
+      Self.Fs.style.fontSize = Self.FtestSize;
+      Self.Fs.innerHTML = Self.FtestString;
+      Self.FdefaultWidth = TVariant.CreateObject();
+      Self.FdefaultHeight = TVariant.CreateObject();
+      if (Self.FBaseFonts.length>0) {
+         var $temp38;
+         for(x$64 = 0,$temp38 = Self.FBaseFonts.length;x$64<$temp38;x$64++) {
+            Self.Fs.style.fontFamily = Self.FBaseFonts[x$64];
+            Self.Fh.appendChild(Self.Fs);
+            Self.FdefaultWidth[Self.FBaseFonts[x$64]] = Self.Fs.offsetWidth;
+            Self.FdefaultHeight[Self.FBaseFonts[x$64]] = Self.Fs.offsetHeight;
+            Self.Fh.removeChild(Self.Fs);
+         }
+      }
+      return Self
+   }
+   /// function TQTXFontDetector.Detect(aFont: String) : Boolean
+   ,Detect:function(Self, aFont) {
+      var Result = false;
+      var x$65 = 0;
+      aFont = Trim$_String_(aFont);
+      if (aFont.length>0) {
+         if (Self.FBaseFonts.length>0) {
+            var $temp39;
+            for(x$65 = 0,$temp39 = Self.FBaseFonts.length;x$65<$temp39;x$65++) {
+               Self.Fs.style.fontFamily = (aFont+","+Self.FBaseFonts[x$65]);
+               Self.Fh.appendChild(Self.Fs);
+               Result = (Self.Fs.offsetWidth!=Self.FdefaultWidth[Self.FBaseFonts[x$65]])&&(Self.Fs.offsetHeight!=Self.FdefaultHeight[Self.FBaseFonts[x$65]]);
+               Self.Fh.removeChild(Self.Fs);
+               if (Result) {
+                  break;
+               }
+            }
+         }
+      }
+      return Result
+   }
+   /// function TQTXFontDetector.getFontInfo(const aHandle: THandle) : TQTXFontInfo
+   ,getFontInfo:function(Self, aHandle$3) {
+      var Result = {fiName:"",fiSize:0};
+      var mName$1 = "";
+      var mSize = 0;
+      var mData$6 = [];
+      var x$66 = 0;
+      Result.fiSize = -1;
+      if (TQTXHandleHelper$Valid(aHandle$3)) {
+         mName$1 = w3_getStyleAsStr(aHandle$3,"font-family");
+         mSize = w3_getStyleAsInt(aHandle$3,"font-size");
+         if (mName$1.length>0) {
+            
+        mData$6 = (mName$1).split(",");
+      if (mData$6.length>0) {
+               var $temp40;
+               for(x$66 = 0,$temp40 = mData$6.length;x$66<$temp40;x$66++) {
+                  if (TQTXFontDetector.Detect(Self,mData$6[x$66])) {
+                     Result.fiName = mData$6[x$66];
+                     Result.fiSize = mSize;
+                     break;
+                  }
+               }
+            }
+         }
+      }
+      return Result
+   }
+   /// function TQTXFontDetector.MeasureText(aFontName: String; aFontSize: Integer; aFixedWidth: Integer; aContent: String) : TQTXTextMetric
+   ,MeasureText$4:function(Self, aFontName$2, aFontSize$2, aFixedWidth, aContent) {
+      var Result = {tmWidth:0,tmHeight:0};
+      var mElement = undefined;
+      if (TQTXFontDetector.Detect(Self,aFontName$2)) {
+         aContent = Trim$_String_(aContent);
+         if (aContent.length>0) {
+            mElement = document.createElement("div");
+            if (mElement) {
+               mElement.style["font-family"] = aFontName$2;
+               mElement.style["font-size"] = TInteger.ToPxStr(aFontSize$2);
+               mElement.style["overflow"] = "scroll";
+               mElement.style.maxWidth = TInteger.ToPxStr(aFixedWidth);
+               mElement.style.width = TInteger.ToPxStr(aFixedWidth);
+               mElement.style.height = "10000px";
+               mElement.innerHTML = aContent;
+               Self.Fh.appendChild(mElement);
+               mElement.style.width = "4px";
+               mElement.style.height = "4px";
+               Result.tmWidth = parseInt(mElement.scrollWidth,10);
+               Result.tmHeight = parseInt(mElement.scrollHeight,10);
+               Self.Fh.removeChild(mElement);
+            }
+         }
+      }
+      return Result
+   }
+   /// function TQTXFontDetector.MeasureText(aFontName: String; aFontSize: Integer; aContent: String) : TQTXTextMetric
+   ,MeasureText$3:function(Self, aFontName$3, aFontSize$3, aContent$1) {
+      var Result = {tmWidth:0,tmHeight:0};
+      var mElement$1 = undefined;
+      if (TQTXFontDetector.Detect(Self,aFontName$3)) {
+         aContent$1 = Trim$_String_(aContent$1);
+         if (aContent$1.length>0) {
+            mElement$1 = document.createElement("div");
+            if (mElement$1) {
+               mElement$1.style["font-family"] = aFontName$3;
+               mElement$1.style["font-size"] = TInteger.ToPxStr(aFontSize$3);
+               mElement$1.style["overflow"] = "scroll";
+               mElement$1.style["display"] = "inline-block";
+               mElement$1.style["white-space"] = "nowrap";
+               mElement$1.style.width = "10000px";
+               mElement$1.style.height = "10000px";
+               mElement$1.innerHTML = aContent$1;
+               Self.Fh.appendChild(mElement$1);
+               mElement$1.style.width = "4px";
+               mElement$1.style.height = "4px";
+               Result.tmWidth = parseInt(mElement$1.scrollWidth,10);
+               Result.tmHeight = parseInt(mElement$1.scrollHeight,10);
+               Self.Fh.removeChild(mElement$1);
+            }
+         }
+      }
+      return Result
+   }
+   /// function TQTXFontDetector.MeasureText(aFontInfo: TQTXFontInfo; aFixedWidth: Integer; aContent: String) : TQTXTextMetric
+   ,MeasureText$2:function(Self, aFontInfo, aFixedWidth$1, aContent$2) {
+      return TQTXFontDetector.MeasureText$4(Self,aFontInfo.fiName,aFontInfo.fiSize,aFixedWidth$1,aContent$2);
+   }
+   /// function TQTXFontDetector.MeasureText(aFontInfo: TQTXFontInfo; aContent: String) : TQTXTextMetric
+   ,MeasureText$1:function(Self, aFontInfo$1, aContent$3) {
+      return TQTXFontDetector.MeasureText$3(Self,aFontInfo$1.fiName,aFontInfo$1.fiSize,aContent$3);
+   }
+   ,Destroy:TObject.Destroy
+   ,Create$44$:function($){return $.ClassType.Create$44($)}
+};
 /// TQTXAttrAccess = class (TObject)
 var TQTXAttrAccess = {
    $ClassName:"TQTXAttrAccess",
@@ -12349,19 +12506,19 @@ var TQTXAttrAccess = {
    /// function TQTXAttrAccess.Exists(aName: String) : Boolean
    ,Exists:function(Self, aName$2) {
       var Result = false;
-      var mName$1 = "";
-      mName$1 = ("data-"+aName$2).toLowerCase();
-      Result = (Self.FHandle$4.hasAttribute(mName$1)?true:false);
+      var mName$2 = "";
+      mName$2 = ("data-"+aName$2).toLowerCase();
+      Result = (Self.FHandle$4.hasAttribute(mName$2)?true:false);
       return Result
    }
    /// function TQTXAttrAccess.Read(aName: String) : Variant
    ,Read:function(Self, aName$3) {
       var Result = undefined;
-      var mName$2 = "";
+      var mName$3 = "";
       try {
-         mName$2 = ("data-"+aName$3).toLowerCase();
-         if (Self.FHandle$4.hasAttribute(mName$2)) {
-            Result = Self.FHandle$4.getAttribute(mName$2);
+         mName$3 = ("data-"+aName$3).toLowerCase();
+         if (Self.FHandle$4.hasAttribute(mName$3)) {
+            Result = Self.FHandle$4.getAttribute(mName$3);
          } else {
             Result = null;
          }
@@ -12373,46 +12530,46 @@ var TQTXAttrAccess = {
    }
    /// procedure TQTXAttrAccess.Write(aName: String; const aValue: Variant)
    ,Write:function(Self, aName$4, aValue$115) {
-      var mName$3 = "";
+      var mName$4 = "";
       try {
-         mName$3 = ("data-"+aName$4).toLowerCase();
-         Self.FHandle$4.setAttribute(mName$3,aValue$115);
+         mName$4 = ("data-"+aName$4).toLowerCase();
+         Self.FHandle$4.setAttribute(mName$4,aValue$115);
       } catch ($e) {
          var e$16 = $W($e);
          throw EW3Exception.CreateFmt($New(EW3Exception),"Failed to write attribute: %s",[e$16.FMessage]);
       }
    }
    /// constructor TQTXAttrAccess.Create(const aHandle: THandle)
-   ,Create$44:function(Self, aHandle$3) {
+   ,Create$45:function(Self, aHandle$4) {
       TObject.Create(Self);
-      if (TQTXHandleHelper$Valid(aHandle$3)) {
-         Self.FHandle$4 = aHandle$3;
+      if (TQTXHandleHelper$Valid(aHandle$4)) {
+         Self.FHandle$4 = aHandle$4;
       } else {
          throw Exception.Create($New(Exception),"Failed to create attribute access, invalid handle error");
       }
       return Self
    }
    ,Destroy:TObject.Destroy
-   ,Create$44$:function($){return $.ClassType.Create$44.apply($.ClassType, arguments)}
+   ,Create$45$:function($){return $.ClassType.Create$45.apply($.ClassType, arguments)}
 };
 /// procedure TQTXAnimationHelper.Pause(Self: TW3CustomAnimation)
-function TQTXAnimationHelper$Pause(Self$81) {
-   if (Self$81.FBusy) {
-      Self$81.FTarget$1.FHandle$3.style["-webkit-animation-play-state"] = "paused";
+function TQTXAnimationHelper$Pause(Self$82) {
+   if (Self$82.FBusy) {
+      Self$82.FTarget$1.FHandle$3.style["-webkit-animation-play-state"] = "paused";
    }
 }
 /// procedure TQTXAnimationHelper.Resume(Self: TW3CustomAnimation)
-function TQTXAnimationHelper$Resume(Self$82) {
-   if (Self$82.FBusy) {
-      if (Self$82.FTarget$1.FHandle$3.style["-webkit-animation-play-state"]=="paused") {
-         Self$82.FTarget$1.FHandle$3.style["-webkit-animation-play-state"] = "running";
+function TQTXAnimationHelper$Resume(Self$83) {
+   if (Self$83.FBusy) {
+      if (Self$83.FTarget$1.FHandle$3.style["-webkit-animation-play-state"]=="paused") {
+         Self$83.FTarget$1.FHandle$3.style["-webkit-animation-play-state"] = "running";
       }
    }
 }
 /// procedure TQTXAnimationHelper.Stop(Self: TW3CustomAnimation)
-function TQTXAnimationHelper$Stop$2(Self$83) {
-   if (Self$83.FBusy) {
-      TW3CustomAnimation.FinalizeTransition$(Self$83);
+function TQTXAnimationHelper$Stop$2(Self$84) {
+   if (Self$84.FBusy) {
+      TW3CustomAnimation.FinalizeTransition$(Self$84);
    }
 }
 /// TQTXLabel = class (TW3CustomControl)
@@ -12425,17 +12582,17 @@ var TQTXLabel = {
    }
    /// procedure TQTXLabel.AdjustSize()
    ,AdjustSize:function(Self) {
-      var mSize = {tmWidth:0,tmHeight:0};
+      var mSize$1 = {tmWidth:0,tmHeight:0};
       if (Self.FAuto) {
-         mSize = TQTXTools.calcTextMetrics(TQTXTools,TW3TagObj.GetInnerHTML(Self),TW3CustomFont.getName(TW3CustomControl.getFont$1(Self)),TW3CustomFont.getSize(TW3CustomControl.getFont$1(Self)));
-         if ((mSize.tmWidth<1)||(mSize.tmHeight<1)) {
+         mSize$1 = TQTXTools.calcTextMetrics(TQTXTools,TW3TagObj.GetInnerHTML(Self),TW3CustomFont.getName(TW3CustomControl.getFont$1(Self)),TW3CustomFont.getSize(TW3CustomControl.getFont$1(Self)));
+         if ((mSize$1.tmWidth<1)||(mSize$1.tmHeight<1)) {
             if (TQTXLabel.getCaption$(Self).length>0) {
                return;
             } else {
-               TW3MovableControl.SetSize$4$(Self,mSize.tmWidth,mSize.tmHeight);
+               TW3MovableControl.SetSize$4$(Self,mSize$1.tmWidth,mSize$1.tmHeight);
             }
          } else {
-            TW3MovableControl.SetSize$4$(Self,mSize.tmWidth,mSize.tmHeight);
+            TW3MovableControl.SetSize$4$(Self,mSize$1.tmWidth,mSize$1.tmHeight);
          }
       }
    }
@@ -12632,7 +12789,7 @@ var TQTXScrollOptions = {
       $.a$52 = 0;
    }
    /// constructor TQTXScrollOptions.Create()
-   ,Create$57:function(Self) {
+   ,Create$58:function(Self) {
       TObject.Create(Self);
       Self.a$42 = true;
       Self.a$48 = true;
@@ -12666,7 +12823,7 @@ var TQTXScrollOptions = {
       return Result
    }
    ,Destroy:TObject.Destroy
-   ,Create$57$:function($){return $.ClassType.Create$57($)}
+   ,Create$58$:function($){return $.ClassType.Create$58($)}
    ,toJSON$:function($){return $.ClassType.toJSON($)}
 };
 /// TQTXScrollController = class (TObject)
@@ -12685,7 +12842,7 @@ var TQTXScrollController = {
    /// procedure TQTXScrollController.Attach()
    ,Attach:function(Self) {
       var mHandle$3 = undefined;
-      var mTemp$12 = undefined;
+      var mTemp$13 = undefined;
       var mOptions = undefined;
       if (Self.FHandle$9) {
          TQTXScrollController.Detach(Self);
@@ -12694,8 +12851,8 @@ var TQTXScrollController = {
       try {
          mHandle$3 = Self.FControl;
          
-      mTemp$12 = new IScroll(mHandle$3,mOptions);
-    Self.FHandle$9 = mTemp$12;
+      mTemp$13 = new IScroll(mHandle$3,mOptions);
+    Self.FHandle$9 = mTemp$13;
       } catch ($e) {
          var e$17 = $W($e);
          throw EW3Exception.CreateFmt($New(EW3Exception),"Failed to create IScroll instance: %s",[e$17.FMessage]);
@@ -12706,10 +12863,10 @@ var TQTXScrollController = {
       }
    }
    /// constructor TQTXScrollController.Create(const aHandle: THandle)
-   ,Create$58:function(Self, aHandle$4) {
+   ,Create$59:function(Self, aHandle$5) {
       TObject.Create(Self);
-      Self.FOptions$1 = TQTXScrollOptions.Create$57$($New(TQTXScrollOptions));
-      Self.FControl = aHandle$4;
+      Self.FOptions$1 = TQTXScrollOptions.Create$58$($New(TQTXScrollOptions));
+      Self.FControl = aHandle$5;
       return Self
    }
    /// destructor TQTXScrollController.Destroy()
@@ -12765,10 +12922,10 @@ var TQTXScrollController = {
       }
    }
    /// procedure TQTXScrollController.ScrollTo(x: Integer; y: Integer; time: Integer; relative: Boolean)
-   ,ScrollTo$1:function(Self, x$64, y$46, time, relative) {
+   ,ScrollTo$1:function(Self, x$67, y$46, time, relative) {
       if (Self.FHandle$9) {
          try {
-            Self.FHandle$9.scrollTo(x$64,y$46,time,relative);
+            Self.FHandle$9.scrollTo(x$67,y$46,time,relative);
          } catch ($e) {
             var e$21 = $W($e);
             throw EW3Exception.CreateFmt($New(EW3Exception),"IScroll->ScrollTo([int,int]) threw exception: [%s]",[e$21.FMessage]);
@@ -12838,7 +12995,7 @@ var TQTXScrollController = {
       }
    }
    ,Destroy$:function($){return $.ClassType.Destroy($)}
-   ,Create$58$:function($){return $.ClassType.Create$58.apply($.ClassType, arguments)}
+   ,Create$59$:function($){return $.ClassType.Create$59.apply($.ClassType, arguments)}
 };
 /// TQTXSizeAnimation = class (TW3TransitionAnimation)
 var TQTXSizeAnimation = {
@@ -12898,24 +13055,24 @@ var TQTXFadeAnimation = {
    ,KeyFramesName:TW3TransitionAnimation.KeyFramesName
 };
 /// function TQTXEffectsHelper.fxBusy(Self: TW3CustomControl) : Boolean
-function TQTXEffectsHelper$fxBusy(Self$84) {
+function TQTXEffectsHelper$fxBusy(Self$85) {
    var Result = false;
-   if (TQTXAttrAccess.Exists(Self$84.FAccess,"fxBusy")) {
-      Result = TQTXAttrAccess.Read(Self$84.FAccess,"fxBusy")=="yes";
+   if (TQTXAttrAccess.Exists(Self$85.FAccess,"fxBusy")) {
+      Result = TQTXAttrAccess.Read(Self$85.FAccess,"fxBusy")=="yes";
    }
-   TQTXAttrAccess.Write(Self$84.FAccess,"fxBusy","no");
+   TQTXAttrAccess.Write(Self$85.FAccess,"fxBusy","no");
    return Result
 }
 /// procedure TQTXEffectsHelper.fxFadeIn(Self: TW3CustomControl; const Duration: Float)
-function TQTXEffectsHelper$fxFadeIn(Self$85, Duration$1) {
-   TQTXEffectsHelper$fxFadeIn$1(Self$85,Duration$1,null);
+function TQTXEffectsHelper$fxFadeIn(Self$86, Duration$1) {
+   TQTXEffectsHelper$fxFadeIn$1(Self$86,Duration$1,null);
 }
 /// procedure TQTXEffectsHelper.fxFadeIn(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxFadeIn$1(Self$86, Duration$2, OnFinished) {
+function TQTXEffectsHelper$fxFadeIn$1(Self$87, Duration$2, OnFinished) {
    var mEffect = null;
-   if (TQTXEffectsHelper$fxBusy(Self$86)) {
+   if (TQTXEffectsHelper$fxBusy(Self$87)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxFadeIn$1(Self$86,Duration$2,OnFinished);
+         TQTXEffectsHelper$fxFadeIn$1(Self$87,Duration$2,OnFinished);
       },50);
    } else {
       mEffect = TW3CustomAnimation.Create$39$($New(TQTXFadeAnimation));
@@ -12925,27 +13082,27 @@ function TQTXEffectsHelper$fxFadeIn$1(Self$86, Duration$2, OnFinished) {
       mEffect.FOnEnds = function (Sender$15) {
          w3_Callback(function () {
             TObject.Free($As(Sender$15,TW3CustomAnimation));
-            AfterEffect(Self$86,$As(Sender$15,TW3CustomAnimation));
+            AfterEffect(Self$87,$As(Sender$15,TW3CustomAnimation));
             if (OnFinished) {
                OnFinished();
             }
          },25);
       };
-      BeforeEffect(Self$86,mEffect);
-      TW3MovableControl.SetVisible$(Self$86,true);
-      TW3CustomAnimation.Execute(mEffect,Self$86);
+      BeforeEffect(Self$87,mEffect);
+      TW3MovableControl.SetVisible$(Self$87,true);
+      TW3CustomAnimation.Execute(mEffect,Self$87);
    }
 }
 /// procedure TQTXEffectsHelper.fxFadeOut(Self: TW3CustomControl; const Duration: Float)
-function TQTXEffectsHelper$fxFadeOut$1(Self$87, Duration$3) {
-   TQTXEffectsHelper$fxFadeOut(Self$87,Duration$3,null);
+function TQTXEffectsHelper$fxFadeOut$1(Self$88, Duration$3) {
+   TQTXEffectsHelper$fxFadeOut(Self$88,Duration$3,null);
 }
 /// procedure TQTXEffectsHelper.fxFadeOut(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxFadeOut(Self$88, Duration$4, OnFinished$1) {
+function TQTXEffectsHelper$fxFadeOut(Self$89, Duration$4, OnFinished$1) {
    var mEffect$1 = null;
-   if (TQTXEffectsHelper$fxBusy(Self$88)) {
+   if (TQTXEffectsHelper$fxBusy(Self$89)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxFadeOut(Self$88,Duration$4,OnFinished$1);
+         TQTXEffectsHelper$fxFadeOut(Self$89,Duration$4,OnFinished$1);
       },50);
    } else {
       mEffect$1 = TW3CustomAnimation.Create$39$($New(TQTXFadeAnimation));
@@ -12953,313 +13110,313 @@ function TQTXEffectsHelper$fxFadeOut(Self$88, Duration$4, OnFinished$1) {
       $As(mEffect$1,TQTXFadeAnimation).FTo = 0;
       TW3CustomAnimation.SetDuration(mEffect$1,Duration$4);
       mEffect$1.FOnEnds = function (Sender$16) {
-         TW3MovableControl.SetVisible$(Self$88,false);
+         TW3MovableControl.SetVisible$(Self$89,false);
          w3_Callback(function () {
             TObject.Free($As(Sender$16,TW3CustomAnimation));
-            AfterEffect(Self$88,$As(Sender$16,TW3CustomAnimation));
+            AfterEffect(Self$89,$As(Sender$16,TW3CustomAnimation));
             if (OnFinished$1) {
                OnFinished$1();
             }
          },25);
       };
-      BeforeEffect(Self$88,mEffect$1);
-      TW3CustomAnimation.Execute(mEffect$1,Self$88);
+      BeforeEffect(Self$89,mEffect$1);
+      TW3CustomAnimation.Execute(mEffect$1,Self$89);
    }
 }
 /// procedure TQTXEffectsHelper.fxMoveBy(Self: TW3CustomControl; const dx: Integer; const dy: Integer; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxMoveBy(Self$89, dx$17, dy$19, Duration$5, OnFinished$2) {
+function TQTXEffectsHelper$fxMoveBy(Self$90, dx$17, dy$19, Duration$5, OnFinished$2) {
    var mEffect$2 = null;
-   if (TQTXEffectsHelper$fxBusy(Self$89)) {
+   if (TQTXEffectsHelper$fxBusy(Self$90)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxMoveBy(Self$89,dx$17,dy$19,Duration$5,OnFinished$2);
+         TQTXEffectsHelper$fxMoveBy(Self$90,dx$17,dy$19,Duration$5,OnFinished$2);
       },50);
    } else {
       mEffect$2 = TW3CustomAnimation.Create$39$($New(TQTXMoveAnimation));
       TW3CustomAnimation.SetDuration(mEffect$2,Duration$5);
-      $As(mEffect$2,TQTXMoveAnimation).FFromX$1 = TW3MovableControl.GetLeft$(Self$89);
-      $As(mEffect$2,TQTXMoveAnimation).FFromY$1 = TW3MovableControl.GetTop$(Self$89);
-      $As(mEffect$2,TQTXMoveAnimation).FToX$1 = TW3MovableControl.GetLeft$(Self$89)+dx$17;
-      $As(mEffect$2,TQTXMoveAnimation).FToY$1 = TW3MovableControl.GetTop$(Self$89)+dy$19;
+      $As(mEffect$2,TQTXMoveAnimation).FFromX$1 = TW3MovableControl.GetLeft$(Self$90);
+      $As(mEffect$2,TQTXMoveAnimation).FFromY$1 = TW3MovableControl.GetTop$(Self$90);
+      $As(mEffect$2,TQTXMoveAnimation).FToX$1 = TW3MovableControl.GetLeft$(Self$90)+dx$17;
+      $As(mEffect$2,TQTXMoveAnimation).FToY$1 = TW3MovableControl.GetTop$(Self$90)+dy$19;
       $As(mEffect$2,TQTXMoveAnimation).FTiming = 4;
       mEffect$2.FOnEnds = function (sender) {
-         TW3MovableControl.setLeft$(Self$89,dx$17);
-         TW3MovableControl.setTop$(Self$89,dy$19);
+         TW3MovableControl.setLeft$(Self$90,dx$17);
+         TW3MovableControl.setTop$(Self$90,dy$19);
          w3_Callback(function () {
             TObject.Free($As(sender,TW3CustomAnimation));
-            AfterEffect(Self$89,$As(sender,TW3CustomAnimation));
+            AfterEffect(Self$90,$As(sender,TW3CustomAnimation));
             if (OnFinished$2) {
                OnFinished$2();
             }
          },25);
       };
-      BeforeEffect(Self$89,mEffect$2);
-      TW3CustomAnimation.Execute(mEffect$2,Self$89);
+      BeforeEffect(Self$90,mEffect$2);
+      TW3CustomAnimation.Execute(mEffect$2,Self$90);
    }
 }
 /// procedure TQTXEffectsHelper.fxMoveBy(Self: TW3CustomControl; const dx: Integer; const dy: Integer; const Duration: Float)
-function TQTXEffectsHelper$fxMoveBy$1(Self$90, dx$18, dy$20, Duration$6) {
-   TQTXEffectsHelper$fxMoveBy(Self$90,dx$18,dy$20,Duration$6,null);
+function TQTXEffectsHelper$fxMoveBy$1(Self$91, dx$18, dy$20, Duration$6) {
+   TQTXEffectsHelper$fxMoveBy(Self$91,dx$18,dy$20,Duration$6,null);
 }
 /// procedure TQTXEffectsHelper.fxMoveDown(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxMoveDown(Self$91, Duration$7, OnFinished$3) {
+function TQTXEffectsHelper$fxMoveDown(Self$92, Duration$7, OnFinished$3) {
    var mEffect$3 = null;
-   if (TQTXEffectsHelper$fxBusy(Self$91)) {
+   if (TQTXEffectsHelper$fxBusy(Self$92)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxMoveDown(Self$91,Duration$7,OnFinished$3);
+         TQTXEffectsHelper$fxMoveDown(Self$92,Duration$7,OnFinished$3);
       },50);
    } else {
       mEffect$3 = TW3CustomAnimation.Create$39$($New(TQTXMoveAnimation));
       TW3CustomAnimation.SetDuration(mEffect$3,Duration$7);
-      $As(mEffect$3,TQTXMoveAnimation).FFromX$1 = TW3MovableControl.GetLeft$(Self$91);
-      $As(mEffect$3,TQTXMoveAnimation).FFromY$1 = TW3MovableControl.GetTop$(Self$91);
-      $As(mEffect$3,TQTXMoveAnimation).FToX$1 = TW3MovableControl.GetLeft$(Self$91);
-      $As(mEffect$3,TQTXMoveAnimation).FToY$1 = TW3MovableControl.GetHeight$1$($As(Self$91.FParent,TW3MovableControl))-TW3MovableControl.GetHeight$1$(Self$91);
+      $As(mEffect$3,TQTXMoveAnimation).FFromX$1 = TW3MovableControl.GetLeft$(Self$92);
+      $As(mEffect$3,TQTXMoveAnimation).FFromY$1 = TW3MovableControl.GetTop$(Self$92);
+      $As(mEffect$3,TQTXMoveAnimation).FToX$1 = TW3MovableControl.GetLeft$(Self$92);
+      $As(mEffect$3,TQTXMoveAnimation).FToY$1 = TW3MovableControl.GetHeight$1$($As(Self$92.FParent,TW3MovableControl))-TW3MovableControl.GetHeight$1$(Self$92);
       $As(mEffect$3,TQTXMoveAnimation).FTiming = 4;
       mEffect$3.FOnEnds = function (sender$1) {
-         TW3MovableControl.setTop$(Self$91,(TW3MovableControl.GetHeight$1$($As(Self$91.FParent,TW3MovableControl))-TW3MovableControl.GetHeight$1$(Self$91)));
+         TW3MovableControl.setTop$(Self$92,(TW3MovableControl.GetHeight$1$($As(Self$92.FParent,TW3MovableControl))-TW3MovableControl.GetHeight$1$(Self$92)));
          w3_Callback(function () {
             TObject.Free($As(sender$1,TW3CustomAnimation));
-            AfterEffect(Self$91,$As(sender$1,TW3CustomAnimation));
+            AfterEffect(Self$92,$As(sender$1,TW3CustomAnimation));
             if (OnFinished$3) {
                OnFinished$3();
             }
          },25);
       };
-      BeforeEffect(Self$91,mEffect$3);
-      TW3CustomAnimation.Execute(mEffect$3,Self$91);
+      BeforeEffect(Self$92,mEffect$3);
+      TW3CustomAnimation.Execute(mEffect$3,Self$92);
    }
 }
 /// procedure TQTXEffectsHelper.fxMoveDown(Self: TW3CustomControl; const Duration: Float)
-function TQTXEffectsHelper$fxMoveDown$1(Self$92, Duration$8) {
-   TQTXEffectsHelper$fxMoveDown(Self$92,Duration$8,null);
+function TQTXEffectsHelper$fxMoveDown$1(Self$93, Duration$8) {
+   TQTXEffectsHelper$fxMoveDown(Self$93,Duration$8,null);
 }
 /// procedure TQTXEffectsHelper.fxMoveTo(Self: TW3CustomControl; const dx: Integer; const dy: Integer; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxMoveTo(Self$93, dx$19, dy$21, Duration$9, OnFinished$4) {
+function TQTXEffectsHelper$fxMoveTo(Self$94, dx$19, dy$21, Duration$9, OnFinished$4) {
    var mEffect$4 = null;
-   if (TQTXEffectsHelper$fxBusy(Self$93)) {
+   if (TQTXEffectsHelper$fxBusy(Self$94)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxMoveTo(Self$93,dx$19,dy$21,Duration$9,OnFinished$4);
+         TQTXEffectsHelper$fxMoveTo(Self$94,dx$19,dy$21,Duration$9,OnFinished$4);
       },50);
    } else {
       mEffect$4 = TW3CustomAnimation.Create$39$($New(TQTXMoveAnimation));
       TW3CustomAnimation.SetDuration(mEffect$4,Duration$9);
-      $As(mEffect$4,TQTXMoveAnimation).FFromX$1 = TW3MovableControl.GetLeft$(Self$93);
-      $As(mEffect$4,TQTXMoveAnimation).FFromY$1 = TW3MovableControl.GetTop$(Self$93);
+      $As(mEffect$4,TQTXMoveAnimation).FFromX$1 = TW3MovableControl.GetLeft$(Self$94);
+      $As(mEffect$4,TQTXMoveAnimation).FFromY$1 = TW3MovableControl.GetTop$(Self$94);
       $As(mEffect$4,TQTXMoveAnimation).FToX$1 = dx$19;
       $As(mEffect$4,TQTXMoveAnimation).FToY$1 = dy$21;
       $As(mEffect$4,TQTXMoveAnimation).FTiming = 1;
       mEffect$4.FOnEnds = function (sender$2) {
-         TW3MovableControl.setLeft$(Self$93,dx$19);
-         TW3MovableControl.setTop$(Self$93,dy$21);
+         TW3MovableControl.setLeft$(Self$94,dx$19);
+         TW3MovableControl.setTop$(Self$94,dy$21);
          w3_Callback(function () {
             TObject.Free($As(sender$2,TW3CustomAnimation));
-            AfterEffect(Self$93,$As(sender$2,TW3CustomAnimation));
+            AfterEffect(Self$94,$As(sender$2,TW3CustomAnimation));
             if (OnFinished$4) {
                OnFinished$4();
             }
          },25);
       };
-      BeforeEffect(Self$93,mEffect$4);
-      TW3CustomAnimation.Execute(mEffect$4,Self$93);
+      BeforeEffect(Self$94,mEffect$4);
+      TW3CustomAnimation.Execute(mEffect$4,Self$94);
    }
 }
 /// procedure TQTXEffectsHelper.fxMoveTo(Self: TW3CustomControl; const dx: Integer; const dy: Integer; const Duration: Float)
-function TQTXEffectsHelper$fxMoveTo$1(Self$94, dx$20, dy$22, Duration$10) {
-   TQTXEffectsHelper$fxMoveTo(Self$94,dx$20,dy$22,Duration$10,null);
+function TQTXEffectsHelper$fxMoveTo$1(Self$95, dx$20, dy$22, Duration$10) {
+   TQTXEffectsHelper$fxMoveTo(Self$95,dx$20,dy$22,Duration$10,null);
 }
 /// procedure TQTXEffectsHelper.fxMoveUp(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxMoveUp(Self$95, Duration$11, OnFinished$5) {
+function TQTXEffectsHelper$fxMoveUp(Self$96, Duration$11, OnFinished$5) {
    var mEffect$5 = null;
-   if (TQTXEffectsHelper$fxBusy(Self$95)) {
+   if (TQTXEffectsHelper$fxBusy(Self$96)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxMoveUp(Self$95,Duration$11,OnFinished$5);
+         TQTXEffectsHelper$fxMoveUp(Self$96,Duration$11,OnFinished$5);
       },50);
    } else {
       mEffect$5 = TW3CustomAnimation.Create$39$($New(TQTXMoveAnimation));
       TW3CustomAnimation.SetDuration(mEffect$5,Duration$11);
-      $As(mEffect$5,TQTXMoveAnimation).FFromX$1 = TW3MovableControl.GetLeft$(Self$95);
-      $As(mEffect$5,TQTXMoveAnimation).FFromY$1 = TW3MovableControl.GetTop$(Self$95);
-      $As(mEffect$5,TQTXMoveAnimation).FToX$1 = TW3MovableControl.GetLeft$(Self$95);
+      $As(mEffect$5,TQTXMoveAnimation).FFromX$1 = TW3MovableControl.GetLeft$(Self$96);
+      $As(mEffect$5,TQTXMoveAnimation).FFromY$1 = TW3MovableControl.GetTop$(Self$96);
+      $As(mEffect$5,TQTXMoveAnimation).FToX$1 = TW3MovableControl.GetLeft$(Self$96);
       $As(mEffect$5,TQTXMoveAnimation).FToY$1 = 0;
       $As(mEffect$5,TQTXMoveAnimation).FTiming = 4;
       mEffect$5.FOnEnds = function (sender$3) {
-         TW3MovableControl.setTop$(Self$95,0);
+         TW3MovableControl.setTop$(Self$96,0);
          w3_Callback(function () {
             TObject.Free($As(sender$3,TW3CustomAnimation));
-            AfterEffect(Self$95,$As(sender$3,TW3CustomAnimation));
+            AfterEffect(Self$96,$As(sender$3,TW3CustomAnimation));
             if (OnFinished$5) {
                OnFinished$5();
             }
          },25);
       };
-      BeforeEffect(Self$95,mEffect$5);
-      TW3CustomAnimation.Execute(mEffect$5,Self$95);
+      BeforeEffect(Self$96,mEffect$5);
+      TW3CustomAnimation.Execute(mEffect$5,Self$96);
    }
 }
 /// procedure TQTXEffectsHelper.fxMoveUp(Self: TW3CustomControl; const Duration: Float)
-function TQTXEffectsHelper$fxMoveUp$1(Self$96, Duration$12) {
-   TQTXEffectsHelper$fxMoveUp(Self$96,Duration$12,null);
+function TQTXEffectsHelper$fxMoveUp$1(Self$97, Duration$12) {
+   TQTXEffectsHelper$fxMoveUp(Self$97,Duration$12,null);
 }
 /// procedure TQTXEffectsHelper.fxScaleDown(Self: TW3CustomControl; aFactor: Integer; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxScaleDown(Self$97, aFactor, Duration$13, OnFinished$6) {
+function TQTXEffectsHelper$fxScaleDown(Self$98, aFactor, Duration$13, OnFinished$6) {
    var mEffect$6 = null;
-   if (TQTXEffectsHelper$fxBusy(Self$97)) {
+   if (TQTXEffectsHelper$fxBusy(Self$98)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxScaleDown(Self$97,aFactor,Duration$13,OnFinished$6);
+         TQTXEffectsHelper$fxScaleDown(Self$98,aFactor,Duration$13,OnFinished$6);
       },50);
    } else {
       mEffect$6 = TW3CustomAnimation.Create$39$($New(TQTXSizeAnimation));
       TW3CustomAnimation.SetDuration(mEffect$6,Duration$13);
-      $As(mEffect$6,TQTXSizeAnimation).FFromX = TW3MovableControl.GetLeft$(Self$97);
-      $As(mEffect$6,TQTXSizeAnimation).FFromY = TW3MovableControl.GetTop$(Self$97);
-      $As(mEffect$6,TQTXSizeAnimation).FFromWidth = TW3MovableControl.GetWidth$1$(Self$97);
-      $As(mEffect$6,TQTXSizeAnimation).FFromHeight = TW3MovableControl.GetHeight$1$(Self$97);
+      $As(mEffect$6,TQTXSizeAnimation).FFromX = TW3MovableControl.GetLeft$(Self$98);
+      $As(mEffect$6,TQTXSizeAnimation).FFromY = TW3MovableControl.GetTop$(Self$98);
+      $As(mEffect$6,TQTXSizeAnimation).FFromWidth = TW3MovableControl.GetWidth$1$(Self$98);
+      $As(mEffect$6,TQTXSizeAnimation).FFromHeight = TW3MovableControl.GetHeight$1$(Self$98);
       aFactor = TInteger.EnsureRange(aFactor,1,2147483647);
-      $As(mEffect$6,TQTXSizeAnimation).FToX = TW3MovableControl.GetLeft$(Self$97)+aFactor;
-      $As(mEffect$6,TQTXSizeAnimation).FToY = TW3MovableControl.GetTop$(Self$97)+aFactor;
-      $As(mEffect$6,TQTXSizeAnimation).FToWidth = TW3MovableControl.GetWidth$1$(Self$97)-(aFactor*2);
-      $As(mEffect$6,TQTXSizeAnimation).FToHeight = TW3MovableControl.GetHeight$1$(Self$97)-(aFactor*2);
+      $As(mEffect$6,TQTXSizeAnimation).FToX = TW3MovableControl.GetLeft$(Self$98)+aFactor;
+      $As(mEffect$6,TQTXSizeAnimation).FToY = TW3MovableControl.GetTop$(Self$98)+aFactor;
+      $As(mEffect$6,TQTXSizeAnimation).FToWidth = TW3MovableControl.GetWidth$1$(Self$98)-(aFactor*2);
+      $As(mEffect$6,TQTXSizeAnimation).FToHeight = TW3MovableControl.GetHeight$1$(Self$98)-(aFactor*2);
       $As(mEffect$6,TQTXSizeAnimation).FTiming = 4;
       mEffect$6.FOnEnds = function (sender$4) {
-         TW3MovableControl.SetBounds$2$(Self$97,$As(mEffect$6,TQTXSizeAnimation).FToX,$As(mEffect$6,TQTXSizeAnimation).FToY,$As(mEffect$6,TQTXSizeAnimation).FToWidth,$As(mEffect$6,TQTXSizeAnimation).FToHeight);
+         TW3MovableControl.SetBounds$2$(Self$98,$As(mEffect$6,TQTXSizeAnimation).FToX,$As(mEffect$6,TQTXSizeAnimation).FToY,$As(mEffect$6,TQTXSizeAnimation).FToWidth,$As(mEffect$6,TQTXSizeAnimation).FToHeight);
          w3_Callback(function () {
             TObject.Free($As(sender$4,TW3CustomAnimation));
-            AfterEffect(Self$97,$As(sender$4,TW3CustomAnimation));
+            AfterEffect(Self$98,$As(sender$4,TW3CustomAnimation));
             if (OnFinished$6) {
                OnFinished$6();
             }
          },25);
       };
-      BeforeEffect(Self$97,mEffect$6);
-      TW3CustomAnimation.Execute(mEffect$6,Self$97);
+      BeforeEffect(Self$98,mEffect$6);
+      TW3CustomAnimation.Execute(mEffect$6,Self$98);
    }
 }
 /// procedure TQTXEffectsHelper.fxScaleDown(Self: TW3CustomControl; aFactor: Integer; const Duration: Float)
-function TQTXEffectsHelper$fxScaleDown$1(Self$98, aFactor$1, Duration$14) {
-   TQTXEffectsHelper$fxScaleDown(Self$98,aFactor$1,Duration$14,null);
+function TQTXEffectsHelper$fxScaleDown$1(Self$99, aFactor$1, Duration$14) {
+   TQTXEffectsHelper$fxScaleDown(Self$99,aFactor$1,Duration$14,null);
 }
 /// procedure TQTXEffectsHelper.fxScaleTo(Self: TW3CustomControl; const aToX: Integer; const aToY: Integer; const aToWidth: Integer; const aToHeight: Integer; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxScaleTo(Self$99, aToX, aToY, aToWidth, aToHeight, Duration$15, OnFinished$7) {
+function TQTXEffectsHelper$fxScaleTo(Self$100, aToX, aToY, aToWidth, aToHeight, Duration$15, OnFinished$7) {
    var mEffect$7 = null;
-   if (TQTXEffectsHelper$fxBusy(Self$99)) {
+   if (TQTXEffectsHelper$fxBusy(Self$100)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxScaleTo(Self$99,aToX,aToY,aToWidth,aToHeight,Duration$15,OnFinished$7);
+         TQTXEffectsHelper$fxScaleTo(Self$100,aToX,aToY,aToWidth,aToHeight,Duration$15,OnFinished$7);
       },50);
    } else {
       mEffect$7 = TW3CustomAnimation.Create$39$($New(TQTXSizeAnimation));
       TW3CustomAnimation.SetDuration(mEffect$7,Duration$15);
-      $As(mEffect$7,TQTXSizeAnimation).FFromX = TW3MovableControl.GetLeft$(Self$99);
-      $As(mEffect$7,TQTXSizeAnimation).FFromY = TW3MovableControl.GetTop$(Self$99);
-      $As(mEffect$7,TQTXSizeAnimation).FFromWidth = TW3MovableControl.GetWidth$1$(Self$99);
-      $As(mEffect$7,TQTXSizeAnimation).FFromHeight = TW3MovableControl.GetHeight$1$(Self$99);
+      $As(mEffect$7,TQTXSizeAnimation).FFromX = TW3MovableControl.GetLeft$(Self$100);
+      $As(mEffect$7,TQTXSizeAnimation).FFromY = TW3MovableControl.GetTop$(Self$100);
+      $As(mEffect$7,TQTXSizeAnimation).FFromWidth = TW3MovableControl.GetWidth$1$(Self$100);
+      $As(mEffect$7,TQTXSizeAnimation).FFromHeight = TW3MovableControl.GetHeight$1$(Self$100);
       $As(mEffect$7,TQTXSizeAnimation).FToX = aToX;
       $As(mEffect$7,TQTXSizeAnimation).FToY = aToY;
       $As(mEffect$7,TQTXSizeAnimation).FToWidth = aToWidth;
       $As(mEffect$7,TQTXSizeAnimation).FToHeight = aToHeight;
       $As(mEffect$7,TQTXSizeAnimation).FTiming = 4;
       mEffect$7.FOnEnds = function (sender$5) {
-         TW3MovableControl.SetBounds$2$(Self$99,aToX,aToY,aToWidth,aToHeight);
+         TW3MovableControl.SetBounds$2$(Self$100,aToX,aToY,aToWidth,aToHeight);
          w3_Callback(function () {
             TObject.Free($As(sender$5,TW3CustomAnimation));
-            AfterEffect(Self$99,$As(sender$5,TW3CustomAnimation));
+            AfterEffect(Self$100,$As(sender$5,TW3CustomAnimation));
             if (OnFinished$7) {
                OnFinished$7();
             }
          },25);
       };
-      BeforeEffect(Self$99,mEffect$7);
-      TW3CustomAnimation.Execute(mEffect$7,Self$99);
+      BeforeEffect(Self$100,mEffect$7);
+      TW3CustomAnimation.Execute(mEffect$7,Self$100);
    }
 }
 /// procedure TQTXEffectsHelper.fxScaleTo(Self: TW3CustomControl; const aToX: Integer; const aToY: Integer; const aToWidth: Integer; const aToHeight: Integer; const Duration: Float)
-function TQTXEffectsHelper$fxScaleTo$1(Self$100, aToX$1, aToY$1, aToWidth$1, aToHeight$1, Duration$16) {
-   TQTXEffectsHelper$fxScaleTo(Self$100,aToX$1,aToY$1,aToWidth$1,aToHeight$1,Duration$16,null);
+function TQTXEffectsHelper$fxScaleTo$1(Self$101, aToX$1, aToY$1, aToWidth$1, aToHeight$1, Duration$16) {
+   TQTXEffectsHelper$fxScaleTo(Self$101,aToX$1,aToY$1,aToWidth$1,aToHeight$1,Duration$16,null);
 }
 /// procedure TQTXEffectsHelper.fxScaleUp(Self: TW3CustomControl; aFactor: Integer; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxScaleUp(Self$101, aFactor$2, Duration$17, OnFinished$8) {
+function TQTXEffectsHelper$fxScaleUp(Self$102, aFactor$2, Duration$17, OnFinished$8) {
    var mEffect$8 = null;
-   if (TQTXEffectsHelper$fxBusy(Self$101)) {
+   if (TQTXEffectsHelper$fxBusy(Self$102)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxScaleUp(Self$101,aFactor$2,Duration$17,OnFinished$8);
+         TQTXEffectsHelper$fxScaleUp(Self$102,aFactor$2,Duration$17,OnFinished$8);
       },50);
    } else {
       mEffect$8 = TW3CustomAnimation.Create$39$($New(TQTXSizeAnimation));
       TW3CustomAnimation.SetDuration(mEffect$8,Duration$17);
       aFactor$2 = TInteger.EnsureRange(aFactor$2,1,2147483647);
-      $As(mEffect$8,TQTXSizeAnimation).FFromX = TW3MovableControl.GetLeft$(Self$101);
-      $As(mEffect$8,TQTXSizeAnimation).FFromY = TW3MovableControl.GetTop$(Self$101);
-      $As(mEffect$8,TQTXSizeAnimation).FFromWidth = TW3MovableControl.GetWidth$1$(Self$101);
-      $As(mEffect$8,TQTXSizeAnimation).FFromHeight = TW3MovableControl.GetHeight$1$(Self$101);
-      $As(mEffect$8,TQTXSizeAnimation).FToX = TW3MovableControl.GetLeft$(Self$101)-aFactor$2;
-      $As(mEffect$8,TQTXSizeAnimation).FToY = TW3MovableControl.GetTop$(Self$101)-aFactor$2;
-      $As(mEffect$8,TQTXSizeAnimation).FToWidth = TW3MovableControl.GetWidth$1$(Self$101)+(aFactor$2*2);
-      $As(mEffect$8,TQTXSizeAnimation).FToHeight = TW3MovableControl.GetHeight$1$(Self$101)+(aFactor$2*2);
+      $As(mEffect$8,TQTXSizeAnimation).FFromX = TW3MovableControl.GetLeft$(Self$102);
+      $As(mEffect$8,TQTXSizeAnimation).FFromY = TW3MovableControl.GetTop$(Self$102);
+      $As(mEffect$8,TQTXSizeAnimation).FFromWidth = TW3MovableControl.GetWidth$1$(Self$102);
+      $As(mEffect$8,TQTXSizeAnimation).FFromHeight = TW3MovableControl.GetHeight$1$(Self$102);
+      $As(mEffect$8,TQTXSizeAnimation).FToX = TW3MovableControl.GetLeft$(Self$102)-aFactor$2;
+      $As(mEffect$8,TQTXSizeAnimation).FToY = TW3MovableControl.GetTop$(Self$102)-aFactor$2;
+      $As(mEffect$8,TQTXSizeAnimation).FToWidth = TW3MovableControl.GetWidth$1$(Self$102)+(aFactor$2*2);
+      $As(mEffect$8,TQTXSizeAnimation).FToHeight = TW3MovableControl.GetHeight$1$(Self$102)+(aFactor$2*2);
       $As(mEffect$8,TQTXSizeAnimation).FTiming = 4;
       mEffect$8.FOnEnds = function (sender$6) {
-         TW3MovableControl.SetBounds$2$(Self$101,$As(mEffect$8,TQTXSizeAnimation).FToX,$As(mEffect$8,TQTXSizeAnimation).FToY,$As(mEffect$8,TQTXSizeAnimation).FToWidth,$As(mEffect$8,TQTXSizeAnimation).FToHeight);
+         TW3MovableControl.SetBounds$2$(Self$102,$As(mEffect$8,TQTXSizeAnimation).FToX,$As(mEffect$8,TQTXSizeAnimation).FToY,$As(mEffect$8,TQTXSizeAnimation).FToWidth,$As(mEffect$8,TQTXSizeAnimation).FToHeight);
          w3_Callback(function () {
             TObject.Free($As(sender$6,TW3CustomAnimation));
-            AfterEffect(Self$101,$As(sender$6,TW3CustomAnimation));
+            AfterEffect(Self$102,$As(sender$6,TW3CustomAnimation));
             if (OnFinished$8) {
                OnFinished$8();
             }
          },25);
       };
-      BeforeEffect(Self$101,mEffect$8);
-      TW3CustomAnimation.Execute(mEffect$8,Self$101);
+      BeforeEffect(Self$102,mEffect$8);
+      TW3CustomAnimation.Execute(mEffect$8,Self$102);
    }
 }
 /// procedure TQTXEffectsHelper.fxScaleUp(Self: TW3CustomControl; aFactor: Integer; const Duration: Float)
-function TQTXEffectsHelper$fxScaleUp$1(Self$102, aFactor$3, Duration$18) {
-   TQTXEffectsHelper$fxScaleUp(Self$102,aFactor$3,Duration$18,null);
+function TQTXEffectsHelper$fxScaleUp$1(Self$103, aFactor$3, Duration$18) {
+   TQTXEffectsHelper$fxScaleUp(Self$103,aFactor$3,Duration$18,null);
 }
 /// procedure TQTXEffectsHelper.fxSetBusy(Self: TW3CustomControl; const aValue: Boolean)
-function TQTXEffectsHelper$fxSetBusy(Self$103, aValue$119) {
-   TQTXAttrAccess.Write(Self$103.FAccess,"fxBusy","yes");
+function TQTXEffectsHelper$fxSetBusy(Self$104, aValue$119) {
+   TQTXAttrAccess.Write(Self$104.FAccess,"fxBusy","yes");
 }
 /// procedure TQTXEffectsHelper.fxSizeTo(Self: TW3CustomControl; const aWidth: Integer; const aHeight: Integer; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxSizeTo(Self$104, aWidth$14, aHeight$14, Duration$19, OnFinished$9) {
+function TQTXEffectsHelper$fxSizeTo(Self$105, aWidth$14, aHeight$14, Duration$19, OnFinished$9) {
    var mEffect$9 = null;
-   if (TQTXEffectsHelper$fxBusy(Self$104)) {
+   if (TQTXEffectsHelper$fxBusy(Self$105)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxSizeTo(Self$104,aWidth$14,aHeight$14,Duration$19,OnFinished$9);
+         TQTXEffectsHelper$fxSizeTo(Self$105,aWidth$14,aHeight$14,Duration$19,OnFinished$9);
       },50);
    } else {
       mEffect$9 = TW3CustomAnimation.Create$39$($New(TQTXSizeAnimation));
       TW3CustomAnimation.SetDuration(mEffect$9,Duration$19);
-      $As(mEffect$9,TQTXSizeAnimation).FFromX = TW3MovableControl.GetLeft$(Self$104);
-      $As(mEffect$9,TQTXSizeAnimation).FFromY = TW3MovableControl.GetTop$(Self$104);
-      $As(mEffect$9,TQTXSizeAnimation).FFromWidth = TW3MovableControl.GetWidth$1$(Self$104);
-      $As(mEffect$9,TQTXSizeAnimation).FFromHeight = TW3MovableControl.GetHeight$1$(Self$104);
-      $As(mEffect$9,TQTXSizeAnimation).FToX = TW3MovableControl.GetLeft$(Self$104);
-      $As(mEffect$9,TQTXSizeAnimation).FToY = TW3MovableControl.GetTop$(Self$104);
+      $As(mEffect$9,TQTXSizeAnimation).FFromX = TW3MovableControl.GetLeft$(Self$105);
+      $As(mEffect$9,TQTXSizeAnimation).FFromY = TW3MovableControl.GetTop$(Self$105);
+      $As(mEffect$9,TQTXSizeAnimation).FFromWidth = TW3MovableControl.GetWidth$1$(Self$105);
+      $As(mEffect$9,TQTXSizeAnimation).FFromHeight = TW3MovableControl.GetHeight$1$(Self$105);
+      $As(mEffect$9,TQTXSizeAnimation).FToX = TW3MovableControl.GetLeft$(Self$105);
+      $As(mEffect$9,TQTXSizeAnimation).FToY = TW3MovableControl.GetTop$(Self$105);
       $As(mEffect$9,TQTXSizeAnimation).FToWidth = aWidth$14;
       $As(mEffect$9,TQTXSizeAnimation).FToHeight = aHeight$14;
       $As(mEffect$9,TQTXSizeAnimation).FTiming = 4;
       mEffect$9.FOnEnds = function (sender$7) {
-         TW3MovableControl.SetBounds$2$(Self$104,$As(mEffect$9,TQTXSizeAnimation).FToX,$As(mEffect$9,TQTXSizeAnimation).FToY,$As(mEffect$9,TQTXSizeAnimation).FToWidth,$As(mEffect$9,TQTXSizeAnimation).FToHeight);
+         TW3MovableControl.SetBounds$2$(Self$105,$As(mEffect$9,TQTXSizeAnimation).FToX,$As(mEffect$9,TQTXSizeAnimation).FToY,$As(mEffect$9,TQTXSizeAnimation).FToWidth,$As(mEffect$9,TQTXSizeAnimation).FToHeight);
          w3_Callback(function () {
             TObject.Free($As(sender$7,TW3CustomAnimation));
-            AfterEffect(Self$104,$As(sender$7,TW3CustomAnimation));
+            AfterEffect(Self$105,$As(sender$7,TW3CustomAnimation));
             if (OnFinished$9) {
                OnFinished$9();
             }
          },25);
       };
-      BeforeEffect(Self$104,mEffect$9);
-      TW3CustomAnimation.Execute(mEffect$9,Self$104);
+      BeforeEffect(Self$105,mEffect$9);
+      TW3CustomAnimation.Execute(mEffect$9,Self$105);
    }
 }
 /// procedure TQTXEffectsHelper.fxSizeTo(Self: TW3CustomControl; const aWidth: Integer; const aHeight: Integer; const Duration: Float)
-function TQTXEffectsHelper$fxSizeTo$1(Self$105, aWidth$15, aHeight$15, Duration$20) {
-   TQTXEffectsHelper$fxSizeTo(Self$105,aWidth$15,aHeight$15,Duration$20,null);
+function TQTXEffectsHelper$fxSizeTo$1(Self$106, aWidth$15, aHeight$15, Duration$20) {
+   TQTXEffectsHelper$fxSizeTo(Self$106,aWidth$15,aHeight$15,Duration$20,null);
 }
 /// procedure TQTXEffectsHelper.fxWarpIn(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxWarpIn(Self$106, Duration$21, OnFinished$10) {
+function TQTXEffectsHelper$fxWarpIn(Self$107, Duration$21, OnFinished$10) {
    var mEffect$10 = null;
-   if (TQTXEffectsHelper$fxBusy(Self$106)) {
+   if (TQTXEffectsHelper$fxBusy(Self$107)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxWarpIn(Self$106,Duration$21,OnFinished$10);
+         TQTXEffectsHelper$fxWarpIn(Self$107,Duration$21,OnFinished$10);
       },50);
    } else {
       mEffect$10 = TW3CustomAnimation.Create$39$($New(TW3WarpInTransition));
@@ -13267,55 +13424,55 @@ function TQTXEffectsHelper$fxWarpIn(Self$106, Duration$21, OnFinished$10) {
       mEffect$10.FOnEnds = function (Sender$17) {
          w3_Callback(function () {
             TObject.Free($As(Sender$17,TW3CustomAnimation));
-            AfterEffect(Self$106,$As(Sender$17,TW3CustomAnimation));
+            AfterEffect(Self$107,$As(Sender$17,TW3CustomAnimation));
             if (OnFinished$10) {
                OnFinished$10();
             }
          },25);
       };
-      BeforeEffect(Self$106,mEffect$10);
-      TW3MovableControl.SetVisible$(Self$106,true);
-      TW3CustomAnimation.Execute(mEffect$10,Self$106);
+      BeforeEffect(Self$107,mEffect$10);
+      TW3MovableControl.SetVisible$(Self$107,true);
+      TW3CustomAnimation.Execute(mEffect$10,Self$107);
    }
 }
 /// procedure TQTXEffectsHelper.fxWarpIn(Self: TW3CustomControl; const Duration: Float)
-function TQTXEffectsHelper$fxWarpIn$1(Self$107, Duration$22) {
-   TQTXEffectsHelper$fxWarpIn(Self$107,Duration$22,null);
+function TQTXEffectsHelper$fxWarpIn$1(Self$108, Duration$22) {
+   TQTXEffectsHelper$fxWarpIn(Self$108,Duration$22,null);
 }
 /// procedure TQTXEffectsHelper.fxWarpOut(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxWarpOut(Self$108, Duration$23, OnFinished$11) {
+function TQTXEffectsHelper$fxWarpOut(Self$109, Duration$23, OnFinished$11) {
    var mEffect$11 = null;
-   if (TQTXEffectsHelper$fxBusy(Self$108)) {
+   if (TQTXEffectsHelper$fxBusy(Self$109)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxWarpOut(Self$108,Duration$23,OnFinished$11);
+         TQTXEffectsHelper$fxWarpOut(Self$109,Duration$23,OnFinished$11);
       },50);
    } else {
       mEffect$11 = TW3CustomAnimation.Create$39$($New(TW3WarpOutTransition));
       TW3CustomAnimation.SetDuration(mEffect$11,Duration$23);
       mEffect$11.FOnEnds = function (Sender$18) {
-         TW3MovableControl.SetVisible$(Self$108,false);
+         TW3MovableControl.SetVisible$(Self$109,false);
          w3_Callback(function () {
             TObject.Free($As(Sender$18,TW3CustomAnimation));
-            AfterEffect(Self$108,$As(Sender$18,TW3CustomAnimation));
+            AfterEffect(Self$109,$As(Sender$18,TW3CustomAnimation));
             if (OnFinished$11) {
                OnFinished$11();
             }
          },25);
       };
-      BeforeEffect(Self$108,mEffect$11);
-      TW3CustomAnimation.Execute(mEffect$11,Self$108);
+      BeforeEffect(Self$109,mEffect$11);
+      TW3CustomAnimation.Execute(mEffect$11,Self$109);
    }
 }
 /// procedure TQTXEffectsHelper.fxWarpOut(Self: TW3CustomControl; const Duration: Float)
-function TQTXEffectsHelper$fxWarpOut$1(Self$109, Duration$24) {
-   TQTXEffectsHelper$fxWarpOut(Self$109,Duration$24,null);
+function TQTXEffectsHelper$fxWarpOut$1(Self$110, Duration$24) {
+   TQTXEffectsHelper$fxWarpOut(Self$110,Duration$24,null);
 }
 /// procedure TQTXEffectsHelper.fxZoomIn(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxZoomIn$1(Self$110, Duration$25, OnFinished$12) {
+function TQTXEffectsHelper$fxZoomIn$1(Self$111, Duration$25, OnFinished$12) {
    var mEffect$12 = null;
-   if (TQTXEffectsHelper$fxBusy(Self$110)) {
+   if (TQTXEffectsHelper$fxBusy(Self$111)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxZoomIn$1(Self$110,Duration$25,OnFinished$12);
+         TQTXEffectsHelper$fxZoomIn$1(Self$111,Duration$25,OnFinished$12);
       },100);
    } else {
       mEffect$12 = TW3CustomAnimation.Create$39$($New(TW3ZoomInTransition));
@@ -13323,62 +13480,62 @@ function TQTXEffectsHelper$fxZoomIn$1(Self$110, Duration$25, OnFinished$12) {
       mEffect$12.FOnEnds = function (Sender$19) {
          w3_Callback(function () {
             TObject.Free($As(Sender$19,TW3CustomAnimation));
-            AfterEffect(Self$110,$As(Sender$19,TW3CustomAnimation));
+            AfterEffect(Self$111,$As(Sender$19,TW3CustomAnimation));
             if (OnFinished$12) {
                OnFinished$12();
             }
          },25);
       };
-      TW3MovableControl.SetVisible$(Self$110,true);
-      BeforeEffect(Self$110,mEffect$12);
-      TW3CustomAnimation.Execute(mEffect$12,Self$110);
+      TW3MovableControl.SetVisible$(Self$111,true);
+      BeforeEffect(Self$111,mEffect$12);
+      TW3CustomAnimation.Execute(mEffect$12,Self$111);
    }
 }
 /// procedure TQTXEffectsHelper.fxZoomIn(Self: TW3CustomControl; const Duration: Float)
-function TQTXEffectsHelper$fxZoomIn(Self$111, Duration$26) {
-   TQTXEffectsHelper$fxZoomIn$1(Self$111,Duration$26,null);
+function TQTXEffectsHelper$fxZoomIn(Self$112, Duration$26) {
+   TQTXEffectsHelper$fxZoomIn$1(Self$112,Duration$26,null);
 }
 /// procedure TQTXEffectsHelper.fxZoomOut(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-function TQTXEffectsHelper$fxZoomOut(Self$112, Duration$27, OnFinished$13) {
+function TQTXEffectsHelper$fxZoomOut(Self$113, Duration$27, OnFinished$13) {
    var mEffect$13 = null;
-   if (TQTXEffectsHelper$fxBusy(Self$112)) {
+   if (TQTXEffectsHelper$fxBusy(Self$113)) {
       w3_Callback(function () {
-         TQTXEffectsHelper$fxZoomOut(Self$112,Duration$27,OnFinished$13);
+         TQTXEffectsHelper$fxZoomOut(Self$113,Duration$27,OnFinished$13);
       },50);
    } else {
       mEffect$13 = TW3CustomAnimation.Create$39$($New(TW3ZoomOutTransition));
       TW3CustomAnimation.SetDuration(mEffect$13,Duration$27);
       mEffect$13.FOnEnds = function (Sender$20) {
-         TW3MovableControl.SetVisible$(Self$112,false);
+         TW3MovableControl.SetVisible$(Self$113,false);
          w3_Callback(function () {
             TObject.Free($As(Sender$20,TW3CustomAnimation));
-            AfterEffect(Self$112,$As(Sender$20,TW3CustomAnimation));
+            AfterEffect(Self$113,$As(Sender$20,TW3CustomAnimation));
             if (OnFinished$13) {
                OnFinished$13();
             }
          },25);
       };
-      BeforeEffect(Self$112,mEffect$13);
-      TW3CustomAnimation.Execute(mEffect$13,Self$112);
+      BeforeEffect(Self$113,mEffect$13);
+      TW3CustomAnimation.Execute(mEffect$13,Self$113);
    }
 }
 /// procedure TQTXEffectsHelper.fxZoomOut(Self: TW3CustomControl; const Duration: Float)
-function TQTXEffectsHelper$fxZoomOut$1(Self$113, Duration$28) {
-   TQTXEffectsHelper$fxZoomOut(Self$113,Duration$28,null);
+function TQTXEffectsHelper$fxZoomOut$1(Self$114, Duration$28) {
+   TQTXEffectsHelper$fxZoomOut(Self$114,Duration$28,null);
 }
 /// procedure TQTXAnimationHelper.Pause(Self: TW3CustomAnimation)
-function TQTXAnimationHelper$1$Pause$1(Self$114) {
-   if (Self$114.FBusy) {
-      Self$114.FTarget$1.FHandle$3.style[w3_CSSPrefix("AnimationPlayState")] = "paused";
+function TQTXAnimationHelper$1$Pause$1(Self$115) {
+   if (Self$115.FBusy) {
+      Self$115.FTarget$1.FHandle$3.style[w3_CSSPrefix("AnimationPlayState")] = "paused";
    }
 }
 /// procedure TQTXAnimationHelper.Resume(Self: TW3CustomAnimation)
-function TQTXAnimationHelper$1$Resume$1(Self$115) {
+function TQTXAnimationHelper$1$Resume$1(Self$116) {
    var mRef$48 = undefined;
    var mId = "";
-   if (Self$115.FBusy) {
+   if (Self$116.FBusy) {
       mId = w3_CSSPrefix("AnimationPlayState");
-      mRef$48 = Self$115.FTarget$1.FHandle$3;
+      mRef$48 = Self$116.FTarget$1.FHandle$3;
       if (mRef$48.style[mId]) {
          if (mRef$48.style[mId]!="running") {
             mRef$48.style[mId] = "running";
@@ -13387,9 +13544,9 @@ function TQTXAnimationHelper$1$Resume$1(Self$115) {
    }
 }
 /// procedure TQTXAnimationHelper.Stop(Self: TW3CustomAnimation)
-function TQTXAnimationHelper$1$Stop$3(Self$116) {
-   if (Self$116.FBusy) {
-      Self$116.FTarget$1.FHandle$3.style[w3_CSSPrefix("AnimationPlayState")] = "stopped";
+function TQTXAnimationHelper$1$Stop$3(Self$117) {
+   if (Self$117.FBusy) {
+      Self$117.FTarget$1.FHandle$3.style[w3_CSSPrefix("AnimationPlayState")] = "stopped";
    }
 }
 function AfterEffect(aControl, aEffectObj) {
@@ -13596,14 +13753,14 @@ var TW3HeaderControl = {
    ,Resize:function(Self) {
       var wd$11 = 0;
       var hd$8 = 0;
-      var mTemp$13 = 0;
+      var mTemp$14 = 0;
       var dx$21 = 0;
       var dy$23 = 0;
       wd$11 = TW3MovableControl.ClientWidth(Self);
       hd$8 = TW3MovableControl.ClientHeight(Self);
       dx$21 = Self.FSpacing;
-      mTemp$13 = wd$11;
-      (mTemp$13-= (Self.FSpacing*2));
+      mTemp$14 = wd$11;
+      (mTemp$14-= (Self.FSpacing*2));
       dy$23 = ($Div(hd$8,2))-($Div(TW3MovableControl.GetHeight$1$(Self.FBackBtn),2));
       TW3MovableControl.MoveTo$1$(Self.FBackBtn,Self.FSpacing,dy$23);
       dy$23 = ($Div(hd$8,2))-($Div(TW3MovableControl.GetHeight$1$(Self.FNextBtn),2));
@@ -13611,16 +13768,16 @@ var TW3HeaderControl = {
       if (TW3MovableControl.getVisible$(Self.FBackBtn)==true) {
          (dx$21+= TW3MovableControl.GetWidth$1$(Self.FBackBtn));
          (dx$21+= Self.FSpacing);
-         (mTemp$13-= TW3MovableControl.GetWidth$1$(Self.FBackBtn));
-         (mTemp$13-= Self.FSpacing);
+         (mTemp$14-= TW3MovableControl.GetWidth$1$(Self.FBackBtn));
+         (mTemp$14-= Self.FSpacing);
       }
       TW3MovableControl.MoveTo$1$(Self.FLabel,dx$21,Self.FSpacing);
       if (TW3MovableControl.getVisible$(Self.FNextBtn)) {
-         (mTemp$13-= TW3MovableControl.GetWidth$1$(Self.FNextBtn));
-         (mTemp$13-= Self.FSpacing);
-         (mTemp$13-= Self.FSpacing);
+         (mTemp$14-= TW3MovableControl.GetWidth$1$(Self.FNextBtn));
+         (mTemp$14-= Self.FSpacing);
+         (mTemp$14-= Self.FSpacing);
       }
-      TW3MovableControl.SetBounds$2$(Self.FLabel,TW3MovableControl.GetLeft$(Self.FLabel),Self.FSpacing,mTemp$13,hd$8-(Self.FSpacing*2));
+      TW3MovableControl.SetBounds$2$(Self.FLabel,TW3MovableControl.GetLeft$(Self.FLabel),Self.FSpacing,mTemp$14,hd$8-(Self.FSpacing*2));
    }
    /// function TW3HeaderControl.supportAdjustment() : Boolean
    ,supportAdjustment:function(Self) {
@@ -14503,17 +14660,17 @@ var TformLogin = {
       },500);
       w3_Callback(function () {
          var mApp$1 = null;
-         var x$65 = 0;
+         var x$68 = 0;
          var mSave = {Bottom$1:0,Left$1:0,Right$1:0,Top$1:0};
          mApp$1 = $As(Application(),TApplication);
-         var $temp38;
-         for(x$65 = 0,$temp38 = TW3CustomApplication.GetFormCount(mApp$1);x$65<$temp38;x$65++) {
-            if (!(Self===TW3CustomApplication.GetForm(mApp$1,x$65))) {
-               TW3MovableControl.MoveTo$1$(TW3CustomApplication.GetForm(mApp$1,x$65),100,100);
-               TW3MovableControl.SetVisible$(TW3CustomApplication.GetForm(mApp$1,x$65),true);
-               TW3CustomForm.InitializeForm$(TW3CustomApplication.GetForm(mApp$1,x$65));
-               TW3CustomControl.LayoutChildren$(TW3CustomApplication.GetForm(mApp$1,x$65));
-               TW3MovableControl.SetVisible$(TW3CustomApplication.GetForm(mApp$1,x$65),false);
+         var $temp41;
+         for(x$68 = 0,$temp41 = TW3CustomApplication.GetFormCount(mApp$1);x$68<$temp41;x$68++) {
+            if (!(Self===TW3CustomApplication.GetForm(mApp$1,x$68))) {
+               TW3MovableControl.MoveTo$1$(TW3CustomApplication.GetForm(mApp$1,x$68),100,100);
+               TW3MovableControl.SetVisible$(TW3CustomApplication.GetForm(mApp$1,x$68),true);
+               TW3CustomForm.InitializeForm$(TW3CustomApplication.GetForm(mApp$1,x$68));
+               TW3CustomControl.LayoutChildren$(TW3CustomApplication.GetForm(mApp$1,x$68));
+               TW3MovableControl.SetVisible$(TW3CustomApplication.GetForm(mApp$1,x$68),false);
             }
          }
       },100);
@@ -14553,6 +14710,8 @@ var TformLogin = {
       TW3CustomControl.SetEnabled$(Self.W3Button1$1,true);
       TQTXEffectsHelper$fxFadeIn(Self.W3Label2$1,0.5);
       TQTXEffectsHelper$fxWarpIn$1(Self.W3Label1$1,0.3);
+      TformLogin.UpdateCloud1(Self);
+      TformLogin.UpdateCloud2(Self);
    }
    /// procedure TformLogin.Resize()
    ,Resize:function(Self) {
@@ -14692,22 +14851,22 @@ var TW3EditBox = {
    /// function TW3EditBox.getAutoCapitalize() : Boolean
    ,getAutoCapitalize:function(Self) {
       var Result = false;
-      var mTemp$14 = "";
+      var mTemp$15 = "";
       Result = false;
-      mTemp$14 = w3_getAttribAsStr(Self.FHandle$3,"autocapitalize");
-      if (mTemp$14.length>0) {
-         Result = (mTemp$14).toLowerCase()=="on";
+      mTemp$15 = w3_getAttribAsStr(Self.FHandle$3,"autocapitalize");
+      if (mTemp$15.length>0) {
+         Result = (mTemp$15).toLowerCase()=="on";
       }
       return Result
    }
    /// function TW3EditBox.getAutoCorrect() : Boolean
    ,getAutoCorrect:function(Self) {
       var Result = false;
-      var mTemp$15 = "";
+      var mTemp$16 = "";
       Result = false;
-      mTemp$15 = w3_getAttribAsStr(Self.FHandle$3,"autocorrect");
-      if (mTemp$15.length>0) {
-         Result = (mTemp$15).toLowerCase()=="on";
+      mTemp$16 = w3_getAttribAsStr(Self.FHandle$3,"autocorrect");
+      if (mTemp$16.length>0) {
+         Result = (mTemp$16).toLowerCase()=="on";
       }
       return Result
    }
@@ -15150,6 +15309,117 @@ var TformNew = {
    ,FormDeactivated:TW3CustomForm.FormDeactivated
    ,InitializeForm$:function($){return $.ClassType.InitializeForm($)}
 };
+/// TformAccount = class (TW3Form)
+var TformAccount = {
+   $ClassName:"TformAccount",
+   $Parent:TW3Form
+   ,$Init:function ($) {
+      TW3Form.$Init($);
+      $.W3Label1$2 = null;
+   }
+   /// procedure TformAccount.InitializeForm()
+   ,InitializeForm:function(Self) {
+      TW3CustomForm.InitializeForm(Self);
+   }
+   /// procedure TformAccount.InitializeObject()
+   ,InitializeObject:function(Self) {
+      TW3CustomControl.InitializeObject(Self);
+      TW3CustomForm.setCaption$4(Self,"W3Form");
+      TW3Component.SetName(Self,"formAccount");
+      Self.W3Label1$2 = TW3Component.Create$36$($New(TW3Label),Self);
+      TW3Label.setCaption$3$(Self.W3Label1$2,"Account information");
+      TW3MovableControl.SetWidth$(Self.W3Label1$2,144);
+      TW3MovableControl.setTop$(Self.W3Label1$2,8);
+      TW3MovableControl.setLeft$(Self.W3Label1$2,16);
+      TW3MovableControl.setHeight$(Self.W3Label1$2,32);
+      TW3Component.SetName(Self.W3Label1$2,"W3Label1");
+   }
+   /// procedure TformAccount.Resize()
+   ,Resize:function(Self) {
+      TW3MovableControl.Resize(Self);
+   }
+   /// procedure TformAccount.FormActivated()
+   ,FormActivated:function(Self) {
+      TW3CustomForm.FormActivated(Self);
+      TQTXLabel.setCaption$($As(Application(),TApplication).FHeader$1.FCaption,"Profile <i class=\"fa fa-angle-double-right\"></i> Account");
+      TQTXBackButton.setVisible$1($As(Application(),TApplication).FHeader$1.FBackButton,true);
+      TW3CustomControl._setMouseClick($As(Application(),TApplication).FHeader$1.FBackButton,function (sender$11) {
+         TW3CustomApplication.GotoForm(Application(),"FormProfile",2);
+      });
+   }
+   ,Destroy:TW3CustomControl.Destroy
+   ,AfterUpdate:TW3CustomControl.AfterUpdate
+   ,Create$35:TW3TagObj.Create$35
+   ,EndUpdate:TW3TagObj.EndUpdate
+   ,FinalizeObject:TW3CustomControl.FinalizeObject
+   ,InitializeObject$:function($){return $.ClassType.InitializeObject($)}
+   ,MakeElementTagId:TW3TagObj.MakeElementTagId
+   ,MakeElementTagObj:TW3TagObj.MakeElementTagObj
+   ,StyleTagObject:TW3CustomForm.StyleTagObject
+   ,UnHookEvents:TW3TagObj.UnHookEvents
+   ,CBNoBehavior:TW3Component.CBNoBehavior
+   ,ChildAdded:TW3Component.ChildAdded
+   ,ChildRemoved:TW3Component.ChildRemoved
+   ,Create$36:TW3CustomControl.Create$36
+   ,AdjustToParentBox:TW3MovableControl.AdjustToParentBox
+   ,DisplayMode:TW3MovableControl.DisplayMode
+   ,getBoundsRect:TW3MovableControl.getBoundsRect
+   ,GetHeight$1:TW3MovableControl.GetHeight$1
+   ,GetLeft:TW3MovableControl.GetLeft
+   ,GetTop:TW3MovableControl.GetTop
+   ,getVisible:TW3MovableControl.getVisible
+   ,GetWidth$1:TW3MovableControl.GetWidth$1
+   ,Moved:TW3MovableControl.Moved
+   ,MoveTo$1:TW3MovableControl.MoveTo$1
+   ,Resize$:function($){return $.ClassType.Resize($)}
+   ,SetBounds$3:TW3MovableControl.SetBounds$3
+   ,SetBounds$2:TW3MovableControl.SetBounds$2
+   ,setHeight:TW3MovableControl.setHeight
+   ,setLeft:TW3MovableControl.setLeft
+   ,SetSize$4:TW3MovableControl.SetSize$4
+   ,setTop:TW3MovableControl.setTop
+   ,SetVisible:TW3MovableControl.SetVisible
+   ,SetWidth:TW3MovableControl.SetWidth
+   ,supportAdjustment:TW3MovableControl.supportAdjustment
+   ,CBAnimationBegins:TW3CustomControl.CBAnimationBegins
+   ,CBAnimationEnds:TW3CustomControl.CBAnimationEnds
+   ,CBChanged:TW3CustomControl.CBChanged
+   ,CBClick:TW3CustomControl.CBClick
+   ,CBContextPopup:TW3CustomControl.CBContextPopup
+   ,CBDblClick:TW3CustomControl.CBDblClick
+   ,CBFocused:TW3CustomControl.CBFocused
+   ,CBKeyDown:TW3CustomControl.CBKeyDown
+   ,CBKeyPress:TW3CustomControl.CBKeyPress
+   ,CBKeyUp:TW3CustomControl.CBKeyUp
+   ,CBLostFocus:TW3CustomControl.CBLostFocus
+   ,CBMouseDown:TW3CustomControl.CBMouseDown
+   ,CBMouseEnter:TW3CustomControl.CBMouseEnter
+   ,CBMouseExit:TW3CustomControl.CBMouseExit
+   ,CBMouseMove:TW3CustomControl.CBMouseMove
+   ,CBMouseUp:TW3CustomControl.CBMouseUp
+   ,CBMouseWheel:TW3CustomControl.CBMouseWheel
+   ,CMGestureChange:TW3CustomControl.CMGestureChange
+   ,CMGestureEnd:TW3CustomControl.CMGestureEnd
+   ,CMGestureStart:TW3CustomControl.CMGestureStart
+   ,CMTouchBegins:TW3CustomControl.CMTouchBegins
+   ,CMTouchEnds:TW3CustomControl.CMTouchEnds
+   ,CMTouchMove:TW3CustomControl.CMTouchMove
+   ,GetChildrenSortedByYPos:TW3CustomControl.GetChildrenSortedByYPos
+   ,GetEnabled:TW3CustomControl.GetEnabled
+   ,GetSizeInfo:TW3CustomControl.GetSizeInfo
+   ,Invalidate:TW3CustomControl.Invalidate
+   ,LayoutChildren:TW3CustomControl.LayoutChildren
+   ,MouseDown:TW3CustomControl.MouseDown
+   ,MouseEnter:TW3CustomControl.MouseEnter
+   ,MouseExit:TW3CustomControl.MouseExit
+   ,MouseMove:TW3CustomControl.MouseMove
+   ,MouseUp:TW3CustomControl.MouseUp
+   ,MouseWheel:TW3CustomControl.MouseWheel
+   ,SetEnabled:TW3CustomControl.SetEnabled
+   ,FormActivated$:function($){return $.ClassType.FormActivated($)}
+   ,FormDeactivated:TW3CustomForm.FormDeactivated
+   ,InitializeForm$:function($){return $.ClassType.InitializeForm($)}
+};
 /// TformProfile = class (TW3Form)
 var TformProfile = {
    $ClassName:"TformProfile",
@@ -15168,7 +15438,7 @@ var TformProfile = {
       TQTXLabel.setCaption$(mHead$1.FCaption,"CaseBook <i class=\"fa fa-angle-double-right\"></i> Profile");
       TQTXBackButton.setVisible$1(mHead$1.FBackButton,true);
       TW3ToolButton.setCaption$1$(mHead$1.FBackButton,"Back");
-      TW3CustomControl._setMouseClick(mHead$1.FBackButton,function (sender$11) {
+      TW3CustomControl._setMouseClick(mHead$1.FBackButton,function (sender$12) {
          TW3CustomApplication.GotoForm(Application(),"mainForm",2);
       });
    }
@@ -15182,6 +15452,7 @@ var TformProfile = {
    }
    /// procedure TformProfile.InitializeObject()
    ,InitializeObject:function(Self) {
+      var mItem$1 = null;
       TW3CustomControl.InitializeObject(Self);
       TW3CustomForm.setCaption$4(Self,"W3Form");
       TW3Component.SetName(Self,"formProfile");
@@ -15201,9 +15472,9 @@ var TformProfile = {
       TW3Component.SetName(Self.W3ListMenu1,"W3ListMenu1");
       Self.W3ListMenu2 = TW3Component.Create$36$($New(TW3ListMenu),Self);
       TW3MovableControl.SetWidth$(Self.W3ListMenu2,304);
-      TW3MovableControl.setTop$(Self.W3ListMenu2,240);
+      TW3MovableControl.setTop$(Self.W3ListMenu2,232);
       TW3MovableControl.setLeft$(Self.W3ListMenu2,8);
-      TW3MovableControl.setHeight$(Self.W3ListMenu2,128);
+      TW3MovableControl.setHeight$(Self.W3ListMenu2,136);
       TW3Component.SetName(Self.W3ListMenu2,"W3ListMenu2");
       Self.W3Label1 = TW3Component.Create$36$($New(TW3Label),Self);
       TW3Label.setCaption$3$(Self.W3Label1,"General settings");
@@ -15215,12 +15486,16 @@ var TformProfile = {
       Self.W3Label2 = TW3Component.Create$36$($New(TW3Label),Self);
       TW3Label.setCaption$3$(Self.W3Label2,"Appearance");
       TW3MovableControl.SetWidth$(Self.W3Label2,128);
-      TW3MovableControl.setTop$(Self.W3Label2,208);
+      TW3MovableControl.setTop$(Self.W3Label2,200);
       TW3MovableControl.setLeft$(Self.W3Label2,8);
       TW3MovableControl.setHeight$(Self.W3Label2,32);
       TW3Component.SetName(Self.W3Label2,"W3Label2");
       TW3CustomControl.setStyleClass(Self.W3Button1,"CaseBookButton");
-      TW3ListItem.setText$1(TW3ListItems.Add$7(Self.W3ListMenu1.FItems),"Your account");
+      mItem$1 = TW3ListItems.Add$7(Self.W3ListMenu1.FItems);
+      TW3ListItem.setText$1(mItem$1,"Your account");
+      TW3CustomControl._setMouseClick(mItem$1,function (sender$13) {
+         TW3CustomApplication.GotoForm(Application(),"FormAccount",1);
+      });
       TW3ListItem.setText$1(TW3ListItems.Add$7(Self.W3ListMenu1.FItems),"Network security");
       TW3ListItem.setText$1(TW3ListItems.Add$7(Self.W3ListMenu1.FItems),"Registration");
       TW3ListItem.setText$1(TW3ListItems.Add$7(Self.W3ListMenu2.FItems),"Profile picture");
@@ -15320,9 +15595,9 @@ var TW3CustomScrollBar = {
    /// function TW3CustomScrollBar.calcSizeOfHandle() : Integer
    ,calcSizeOfHandle:function(Self) {
       var Result = 0;
-      var mTemp$16 = 0;
-      mTemp$16 = TInteger.PercentOfValue(Self.FPageSize,Self.FTotal);
-      Result = Trunc((mTemp$16*TW3CustomScrollBar.getArea$(Self))/100);
+      var mTemp$17 = 0;
+      mTemp$17 = TInteger.PercentOfValue(Self.FPageSize,Self.FTotal);
+      Result = Trunc((mTemp$17*TW3CustomScrollBar.getArea$(Self))/100);
       return Result
    }
    /// procedure TW3CustomScrollBar.FinalizeObject()
@@ -15356,17 +15631,17 @@ var TW3CustomScrollBar = {
    /// function TW3CustomScrollBar.PixelOffsetToPosition(aPxPos: Integer) : Integer
    ,PixelOffsetToPosition:function(Self, aPxPos) {
       var Result = 0;
-      var mTemp$17 = 0;
-      mTemp$17 = TInteger.PercentOfValue(aPxPos,TW3CustomScrollBar.getArea$(Self));
-      Result = Trunc((mTemp$17*Self.FTotal)/100);
+      var mTemp$18 = 0;
+      mTemp$18 = TInteger.PercentOfValue(aPxPos,TW3CustomScrollBar.getArea$(Self));
+      Result = Trunc((mTemp$18*Self.FTotal)/100);
       return Result
    }
    /// function TW3CustomScrollBar.PositionToPixelOffset(aPosition: Integer) : Integer
    ,PositionToPixelOffset:function(Self, aPosition) {
       var Result = 0;
-      var mTemp$18 = 0;
-      mTemp$18 = TInteger.PercentOfValue(aPosition,Self.FTotal);
-      Result = Trunc((mTemp$18*TW3CustomScrollBar.getArea$(Self))/100);
+      var mTemp$19 = 0;
+      mTemp$19 = TInteger.PercentOfValue(aPosition,Self.FTotal);
+      Result = Trunc((mTemp$19*TW3CustomScrollBar.getArea$(Self))/100);
       return Result
    }
    /// procedure TW3CustomScrollBar.setPageSize(aValue: Integer)
@@ -15525,21 +15800,21 @@ var TW3VerticalScrollbar = {
       return TW3MovableControl.GetTop$(Self.FDownBtn)-1-(TW3MovableControl.getBoundsRect$(Self.FUpBtn).Bottom$1+1);
    }
    /// procedure TW3VerticalScrollbar.HandleDragBarMouseDown(Sender: TObject; button: TMouseButton; shiftState: TShiftState; x: Integer; y: Integer)
-   ,HandleDragBarMouseDown:function(Self, Sender$25, button$3, shiftState$11, x$66, y$47) {
+   ,HandleDragBarMouseDown:function(Self, Sender$25, button$3, shiftState$11, x$69, y$47) {
       if (!button$3) {
-         if (TRect$ContainsPos$1(TW3MovableControl.getBoundsRect$(Self.FHandle$7),x$66,y$47)) {
+         if (TRect$ContainsPos$1(TW3MovableControl.getBoundsRect$(Self.FHandle$7),x$69,y$47)) {
             TW3CustomControl.SetCapture(Self);
             Self.FEntry = y$47-TW3MovableControl.GetTop$(Self.FHandle$7);
             Self.FMoving = true;
-         } else if ((y$47<TW3MovableControl.GetTop$(Self.FHandle$7))&&(!TRect$ContainsPos$1(TW3MovableControl.getBoundsRect$(Self.FUpBtn),x$66,y$47))) {
+         } else if ((y$47<TW3MovableControl.GetTop$(Self.FHandle$7))&&(!TRect$ContainsPos$1(TW3MovableControl.getBoundsRect$(Self.FUpBtn),x$69,y$47))) {
             TW3CustomScrollBar.setPosition$1$(Self,Self.FPosition-Self.FPageSize);
-         } else if ((y$47>TW3MovableControl.getBoundsRect$(Self.FHandle$7).Bottom$1)&&(!TRect$ContainsPos$1(TW3MovableControl.getBoundsRect$(Self.FDownBtn),x$66,y$47))) {
+         } else if ((y$47>TW3MovableControl.getBoundsRect$(Self.FHandle$7).Bottom$1)&&(!TRect$ContainsPos$1(TW3MovableControl.getBoundsRect$(Self.FDownBtn),x$69,y$47))) {
             TW3CustomScrollBar.setPosition$1$(Self,Self.FPosition+Self.FPageSize);
          }
       }
    }
    /// procedure TW3VerticalScrollbar.HandleDragBarMouseMove(Sender: TObject; shiftState: TShiftState; x: Integer; y: Integer)
-   ,HandleDragBarMouseMove:function(Self, Sender$26, shiftState$12, x$67, y$48) {
+   ,HandleDragBarMouseMove:function(Self, Sender$26, shiftState$12, x$70, y$48) {
       var mNewPos = 0;
       var dy$26 = 0;
       if (Self.FMoving) {
@@ -15550,7 +15825,7 @@ var TW3VerticalScrollbar = {
       }
    }
    /// procedure TW3VerticalScrollbar.HandleDragBarMouseUp(Sender: TObject; button: TMouseButton; shiftState: TShiftState; x: Integer; y: Integer)
-   ,HandleDragBarMouseUp:function(Self, Sender$27, button$4, shiftState$13, x$68, y$49) {
+   ,HandleDragBarMouseUp:function(Self, Sender$27, button$4, shiftState$13, x$71, y$49) {
       if (Self.FMoving) {
          Self.FMoving = false;
          TW3CustomScrollBar.setPosition$1$(Self,TW3CustomScrollBar.PixelOffsetToPosition(Self,TW3MovableControl.GetTop$(Self.FHandle$7)-(TW3MovableControl.getBoundsRect$(Self.FUpBtn).Bottom$1+1)));
@@ -15911,32 +16186,32 @@ var TW3HorizontalScrollbar = {
       return TW3MovableControl.GetLeft$(Self.FDownBtn)-1-(TW3MovableControl.getBoundsRect$(Self.FUpBtn).Right$1+1);
    }
    /// procedure TW3HorizontalScrollbar.HandleDragBarMouseDown(Sender: TObject; button: TMouseButton; shiftState: TShiftState; x: Integer; y: Integer)
-   ,HandleDragBarMouseDown$1:function(Self, Sender$28, button$5, shiftState$14, x$69, y$50) {
+   ,HandleDragBarMouseDown$1:function(Self, Sender$28, button$5, shiftState$14, x$72, y$50) {
       if (!button$5) {
-         if (TRect$ContainsPos$1(TW3MovableControl.getBoundsRect$(Self.FHandle$7),x$69,y$50)) {
+         if (TRect$ContainsPos$1(TW3MovableControl.getBoundsRect$(Self.FHandle$7),x$72,y$50)) {
             TW3CustomControl.SetCapture(Self);
-            Self.FEntry$1 = x$69-TW3MovableControl.GetLeft$(Self.FHandle$7);
+            Self.FEntry$1 = x$72-TW3MovableControl.GetLeft$(Self.FHandle$7);
             Self.FMoving$1 = true;
-         } else if ((x$69<TW3MovableControl.GetLeft$(Self.FHandle$7))&&(!TRect$ContainsPos$1(TW3MovableControl.getBoundsRect$(Self.FUpBtn),x$69,y$50))) {
+         } else if ((x$72<TW3MovableControl.GetLeft$(Self.FHandle$7))&&(!TRect$ContainsPos$1(TW3MovableControl.getBoundsRect$(Self.FUpBtn),x$72,y$50))) {
             TW3CustomScrollBar.setPosition$1$(Self,Self.FPosition-Self.FPageSize);
-         } else if ((x$69>TW3MovableControl.getBoundsRect$(Self.FHandle$7).Right$1)&&(!TRect$ContainsPos$1(TW3MovableControl.getBoundsRect$(Self.FDownBtn),x$69,y$50))) {
+         } else if ((x$72>TW3MovableControl.getBoundsRect$(Self.FHandle$7).Right$1)&&(!TRect$ContainsPos$1(TW3MovableControl.getBoundsRect$(Self.FDownBtn),x$72,y$50))) {
             TW3CustomScrollBar.setPosition$1$(Self,Self.FPosition+Self.FPageSize);
          }
       }
    }
    /// procedure TW3HorizontalScrollbar.HandleDragBarMouseMove(Sender: TObject; shiftState: TShiftState; x: Integer; y: Integer)
-   ,HandleDragBarMouseMove$1:function(Self, Sender$29, shiftState$15, x$70, y$51) {
+   ,HandleDragBarMouseMove$1:function(Self, Sender$29, shiftState$15, x$73, y$51) {
       var mNewPos$1 = 0;
       var dx$28 = 0;
       if (Self.FMoving$1) {
-         dx$28 = x$70-Self.FEntry$1;
+         dx$28 = x$73-Self.FEntry$1;
          TW3MovableControl.setLeft$(Self.FHandle$7,TInteger.EnsureRange(dx$28,TW3MovableControl.getBoundsRect$(Self.FUpBtn).Right$1,(TW3MovableControl.GetLeft$(Self.FDownBtn)-Self.FDragSize$1)));
          mNewPos$1 = TW3CustomScrollBar.PixelOffsetToPosition(Self,TW3MovableControl.GetLeft$(Self.FHandle$7)-(TW3MovableControl.getBoundsRect$(Self.FUpBtn).Right$1+1));
          TW3CustomScrollBar.setPositionNoCalc$(Self,mNewPos$1);
       }
    }
    /// procedure TW3HorizontalScrollbar.HandleDragBarMouseUp(Sender: TObject; button: TMouseButton; shiftState: TShiftState; x: Integer; y: Integer)
-   ,HandleDragBarMouseUp$1:function(Self, Sender$30, button$6, shiftState$16, x$71, y$52) {
+   ,HandleDragBarMouseUp$1:function(Self, Sender$30, button$6, shiftState$16, x$74, y$52) {
       if (Self.FMoving$1) {
          Self.FMoving$1 = false;
          TW3CustomScrollBar.setPosition$1$(Self,TW3CustomScrollBar.PixelOffsetToPosition(Self,TW3MovableControl.GetLeft$(Self.FHandle$7)-(TW3MovableControl.getBoundsRect$(Self.FUpBtn).Right$1+1)));
@@ -16072,7 +16347,7 @@ var TW3ToggleSwitch = {
       return TW3MovableControl.GetLeft$(Self.FKnob)>0;
    }
    /// procedure TW3ToggleSwitch.HandleMouseDown(sender: TObject; button: TMouseButton; shiftState: TShiftState; x: Integer; y: Integer)
-   ,HandleMouseDown:function(Self, sender$12, button$7, shiftState$17, x$72, y$53) {
+   ,HandleMouseDown:function(Self, sender$14, button$7, shiftState$17, x$75, y$53) {
       if (!button$7) {
          TW3ToggleSwitch.Toggle(Self);
       }
@@ -16098,18 +16373,18 @@ var TW3ToggleSwitch = {
    }
    /// procedure TW3ToggleSwitch.Resize()
    ,Resize:function(Self) {
-      var mTemp$19 = 0;
+      var mTemp$20 = 0;
       var wd$15 = 0;
       var hd$9 = 0;
       wd$15 = TW3MovableControl.ClientWidth(Self);
       hd$9 = TW3MovableControl.ClientHeight(Self);
       if ((wd$15>0)&&(hd$9>0)) {
-         mTemp$19 = $Div(wd$15,2);
-         if ((TW3MovableControl.GetWidth$1$(Self.FKnob)!=mTemp$19)||(TW3MovableControl.GetHeight$1$(Self.FKnob)!=hd$9)) {
-            TW3MovableControl.SetSize$4$(Self.FKnob,mTemp$19+7,hd$9);
+         mTemp$20 = $Div(wd$15,2);
+         if ((TW3MovableControl.GetWidth$1$(Self.FKnob)!=mTemp$20)||(TW3MovableControl.GetHeight$1$(Self.FKnob)!=hd$9)) {
+            TW3MovableControl.SetSize$4$(Self.FKnob,mTemp$20+7,hd$9);
          }
-         TW3MovableControl.SetBounds$2$(Self.FOnText,0,0,mTemp$19,hd$9);
-         TW3MovableControl.SetBounds$2$(Self.FOffText,mTemp$19,0,mTemp$19,hd$9);
+         TW3MovableControl.SetBounds$2$(Self.FOnText,0,0,mTemp$20,hd$9);
+         TW3MovableControl.SetBounds$2$(Self.FOffText,mTemp$20,0,mTemp$20,hd$9);
       }
    }
    /// procedure TW3ToggleSwitch.setChecked(const aValue: Boolean)
@@ -16563,10 +16838,10 @@ var TW3ListItems = {
    }
    /// procedure TW3ListItems.Clear()
    ,Clear$7:function(Self) {
-      var x$73 = 0;
-      var $temp39;
-      for(x$73 = 0,$temp39 = TObjectList.GetCount(Self.FObjects$1);x$73<$temp39;x$73++) {
-         TObject.Free(TObjectList.GetItem(Self.FObjects$1,x$73));
+      var x$76 = 0;
+      var $temp42;
+      for(x$76 = 0,$temp42 = TObjectList.GetCount(Self.FObjects$1);x$76<$temp42;x$76++) {
+         TObject.Free(TObjectList.GetItem(Self.FObjects$1,x$76));
       }
       TObjectList.Clear(Self.FObjects$1);
    }
@@ -16754,7 +17029,7 @@ var TQTXStyleSheet = {
       w3_AddClass(aElement$6,aName$6);
    }
    /// constructor TQTXStyleSheet.Create()
-   ,Create$46:function(Self) {
+   ,Create$47:function(Self) {
       var mDocument$2 = undefined;
       TObject.Create(Self);
       mDocument$2 = document;
@@ -16820,7 +17095,7 @@ var TQTXStyleSheet = {
       w3_RemoveClass(aElement$8,aName$8);
    }
    ,Destroy$:function($){return $.ClassType.Destroy($)}
-   ,Create$46$:function($){return $.ClassType.Create$46($)}
+   ,Create$47$:function($){return $.ClassType.Create$47($)}
 };
 /// TQTXTransformController = class (TObject)
 var TQTXTransformController = {
@@ -16833,14 +17108,14 @@ var TQTXTransformController = {
       $.FRegX = $.FRegY = $.FRegZ = $.FRotX = $.FRotY = $.FRotZ = $.FScaleX = $.FScaleY = $.FScaleZ = $.FX = $.FY = $.FZ = 0;
    }
    /// constructor TQTXTransformController.Create(const aHandle: THandle)
-   ,Create$45:function(Self, aHandle$5) {
+   ,Create$46:function(Self, aHandle$6) {
       TObject.Create(Self);
       Self.FScaleX = 1;
       Self.FScaleY = 1;
       Self.FScaleZ = 1;
       Self.FFlags = [31].slice(0);
-      if (aHandle$5) {
-         Self.FHandle$5 = aHandle$5;
+      if (aHandle$6) {
+         Self.FHandle$5 = aHandle$6;
          Self.FHandle$5.style[w3_CSSPrefix("transformStyle")] = "preserve-3d";
          Self.FHandle$5.style[w3_CSSPrefix("Perspective")] = 800;
          Self.FHandle$5.style[w3_CSSPrefix("transformOrigin")] = "50% 50%";
@@ -16933,24 +17208,24 @@ var TQTXTransformController = {
    }
    /// procedure TQTXTransformController.Update()
    ,Update$3:function(Self) {
-      var mTemp$20 = "";
+      var mTemp$21 = "";
       if (Self.FHandle$5) {
          if ($SetIn(Self.FFlags,0,0,5)) {
-            mTemp$20 = "translate3d("+((Self.FX-Self.FRegX)).toString()+"px,"+((Self.FY-Self.FRegY)).toString()+"px,"+((Self.FZ-Self.FRegZ)).toString()+"px) ";
+            mTemp$21 = "translate3d("+((Self.FX-Self.FRegX)).toString()+"px,"+((Self.FY-Self.FRegY)).toString()+"px,"+((Self.FZ-Self.FRegZ)).toString()+"px) ";
          }
          if ($SetIn(Self.FFlags,1,0,5)) {
-            mTemp$20 = mTemp$20+"rotateX("+(Self.FRotX).toString()+"deg) ";
+            mTemp$21 = mTemp$21+"rotateX("+(Self.FRotX).toString()+"deg) ";
          }
          if ($SetIn(Self.FFlags,2,0,5)) {
-            mTemp$20 = mTemp$20+"rotateY("+(Self.FRotY).toString()+"deg) ";
+            mTemp$21 = mTemp$21+"rotateY("+(Self.FRotY).toString()+"deg) ";
          }
          if ($SetIn(Self.FFlags,3,0,5)) {
-            mTemp$20 = mTemp$20+"rotateZ("+(Self.FRotZ).toString()+"deg) ";
+            mTemp$21 = mTemp$21+"rotateZ("+(Self.FRotZ).toString()+"deg) ";
          }
          if ($SetIn(Self.FFlags,4,0,5)) {
-            mTemp$20 = mTemp$20+"scale3d("+(Self.FScaleX).toString()+","+(Self.FScaleY).toString()+","+(Self.FScaleZ).toString()+") ";
+            mTemp$21 = mTemp$21+"scale3d("+(Self.FScaleX).toString()+","+(Self.FScaleY).toString()+","+(Self.FScaleZ).toString()+") ";
          }
-         Self.FHandle$5.style[w3_CSSPrefix("Transform")] = mTemp$20;
+         Self.FHandle$5.style[w3_CSSPrefix("Transform")] = mTemp$21;
       }
    }
    ,Destroy:TObject.Destroy
@@ -17001,7 +17276,7 @@ var TQTXDatasetField = {
       return TVariant.AsString(Self.FValue);
    }
    /// constructor TQTXDatasetField.Create(const aParent: TQTXDatasetFields)
-   ,Create$47:function(Self, aParent$2) {
+   ,Create$48:function(Self, aParent$2) {
       TObject.Create(Self);
       Self.FParent$1 = aParent$2;
       Self.FKind = 0;
@@ -17053,7 +17328,7 @@ var TQTXDatasetField = {
       Self.FValue = aValue$156;
    }
    ,Destroy:TObject.Destroy
-   ,Create$47$:function($){return $.ClassType.Create$47.apply($.ClassType, arguments)}
+   ,Create$48$:function($){return $.ClassType.Create$48.apply($.ClassType, arguments)}
    ,Generate$:function($){return $.ClassType.Generate($)}
    ,getGenerated$:function($){return $.ClassType.getGenerated($)}
    ,getValue$:function($){return $.ClassType.getValue($)}
@@ -17075,7 +17350,7 @@ var TQTXStringField = {
       TQTXDatasetField.setValue(Self,Value$33);
    }
    ,Destroy:TObject.Destroy
-   ,Create$47:TQTXDatasetField.Create$47
+   ,Create$48:TQTXDatasetField.Create$48
    ,Generate:TQTXDatasetField.Generate
    ,getGenerated:TQTXDatasetField.getGenerated
    ,getValue:TQTXDatasetField.getValue
@@ -17097,7 +17372,7 @@ var TQTXIntegerField = {
       TQTXDatasetField.setValue(Self,Value$34);
    }
    ,Destroy:TObject.Destroy
-   ,Create$47:TQTXDatasetField.Create$47
+   ,Create$48:TQTXDatasetField.Create$48
    ,Generate:TQTXDatasetField.Generate
    ,getGenerated:TQTXDatasetField.getGenerated
    ,getValue:TQTXDatasetField.getValue
@@ -17123,7 +17398,7 @@ var TQTXGUIDField = {
       return TVariant.AsString(TQTXDatasetField.getValue(Self));
    }
    ,Destroy:TObject.Destroy
-   ,Create$47:TQTXDatasetField.Create$47
+   ,Create$48:TQTXDatasetField.Create$48
    ,Generate$:function($){return $.ClassType.Generate($)}
    ,getGenerated$:function($){return $.ClassType.getGenerated($)}
    ,getValue:TQTXDatasetField.getValue
@@ -17145,7 +17420,7 @@ var TQTXFloatField = {
       TQTXDatasetField.setValue(Self,Value$35);
    }
    ,Destroy:TObject.Destroy
-   ,Create$47:TQTXDatasetField.Create$47
+   ,Create$48:TQTXDatasetField.Create$48
    ,Generate:TQTXDatasetField.Generate
    ,getGenerated:TQTXDatasetField.getGenerated
    ,getValue:TQTXDatasetField.getValue
@@ -17179,7 +17454,7 @@ var TQTXFieldDefs = {
          aName$9 = Trim$_String_((aName$9).toLowerCase());
          if (aName$9.length>0) {
             if (TQTXFieldDefs.IndexOf$3(Self,aName$9)<0) {
-               Result = TQTXFieldDef.Create$48$($New(TQTXFieldDef),Self);
+               Result = TQTXFieldDef.Create$49$($New(TQTXFieldDef),Self);
                TQTXFieldDef.setName$2(Result,aName$9);
                TQTXFieldDef.setType(Result,aDataType);
                Self.FFields.push(Result);
@@ -17194,12 +17469,12 @@ var TQTXFieldDefs = {
    }
    /// procedure TQTXFieldDefs.Clear()
    ,Clear$5:function(Self) {
-      var x$74 = 0;
+      var x$77 = 0;
       if (Self.FFields.length>0) {
          try {
-            var $temp40;
-            for(x$74 = 0,$temp40 = Self.FFields.length;x$74<$temp40;x$74++) {
-               TObject.Free(Self.FFields[x$74]);
+            var $temp43;
+            for(x$77 = 0,$temp43 = Self.FFields.length;x$77<$temp43;x$77++) {
+               TObject.Free(Self.FFields[x$77]);
             }
          } finally {
             Self.FFields.length=0;
@@ -17234,15 +17509,15 @@ var TQTXFieldDefs = {
    /// function TQTXFieldDefs.FieldByName(aName: String) : TQTXFieldDef
    ,FieldByName:function(Self, aName$10) {
       var Result = null;
-      var x$75 = 0;
+      var x$78 = 0;
       Result = null;
       if (Self.FFields.length>0) {
          aName$10 = (Trim$_String_(aName$10)).toLowerCase();
          if (aName$10.length>0) {
-            var $temp41;
-            for(x$75 = 0,$temp41 = Self.FFields.length;x$75<$temp41;x$75++) {
-               if (aName$10==(Self.FFields[x$75].FName$4).toLowerCase()) {
-                  Result = Self.FFields[x$75];
+            var $temp44;
+            for(x$78 = 0,$temp44 = Self.FFields.length;x$78<$temp44;x$78++) {
+               if (aName$10==(Self.FFields[x$78].FName$4).toLowerCase()) {
+                  Result = Self.FFields[x$78];
                   break;
                }
             }
@@ -17262,15 +17537,15 @@ var TQTXFieldDefs = {
    /// function TQTXFieldDefs.IndexOf(aName: String) : Integer
    ,IndexOf$3:function(Self, aName$11) {
       var Result = 0;
-      var x$76 = 0;
+      var x$79 = 0;
       Result = -1;
       if (Self.FFields.length>0) {
          aName$11 = (Trim$_String_(aName$11)).toLowerCase();
          if (aName$11.length>0) {
-            var $temp42;
-            for(x$76 = 0,$temp42 = Self.FFields.length;x$76<$temp42;x$76++) {
-               if (aName$11==(Self.FFields[x$76].FName$4).toLowerCase()) {
-                  Result = x$76;
+            var $temp45;
+            for(x$79 = 0,$temp45 = Self.FFields.length;x$79<$temp45;x$79++) {
+               if (aName$11==(Self.FFields[x$79].FName$4).toLowerCase()) {
+                  Result = x$79;
                   break;
                }
             }
@@ -17281,7 +17556,7 @@ var TQTXFieldDefs = {
    /// procedure TQTXFieldDefs.LoadFromString(const aText: String)
    ,LoadFromString:function(Self, aText$8) {
       var mHead$2 = {ddMagic:0,ddDefs:[]};
-      var x$77 = 0;
+      var x$80 = 0;
       TQTXFieldDefs.Clear$5(Self);
       try {
          
@@ -17292,9 +17567,9 @@ var TQTXFieldDefs = {
       }
       if (mHead$2.ddMagic==47806) {
          if (mHead$2.ddDefs.length>0) {
-            var $temp43;
-            for(x$77 = 0,$temp43 = mHead$2.ddDefs.length;x$77<$temp43;x$77++) {
-               TQTXFieldDefs.Add$5(Self,mHead$2.ddDefs[x$77].fdName,mHead$2.ddDefs[x$77].fdDatatype);
+            var $temp46;
+            for(x$80 = 0,$temp46 = mHead$2.ddDefs.length;x$80<$temp46;x$80++) {
+               TQTXFieldDefs.Add$5(Self,mHead$2.ddDefs[x$80].fdName,mHead$2.ddDefs[x$80].fdDatatype);
             }
          }
       } else {
@@ -17304,15 +17579,15 @@ var TQTXFieldDefs = {
    /// function TQTXFieldDefs.SaveToString() : String
    ,SaveToString:function(Self) {
       var Result = "";
-      var x$78 = 0;
+      var x$81 = 0;
       var mHead$3 = {ddMagic:0,ddDefs:[]};
       mHead$3.ddMagic = 47806;
       if (Self.FFields.length>0) {
          $ArraySetLenC(mHead$3.ddDefs,Self.FFields.length,function (){return {fdName:"",fdDatatype:0}});
-         var $temp44;
-         for(x$78 = 0,$temp44 = Self.FFields.length;x$78<$temp44;x$78++) {
-            mHead$3.ddDefs[x$78].fdDatatype = Self.FFields[x$78].FDatatype;
-            mHead$3.ddDefs[x$78].fdName = Self.FFields[x$78].FName$4;
+         var $temp47;
+         for(x$81 = 0,$temp47 = Self.FFields.length;x$81<$temp47;x$81++) {
+            mHead$3.ddDefs[x$81].fdDatatype = Self.FFields[x$81].FDatatype;
+            mHead$3.ddDefs[x$81].fdName = Self.FFields[x$81].FName$4;
          }
       }
       
@@ -17321,28 +17596,28 @@ var TQTXFieldDefs = {
    }
    /// procedure TQTXFieldDefs.SetReadOnly(const aValue: Boolean)
    ,SetReadOnly:function(Self, aValue$157) {
-      var mItem$1 = null;
+      var mItem$2 = null;
       var a$85 = 0;
       var a$86 = [];
       Self.FReadOnly$1 = aValue$157;
       if (Self.FFields.length>0) {
          a$86 = Self.FFields;
-         var $temp45;
-         for(a$85 = 0,$temp45 = a$86.length;a$85<$temp45;a$85++) {
-            mItem$1 = a$86[a$85];
-            TQTXFieldDef.setReadOnly$1(mItem$1,aValue$157);
+         var $temp48;
+         for(a$85 = 0,$temp48 = a$86.length;a$85<$temp48;a$85++) {
+            mItem$2 = a$86[a$85];
+            TQTXFieldDef.setReadOnly$1(mItem$2,aValue$157);
          }
       }
    }
    /// function TQTXFieldDefs.toString() : String
-   ,toString$3:function(Self) {
+   ,toString$4:function(Self) {
       var Result = "";
-      var x$79 = 0;
+      var x$82 = 0;
       if (Self.FFields.length>0) {
-         var $temp46;
-         for(x$79 = 0,$temp46 = Self.FFields.length;x$79<$temp46;x$79++) {
-            Result+="Name=\""+Self.FFields[x$79].FName$4+"\""+" Datatype=";
-            switch (Self.FFields[x$79].FDatatype) {
+         var $temp49;
+         for(x$82 = 0,$temp49 = Self.FFields.length;x$82<$temp49;x$82++) {
+            Result+="Name=\""+Self.FFields[x$82].FName$4+"\""+" Datatype=";
+            switch (Self.FFields[x$82].FDatatype) {
                case 0 :
                   Result+="Unknown";
                   break;
@@ -17375,7 +17650,7 @@ var TQTXFieldDefs = {
    }
    ,Destroy$:function($){return $.ClassType.Destroy($)}
    ,getFieldIdentifier$:function($){return $.ClassType.getFieldIdentifier($)}
-   ,toString$3$:function($){return $.ClassType.toString$3($)}
+   ,toString$4$:function($){return $.ClassType.toString$4($)}
 };
 TQTXFieldDefs.$Intf={
    IFieldDefAccess:[TQTXFieldDefs.SetReadOnly,TQTXFieldDefs.getFieldIdentifier]
@@ -17392,7 +17667,7 @@ var TQTXFieldDef = {
       $.FReadOnly$2 = false;
    }
    /// constructor TQTXFieldDef.Create(const aParent: TQTXFieldDefs)
-   ,Create$48:function(Self, aParent$3) {
+   ,Create$49:function(Self, aParent$3) {
       TObject.Create(Self);
       if (aParent$3!==null) {
          Self.FParent$2 = aParent$3;
@@ -17417,7 +17692,7 @@ var TQTXFieldDef = {
       }
    }
    ,Destroy:TObject.Destroy
-   ,Create$48$:function($){return $.ClassType.Create$48.apply($.ClassType, arguments)}
+   ,Create$49$:function($){return $.ClassType.Create$49.apply($.ClassType, arguments)}
 };
 /// TQTXDateTimeField = class (TQTXDatasetField)
 var TQTXDateTimeField = {
@@ -17435,7 +17710,7 @@ var TQTXDateTimeField = {
       TQTXDatasetField.setValue(Self,aValue$160);
    }
    ,Destroy:TObject.Destroy
-   ,Create$47:TQTXDatasetField.Create$47
+   ,Create$48:TQTXDatasetField.Create$48
    ,Generate:TQTXDatasetField.Generate
    ,getGenerated:TQTXDatasetField.getGenerated
    ,getValue:TQTXDatasetField.getValue
@@ -17470,25 +17745,25 @@ var TQTXDatasetFields = {
          if (TQTXDatasetFields.IndexOf$4(Self,aName$13)==(-1)) {
             switch (aKind$4) {
                case 1 :
-                  Result = TQTXDatasetField.Create$47$($New(TQTXBooleanField),Self);
+                  Result = TQTXDatasetField.Create$48$($New(TQTXBooleanField),Self);
                   break;
                case 2 :
-                  Result = TQTXDatasetField.Create$47$($New(TQTXIntegerField),Self);
+                  Result = TQTXDatasetField.Create$48$($New(TQTXIntegerField),Self);
                   break;
                case 3 :
-                  Result = TQTXDatasetField.Create$47$($New(TQTXFloatField),Self);
+                  Result = TQTXDatasetField.Create$48$($New(TQTXFloatField),Self);
                   break;
                case 4 :
-                  Result = TQTXDatasetField.Create$47$($New(TQTXStringField),Self);
+                  Result = TQTXDatasetField.Create$48$($New(TQTXStringField),Self);
                   break;
                case 5 :
-                  Result = TQTXDatasetField.Create$47$($New(TQTXDateTimeField),Self);
+                  Result = TQTXDatasetField.Create$48$($New(TQTXDateTimeField),Self);
                   break;
                case 6 :
-                  Result = TQTXDatasetField.Create$47$($New(TQTXAutoIncField),Self);
+                  Result = TQTXDatasetField.Create$48$($New(TQTXAutoIncField),Self);
                   break;
                case 7 :
-                  Result = TQTXDatasetField.Create$47$($New(TQTXGUIDField),Self);
+                  Result = TQTXDatasetField.Create$48$($New(TQTXGUIDField),Self);
                   break;
                default :
                   Result = null;
@@ -17505,12 +17780,12 @@ var TQTXDatasetFields = {
    }
    /// procedure TQTXDatasetFields.Clear()
    ,Clear$6:function(Self) {
-      var x$80 = 0;
+      var x$83 = 0;
       if (Self.FFields$1.length>0) {
          try {
-            var $temp47;
-            for(x$80 = 0,$temp47 = Self.FFields$1.length;x$80<$temp47;x$80++) {
-               TObject.Free(Self.FFields$1[x$80]);
+            var $temp50;
+            for(x$83 = 0,$temp50 = Self.FFields$1.length;x$83<$temp50;x$83++) {
+               TObject.Free(Self.FFields$1[x$83]);
             }
          } finally {
             Self.FFields$1.length=0;
@@ -17520,15 +17795,15 @@ var TQTXDatasetFields = {
    /// function TQTXDatasetFields.DataExport() : TQTXDatasetPacket
    ,DataExport:function(Self) {
       var Result = undefined;
-      var x$81 = 0;
+      var x$84 = 0;
       var mField = null;
       var a$87 = 0;
       Result = TVariant.CreateObject();
       if (Self.FFields$1.length>0) {
          var a$88 = [];
          a$88 = Self.FFields$1;
-         var $temp48;
-         for(a$87 = 0,$temp48 = a$88.length;a$87<$temp48;a$87++) {
+         var $temp51;
+         for(a$87 = 0,$temp51 = a$88.length;a$87<$temp51;a$87++) {
             mField = a$88[a$87];
             Result[mField.FName$3] = TQTXDatasetField.getValue$(mField);
          }
@@ -17542,8 +17817,8 @@ var TQTXDatasetFields = {
       if (Self.FFields$1.length>0) {
          var a$90 = [];
          a$90 = Self.FFields$1;
-         var $temp49;
-         for(a$89 = 0,$temp49 = a$90.length;a$89<$temp49;a$89++) {
+         var $temp52;
+         for(a$89 = 0,$temp52 = a$90.length;a$89<$temp52;a$89++) {
             mField$1 = a$90[a$89];
             TQTXDatasetField.setValue$(mField$1,aValue$161[mField$1.FName$3]);
          }
@@ -17575,14 +17850,14 @@ var TQTXDatasetFields = {
    /// function TQTXDatasetFields.FieldByName(aName: String) : TQTXDatasetField
    ,FieldByName$1:function(Self, aName$15) {
       var Result = null;
-      var x$82 = 0;
+      var x$85 = 0;
       Result = null;
       aName$15 = (Trim$_String_(aName$15)).toLowerCase();
       if (aName$15.length>0) {
-         var $temp50;
-         for(x$82 = 0,$temp50 = Self.FFields$1.length;x$82<$temp50;x$82++) {
-            if (Self.FFields$1[x$82].FName$3==aName$15) {
-               Result = Self.FFields$1[x$82];
+         var $temp53;
+         for(x$85 = 0,$temp53 = Self.FFields$1.length;x$85<$temp53;x$85++) {
+            if (Self.FFields$1[x$85].FName$3==aName$15) {
+               Result = Self.FFields$1[x$85];
                break;
             }
          }
@@ -17592,14 +17867,14 @@ var TQTXDatasetFields = {
    /// function TQTXDatasetFields.IndexOf(aName: String) : Integer
    ,IndexOf$4:function(Self, aName$16) {
       var Result = 0;
-      var x$83 = 0;
+      var x$86 = 0;
       Result = -1;
       aName$16 = (Trim$_String_(aName$16)).toLowerCase();
       if (aName$16.length>0) {
-         var $temp51;
-         for(x$83 = 0,$temp51 = Self.FFields$1.length;x$83<$temp51;x$83++) {
-            if (Self.FFields$1[x$83].FName$3==aName$16) {
-               Result = x$83;
+         var $temp54;
+         for(x$86 = 0,$temp54 = Self.FFields$1.length;x$86<$temp54;x$86++) {
+            if (Self.FFields$1[x$86].FName$3==aName$16) {
+               Result = x$86;
                break;
             }
          }
@@ -17608,25 +17883,25 @@ var TQTXDatasetFields = {
    }
    /// procedure TQTXDatasetFields.ResetValues()
    ,ResetValues:function(Self) {
-      var mItem$2 = null;
+      var mItem$3 = null;
       var a$91 = 0;
       if (Self.FFields$1.length>0) {
          var a$92 = [];
          a$92 = Self.FFields$1;
-         var $temp52;
-         for(a$91 = 0,$temp52 = a$92.length;a$91<$temp52;a$91++) {
-            mItem$2 = a$92[a$91];
-            TQTXDatasetField.setValue$(mItem$2,null);
+         var $temp55;
+         for(a$91 = 0,$temp55 = a$92.length;a$91<$temp55;a$91++) {
+            mItem$3 = a$92[a$91];
+            TQTXDatasetField.setValue$(mItem$3,null);
          }
       }
    }
    /// procedure TQTXDatasetFields.setReadOnly(const aValue: Boolean)
    ,setReadOnly$2:function(Self, aValue$162) {
-      var x$84 = 0;
+      var x$87 = 0;
       if (Self.FFields$1.length>0) {
-         var $temp53;
-         for(x$84 = 0,$temp53 = Self.FFields$1.length;x$84<$temp53;x$84++) {
-            TQTXDatasetField.setReadOnly(Self.FFields$1[x$84],aValue$162);
+         var $temp56;
+         for(x$87 = 0,$temp56 = Self.FFields$1.length;x$87<$temp56;x$87++) {
+            TQTXDatasetField.setReadOnly(Self.FFields$1[x$87],aValue$162);
          }
       }
    }
@@ -17713,7 +17988,7 @@ var TQTXDataset = {
       }
    }
    /// constructor TQTXDataset.Create()
-   ,Create$49:function(Self) {
+   ,Create$50:function(Self) {
       TObject.Create(Self);
       Self.FFields$2 = TObject.Create($New(TQTXDatasetFields));
       Self.FDefs = TObject.Create($New(TQTXFieldDefs));
@@ -17725,10 +18000,10 @@ var TQTXDataset = {
    /// procedure TQTXDataset.CreateDataset()
    ,CreateDataset:function(Self) {
       function SetupFields() {
-         var x$85 = 0;
-         var $temp54;
-         for(x$85 = 0,$temp54 = TQTXFieldDefs.a$29(Self.FDefs);x$85<$temp54;x$85++) {
-            TQTXDatasetFields.Add$6(Self.FFields$2,TQTXFieldDefs.a$28(Self.FDefs,x$85).FName$4,TQTXFieldDefs.a$28(Self.FDefs,x$85).FDatatype);
+         var x$88 = 0;
+         var $temp57;
+         for(x$88 = 0,$temp57 = TQTXFieldDefs.a$29(Self.FDefs);x$88<$temp57;x$88++) {
+            TQTXDatasetFields.Add$6(Self.FFields$2,TQTXFieldDefs.a$28(Self.FDefs,x$88).FName$4,TQTXFieldDefs.a$28(Self.FDefs,x$88).FDatatype);
          }
       };
       if (!Self.FActive$1) {
@@ -18069,11 +18344,11 @@ var TQTXDataset = {
    }
    /// procedure TQTXDataset.UpdateGeneratedFields()
    ,UpdateGeneratedFields:function(Self) {
-      var x$86 = 0;
-      var $temp55;
-      for(x$86 = 0,$temp55 = TQTXDatasetFields.a$31(Self.FFields$2);x$86<$temp55;x$86++) {
-         if (TQTXDatasetField.getGenerated$(TQTXDatasetFields.a$30(Self.FFields$2,x$86))) {
-            TQTXDatasetField.Generate$(TQTXDatasetFields.a$30(Self.FFields$2,x$86));
+      var x$89 = 0;
+      var $temp58;
+      for(x$89 = 0,$temp58 = TQTXDatasetFields.a$31(Self.FFields$2);x$89<$temp58;x$89++) {
+         if (TQTXDatasetField.getGenerated$(TQTXDatasetFields.a$30(Self.FFields$2,x$89))) {
+            TQTXDatasetField.Generate$(TQTXDatasetFields.a$30(Self.FFields$2,x$89));
          }
       }
    }
@@ -18082,7 +18357,7 @@ var TQTXDataset = {
       return "0.1";
    }
    ,Destroy$:function($){return $.ClassType.Destroy($)}
-   ,Create$49$:function($){return $.ClassType.Create$49($)}
+   ,Create$50$:function($){return $.ClassType.Create$50($)}
    ,DoAfterDatasetClosed$:function($){return $.ClassType.DoAfterDatasetClosed($)}
    ,DoAfterDatasetCreated$:function($){return $.ClassType.DoAfterDatasetCreated($)}
    ,DoBeforeDatasetClosed$:function($){return $.ClassType.DoBeforeDatasetClosed($)}
@@ -18110,7 +18385,7 @@ var TQTXBooleanField = {
       TQTXDatasetField.setValue(Self,Value$36);
    }
    ,Destroy:TObject.Destroy
-   ,Create$47:TQTXDatasetField.Create$47
+   ,Create$48:TQTXDatasetField.Create$48
    ,Generate:TQTXDatasetField.Generate
    ,getGenerated:TQTXDatasetField.getGenerated
    ,getValue:TQTXDatasetField.getValue
@@ -18138,7 +18413,7 @@ var TQTXAutoIncField = {
       return TVariant.AsInteger(TQTXDatasetField.getValue(Self));
    }
    ,Destroy:TObject.Destroy
-   ,Create$47:TQTXDatasetField.Create$47
+   ,Create$48:TQTXDatasetField.Create$48
    ,Generate$:function($){return $.ClassType.Generate($)}
    ,getGenerated$:function($){return $.ClassType.getGenerated($)}
    ,getValue:TQTXDatasetField.getValue
@@ -18300,7 +18575,7 @@ var vDriver = null;
 var vRequestAnimFrame = null;
 var vCancelAnimFrame = null;
 var $Application = function() {
-   Application$1 = TW3CustomApplication.Create$51$($New(TApplication));
+   Application$1 = TW3CustomApplication.Create$52$($New(TApplication));
    TW3CustomApplication.RunApp(Application$1);
 }
 $Application();

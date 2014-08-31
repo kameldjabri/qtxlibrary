@@ -10,6 +10,7 @@ uses
   qtxheader,
   formLogin,
   formNew,
+  formAccount,
   formProfile;
 
 type
@@ -20,6 +21,7 @@ type
     FLogin:   TformLogin;
     FProfile: TformProfile;
     FNew:     TFormNew;
+    FAccount: TformAccount;
     FHeader:  TQTXHeaderBar;
   protected
     procedure ApplicationStarting; override;
@@ -28,6 +30,7 @@ type
     Property  FormLogin:TformLogin read FLogin;
     Property  MainForm:TForm1 read FForm1;
     Property  ProfileForm:TformProfile read FProfile;
+    Property  AccountForm:TformAccount read FAccount;
     Property  Header:TQTXHeaderBar read FHeader;
   end;
 
@@ -96,6 +99,11 @@ begin
   FProfile:=TformProfile.Create(display.view);
   FProfile.name:='FormProfile';
   RegisterFormInstance(FProfile,false);
+
+  FAccount:=TformAccount.Create(display.view);
+  FAccount.name:='FormAccount';
+  RegisterFormInstance(FAccount,false);
+
 
   FNew:=TFormNew.Create(display.view);
   FNew.name:='FormNew';

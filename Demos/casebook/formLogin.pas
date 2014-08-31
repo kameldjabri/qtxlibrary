@@ -38,6 +38,8 @@ begin
   w3Button1.enabled:=True;
   w3label2.fxFadeIn(0.5);
   w3label1.fxWarpIn(0.3);
+  self.UpdateCloud1;
+  self.UpdateCloud2;
 end;
 
 procedure TformLogin.W3Button1Click(Sender: TObject);

@@ -37,6 +37,12 @@ type
     function  toString:String;
   End;
 
+  TQTXFontInfo = Record
+    fiName: String;
+    fiSize: Integer;
+    function  toString:String;
+  End;
+
   TQTXGUID = Class
   public
     class function CreateGUID:String;
@@ -55,21 +61,44 @@ type
   end;
 
 
+  TQTXFontDetector = Class(TObject)
+  private
+    FBaseFonts:     array of string;
+    FtestString:    String = "mmmmmmmmmmlli";
+    FtestSize:      String = '72px';
+    Fh:             THandle;
+    Fs:             THandle;
+    FdefaultWidth:  Variant;
+    FdefaultHeight: Variant;
+  public
+    function    Detect(aFont:String):Boolean;
+
+    function    MeasureText(aFontInfo:TQTXFontInfo;
+                aContent:String):TQTXTextMetric;overload;
+
+    function    MeasureText(aFontInfo:TQTXFontInfo;
+                aFixedWidth:Integer;
+                aContent:String):TQTXTextMetric;overload;
+
+    function    MeasureText(aFontName:String;aFontSize:Integer;
+                aContent:String):TQTXTextMetric;overload;
+
+    function    MeasureText(aFontName:String;aFontSize:Integer;
+                aFixedWidth:Integer;
+                aContent:String):TQTXTextMetric;overload;
+
+    function    getFontInfo(const aHandle:THandle):TQTXFontInfo;
+
+    Constructor Create;virtual;
+  End;
+
+
   TQTXAnimationHelper = helper for TW3CustomAnimation
   public
     procedure Pause;
     procedure Resume;
     procedure Stop;
   End;
-
-
-  (* TQTXCustomAnimation = partial class(TW3CustomAnimation)
-  public
-    procedure Pause;virtual;
-    procedure Resume;virtual;
-    procedure Stop;virtual;
-  End;   *)
-
 
   TQTXAttrAccess = Class(TObject)
   private
@@ -123,9 +152,198 @@ type
           const aCallback:TProcedureRef):THandle;
   end;
 
-
 implementation
 
+//############################################################################
+// TQTXFontInfo
+//############################################################################
+
+function TQTXFontInfo.toString:String;
+begin
+  result:=Format('%s %dpx',[fiName,fiSize]);
+end;
+
+//############################################################################
+// TQTXFontDetector
+//############################################################################
+
+Constructor TQTXFontDetector.Create;
+var
+  x:  Integer;
+begin
+  inherited Create;
+  FBaseFonts.add('monospace');
+  FBaseFonts.add('sans-serif');
+  FBaseFonts.add('serif');
+
+  Fh:=browserApi.document.body;
+
+  Fs:=browserApi.document.createElement("span");
+  Fs.style.fontSize:=FtestSize;
+  Fs.innerHTML := FtestString;
+  FDefaultWidth:=TVariant.createObject;
+  FDefaultHeight:=TVariant.createObject;
+
+  if FBaseFonts.Count>0 then
+  for x:=FBaseFonts.low to FBaseFonts.high do
+  begin
+    Fs.style.fontFamily := FbaseFonts[x];
+    Fh.appendChild(Fs);
+    FdefaultWidth[FbaseFonts[x]]  :=  Fs.offsetWidth;
+    FdefaultHeight[FbaseFonts[x]] :=  Fs.offsetHeight;
+    Fh.removeChild(Fs);
+  end;
+end;
+
+
+function TQTXFontDetector.getFontInfo(const aHandle:THandle):TQTXFontInfo;
+var
+  mName:  String;
+  mSize:  Integer;
+  mData:  Array of string;
+  x:  Integer;
+Begin
+  result.fiSize:=-1;
+  if aHandle.valid then
+  begin
+    mName:=w3_getStyleAsStr(aHandle,'font-family');
+    mSize:=w3_getStyleAsInt(aHandle,'font-size');
+
+    if length(mName)>0 then
+    begin
+      asm
+        @mData = (@mName).split(",");
+      end;
+      if mData.Length>0 then
+      Begin
+        for x:=mData.low to mData.high do
+        begin
+          if Detect(mData[x]) then
+          begin
+            result.fiName:=mData[x];
+            result.fiSize:=mSize;
+            break;
+          end;
+        end;
+      end;
+    end;
+  end;
+end;
+
+function TQTXFontDetector.MeasureText(aFontInfo:TQTXFontInfo;
+         aFixedWidth:Integer;
+         aContent:String):TQTXTextMetric;
+Begin
+  result:=MeasureText(aFontInfo.fiName,aFontInfo.fiSize,aFixedWidth,aContent);
+end;
+
+function TQTXFontDetector.MeasureText(aFontInfo:TQTXFontInfo;
+         aContent:String):TQTXTextMetric;
+Begin
+  result:=MeasureText(aFontInfo.fiName,aFontInfo.fiSize,aContent);
+end;
+
+function TQTXFontDetector.MeasureText(aFontName:String;aFontSize:Integer;
+         aFixedWidth:Integer;
+         aContent:String):TQTXTextMetric;
+var
+  mElement: THandle;
+Begin
+  if Detect(aFontName) then
+  begin
+    aContent:=trim(aContent);
+    if length(aContent)>0 then
+    begin
+      mElement:=BrowserAPi.document.createElement("div");
+      if (mElement) then
+      begin
+        mElement.style['font-family']:=aFontName;
+        mElement.style['font-size']:=TInteger.toPxStr(aFontSize);
+        mElement.style['overflow']:='scroll';
+
+        mElement.style.maxWidth:=TInteger.toPxStr(aFixedWidth);
+        mElement.style.width:=TInteger.toPxStr(aFixedWidth);
+        mElement.style.height:='10000px';
+
+        mElement.innerHTML := aContent;
+        Fh.appendChild(mElement);
+
+        mElement.style.width:="4px";
+        mElement.style.height:="4px";
+
+        result.tmWidth:=mElement.scrollWidth;
+        result.tmHeight:=mElement.scrollHeight;
+        Fh.removeChild(mElement);
+
+      end;
+    end;
+  end;
+end;
+
+function TQTXFontDetector.MeasureText(aFontName:String;aFontSize:Integer;
+         aContent:String):TQTXTextMetric;
+var
+  mElement: THandle;
+Begin
+  if Detect(aFontName) then
+  begin
+    aContent:=trim(aContent);
+    if length(aContent)>0 then
+    begin
+      mElement:=BrowserAPi.document.createElement("div");
+      if (mElement) then
+      begin
+        mElement.style['font-family']:=aFontName;
+        mElement.style['font-size']:=TInteger.toPxStr(aFontSize);
+        mElement.style['overflow']:='scroll';
+
+        mElement.style['display']:='inline-block';
+        mElement.style['white-space']:='nowrap';
+
+
+        mElement.style.width:='10000px';
+        mElement.style.height:='10000px';
+
+        mElement.innerHTML := aContent;
+        Fh.appendChild(mElement);
+
+        mElement.style.width:="4px";
+        mElement.style.height:="4px";
+
+        result.tmWidth:=mElement.scrollWidth;
+        result.tmHeight:=mElement.scrollHeight;
+        Fh.removeChild(mElement);
+
+      end;
+    end;
+  end;
+end;
+
+function TQTXFontDetector.Detect(aFont:String):Boolean;
+var
+  x:  Integer;
+Begin
+  aFont:=trim(aFont);
+  if aFont.Length>0 then
+  Begin
+    if FBaseFonts.Count>0 then
+    for x:=FBaseFonts.low to FBaseFonts.high do
+    begin
+      Fs.style.fontFamily:=aFont + ',' + FbaseFonts[x];
+      Fh.appendChild(Fs);
+      result:= (Fs.offsetWidth  <> FdefaultWidth[FBaseFonts[x]])
+          and  (Fs.offsetHeight <> FdefaultHeight[FBaseFonts[x]]);
+      Fh.removeChild(Fs);
+      if result then
+      break;
+    end;
+  end;
+end;
+
+
+//############################################################################
+// TQTXAnimationHelper
+//############################################################################
 
 procedure TQTXAnimationHelper.Pause;
 begin
