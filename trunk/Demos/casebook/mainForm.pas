@@ -5,10 +5,12 @@ interface
 {.$DEFINE DEBUG_MODE}
 
 uses 
+
   w3panel, w3time, W3System, W3Graphics, W3Components, W3Forms, w3Panel,
   W3Fonts, W3Borders, W3Image, W3Application, W3Button, W3Label, w3dialogs,
-  w3effects, w3memo, qtxheader,
+  w3effects, w3memo,  w3inet, w3c.dom,
   cbclasses,
+  qtxheader,
   qtxEffects,
   qtxScrollController,
   qtxUtils,
@@ -16,36 +18,6 @@ uses
   qtxscrolltext;
 
   type
-
-  TCBDialogInfo = Class(TObject)
-  private
-    FBlocker:   TW3BlockBox;
-    FBox:       TW3Panel;
-    FCancel:    TCBGlyphButton;
-    FPost:      TCBGlyphButton;
-    FEditor:    TW3Memo;
-    FTitle:     TQTXLabel;
-  public
-    property    Editor:TW3Memo read FEditor;
-    Property    BackgroundBlocker:TW3BlockBox read FBlocker;
-    Property    Panel:TW3Panel read FBox;
-    property    CancelButton:TCBGlyphButton read FCancel;
-    Property    PostButton:TCBGlyphButton read FPost;
-
-    Constructor Create;virtual;
-    Destructor  Destroy;Override;
-  End;
-
-  TCBNotifierPlack = Class(TObject)
-  private
-    FBox:       TW3Panel;
-  public
-    Property    Box:TW3Panel read FBox;
-    procedure   Show;
-    Constructor Create(AOwner:TW3CustomControl);virtual;
-    Destructor  Destroy;Override;
-  End;
-
 
   TForm1=class(TW3form)
   private
@@ -73,133 +45,6 @@ implementation
 { TForm1}
 uses casebook, W3MouseTouch;
 
-//#############################################################################
-// TCBNotifierPlack
-//#############################################################################
-
-Constructor TCBNotifierPlack.Create(AOwner:TW3CustomControl);
-const
-  CNT_Width   = 280;
-  CNT_Height  = 100;
-Begin
-  inherited Create;
-  FBox:=TW3Panel.Create(aOwner);
-  FBox.visible:=False;
-  FBox.setBounds(
-    (AOwner.ClientWidth div 2) - (CNT_WIDTH div 2),
-    //(AOwner.clientHeight - CNT_HEIGHT),
-    AOwner.ClientHeight + CNT_HEIGHT,
-    CNT_WIDTH,
-    CNT_HEIGHT);
-  FBox.OnMouseTouchClick:=Procedure (Sender: TObject; Button: TMouseButton;
-    Shift: TShiftState; X, Y: Integer)
-    Begin
-      FBox.fxFadeOut(0.3,
-        procedure ()
-        begin
-          FBox.free;
-        end);
-    end;
-end;
-
-Destructor TCBNotifierPlack.Destroy;
-Begin
-  FBox.free;
-  inherited;
-end;
-
-procedure TCBNotifierPlack.Show;
-Begin
-  FBox.fxFadeIn(0.5, procedure ()
-  begin
-    FBox.fxMoveTo(FBox.Left,
-    (TW3CustomControl(FBox.Parent).ClientHeight div 2) - FBox.Height div 2,
-    //(TW3CustomControl(FBox.Parent).ClientHeight div 2) - FBox.height div 2,
-    0.6, procedure ()
-      begin
-        w3_callback( procedure ()
-          Begin
-            FBox.fxFadeOut(0.3,
-              procedure ()
-              begin
-                self.free;
-              end);
-          end,
-          1000 * 8);
-      end);
-  end);
-end;
-
-//#############################################################################
-// TCBDialogInfo
-//#############################################################################
-
-Constructor TCBDialogInfo.Create;
-var
-  dx: Integer;
-  dy: Integer;
-  wd: Integer;
-Begin
-  inherited Create;
-
-  FBlocker := TW3BlockBox.Create(Application.Display);
-  FBlocker.SetBounds(0,0,Application.Display.Width,Application.Display.Height);
-  FBlocker.BringToFront;
-
-  FBox:=TW3Panel.Create(FBlocker);
-  FBox.SetBounds(10,20,300,280);
-  FBox.moveTo((application.display.clientwidth div 2) - FBox.width div 2,
-    (application.display.clientHeight div 2) - FBox.height div 2);
-
-  FEditor:=TW3Memo.Create(FBox);
-  FEditor.SetBounds(10,40,FBox.ClientWidth-20,(FBox.ClientHeight-20) - 80);
-
-  FTitle:=TQTXLabel.Create(FBox);
-  FTitle.MoveTo(10,10);
-  FTitle.Caption:='Add new post';
-
-  dy:=FBox.ClientHeight-40;
-  wd:=((FBox.ClientWidth - 40) div 2) - 20;
-  Fpost:=TCBGlyphButton.Create(FBox);
-  Fpost.setBounds(10,dy,wd,26);
-  FPost.text.Autosize:=False;
-  FPost.text.height:=16;
-  FPost.Text.Caption:='Post';
-  FPost.glyph.innerHTML:='<i class="fa fa-bolt fa-2x">';
-  FPost.LayoutChildren;
-  FPost.Glyph.height:=26;
-
-  dx:=(FBox.ClientWidth - 10) - wd;
-  FCancel:=TCBGlyphButton.Create(FBox);
-  FCancel.setBounds(dx,dy,wd,26);
-  FCancel.text.Autosize:=False;
-  FCancel.text.height:=16;
-  FCancel.text.caption:='Cancel';
-  FCancel.glyph.innerHTML:='<i class="fa fa-times fa-2x">';
-  FCancel.LayoutChildren;
-  FCancel.Glyph.height:=26;
-  FCancel.OnMouseTouchRelease:=Procedure (Sender: TObject; Button: TMouseButton;
-    Shift: TShiftState; X, Y: Integer)
-    Begin
-      FBox.fxZoomOut(0.3, procedure ()
-      Begin
-        self.free;
-      end);
-    end;
-
-  FBox.fxZoomIn(0.3);
-
-end;
-
-Destructor TCBDialogInfo.Destroy;
-Begin
-  FPost.free;
-  FTitle.free;
-  FEditor.free;
-  FBox.free;
-  FBlocker.free;
-  inherited;
-end;
 
 //#############################################################################
 // FORM
@@ -215,6 +60,8 @@ Begin
   if FFirst then
   Begin
     FFirst:=False;
+
+
     w3_callback( procedure ()
       begin
         {$IFNDEF DEBUG_MODE}
@@ -494,21 +341,75 @@ Begin
 end;
 
 Procedure TForm1.setupItems;
-var
-  x:  Integer;
-  dy:Integer;
-  mItem:  TCBNewsItem;
+//var
+  //x:  Integer;
+  //dy:Integer;
+  //mItem:  TCBNewsItem;
 begin
+
+
+  var mXML:JXMLDocument;
+  TQTXXMLApi.LoadXML('http://feeds.feedburner.com/delphifeeds?format=xml',
+    procedure (sender:TW3HttpRequest;aXML:JXMLDocument)
+    var
+      x:  Integer;
+      dy: Integer;
+      mItem:  TCBNewsItem;
+      mText:  String;
+      mObjs:  JHTMLCollection;
+    begin
+      dy:=4;
+      if aXML<>NIL then
+      mObjs :=  aXMl.getElementsByTagName('item') else
+      mObjs :=  NIL;
+
+      if (mObjs<>NIL)
+      and (mObjs.length>0) then
+      begin
+        for x:=0 to mObjs.length-1 do
+        Begin
+          (* create news item with default width/height *)
+          var mItem:=TCBNewsItem.Create(FList.Content);
+          mItem.setBounds(2,dy,FList.Content.ClientWidth-4,100);
+
+          (* get the title *)
+          mtext:=mObjs[x].childNodes[1].textContent;
+          mItem.title.caption:=mText;
+
+          mItem.Text.caption:=mObjs[x].childnodes[9].textContent;
+          //mItem.Text.Caption:=mObjs.items[x].
+
+          inc(dy,mItem.Height + 10);
+        end;
+      end else
+      begin
+        dy:=4;
+        for x:=1 to 10 do
+        begin
+          mItem:=TCBNewsItem.Create(FList.Content);
+          mItem.setBounds(2,dy,FList.Content.ClientWidth-4,100);
+          Populate(mItem);
+          inc(dy,mItem.Height + 10);
+        end;
+      end;
+
+      FList.Content.Height:=dy + 16;
+      FList.ScrollApi.Refresh;
+
+    end);
+
+
+  (*
   dy:=4;
   for x:=1 to 10 do
   begin
     mItem:=TCBNewsItem.Create(FList.Content);
     mItem.setBounds(2,dy,FList.Content.ClientWidth-4,100);
     Populate(mItem);
-    inc(dy,mItem.Height + 10);;
+    inc(dy,mItem.Height + 10);
   end;
   FList.Content.Height:=dy + 16;
-  FList.ScrollApi.Refresh;
+  FList.ScrollApi.Refresh;   *)
 end;
 
  
