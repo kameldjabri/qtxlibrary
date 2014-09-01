@@ -342,26 +342,7 @@ begin
       FHomeButton.Glyph.StyleClass:="fa fa-arrow-circle-left";
       FHomeButton.OnMouseTouchRelease:=Procedure (Sender: TObject; Button: TMouseButton;
         Shift: TShiftState; X, Y: Integer)
-      var
-        mObj: TQTXFontDetector;
-        mInfo:  TQTXFontInfo;
-        mMetric:  TQTXTextMetric;
-        mtext:  String;
       Begin
-
-        mObj:=TQTXFontDetector.Create;
-        try
-          mInfo:=mObj.getFontInfo(FHomeButton.handle);
-          mMetric:=mObj.MeasureText(mInfo,FHomeButton.Text.caption);
-
-          mText:=mInfo.toString + #13;
-          mText+=mMetric.toString;
-          showmessage(mText);
-        finally
-          mObj.free;
-        end;
-
-
           w3_callback( procedure ()
           begin
             TApplication(application).ShowDialog('<li class="fa fa-warning">&nbsp</li>Logout?',
@@ -387,6 +368,39 @@ begin
     FMore.Text.Visible:=False;
     FMore.glyph.handle.style['color']:='#2d3642';
     FMore.Glyph.StyleClass:='fa fa-bars';
+    FMore.OnMouseTouchRelease:= Procedure
+      (Sender: TObject; Button: TMouseButton;Shift: TShiftState; X, Y: Integer)
+      var
+        mPanel: TW3Panel;
+        dy: Integer;
+      Begin
+        mPanel:=TW3Panel.Create(self);
+
+        dy:=FMore.top + FMore.height;
+
+        mPanel.SetBounds(FMore.left,dy, FMore.Width,FMore.Height);
+        mPanel.fxScaleTo(20,dy,Clientwidth-40,130 ,0.5,
+          procedure ()
+          begin
+            mPanel.InnerHTML:=#"<br><center>Coded by<br>
+              <b>Jon Lennart Aasenden</b><br>
+              Cipher Diaz of <u>QUARTEX</u><br><br>
+              Written in Smart Mobile Studio<br>
+              The #1 HTML5 development suite";
+          end);
+
+        mPanel.OnMouseTouchRelease:= Procedure
+              (Sender: TObject; Button: TMouseButton;Shift: TShiftState; X, Y: Integer)
+        Begin
+          mPanel.free;
+        end;
+        w3_callback( procedure ()
+          Begin
+            mPanel.free;
+            mpanel:=NIL;
+          end,6 * 1000);
+      end;
+
   finally
     FPanel.EndUpdate;
     FPanel.fxFadeIn(0.1);

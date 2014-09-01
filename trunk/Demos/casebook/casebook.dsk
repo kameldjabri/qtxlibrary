@@ -3,14 +3,15 @@
     <editor>
       <tab filename="casebook" fullname="casebook.pas" topline="31" col="14" row="58" />
       <tab filename="formLogin" fullname="formLogin.pas" topline="97" col="19" row="116" />
-      <tab filename="mainForm" fullname="mainForm.pas" topline="1" col="3" row="18" />
-      <tab filename="formProfile" fullname="formProfile.pas" topline="1" col="25" row="26" />
+      <tab filename="mainForm" fullname="mainForm.pas" topline="365" col="50" row="382" />
+      <tab filename="formProfile" fullname="formProfile.pas" topline="1" col="26" row="49" />
       <tab filename="formAccount" fullname="formAccount.pas" topline="1" col="1" row="1" />
       <tab filename="qtxlabel" fullname="..\..\qtxlabel.pas" topline="89" col="5" row="117" />
       <tab filename="qtxutils" fullname="..\..\qtxutils.pas" topline="70" col="30" row="88" />
       <tab filename="cbclasses" fullname="cbclasses.pas" topline="186" col="36" row="199" />
       <tab filename="qtxheader" fullname="..\..\qtxheader.pas" topline="79" col="37" row="92" />
       <tab filename="casebookApplication" fullname="casebookApplication.spr" topline="1" col="1" row="25" />
+      <tab filename="qtxEffects" fullname="..\..\qtxEffects.pas" topline="137" col="24" row="154" />
       <activetab>mainForm</activetab>
     </editor>
   </state>

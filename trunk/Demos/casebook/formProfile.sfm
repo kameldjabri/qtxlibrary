@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SmartForm>
   <Created>2014-08-22T14:15:16.057</Created>
-  <Modified>2014-09-01T13:26:52.767</Modified>
+  <Modified>2014-09-01T15:07:19.326</Modified>
   <object type="TW3Form">
     <Caption>W3Form</Caption>
     <Name>formProfile</Name>
-    <object type="TW3Button">
-      <Caption>Store changes</Caption>
-      <Width>288</Width>
-      <Top>384</Top>
-      <Left>16</Left>
-      <Height>40</Height>
-      <Name>W3Button1</Name>
-      <OnClick>W3Button1Click</OnClick>
-    </object>
     <object type="TW3ListMenu">
       <Width>304</Width>
       <Top>40</Top>
@@ -23,7 +14,7 @@
     </object>
     <object type="TW3ListMenu">
       <Width>304</Width>
-      <Top>224</Top>
+      <Top>240</Top>
       <Left>8</Left>
       <Height>152</Height>
       <Name>W3ListMenu2</Name>
@@ -31,7 +22,6 @@
     <object type="TW3Label">
       <Caption>General settings</Caption>
       <Width>128</Width>
-      <Top>8</Top>
       <Left>8</Left>
       <Height>32</Height>
       <Name>W3Label1</Name>
@@ -39,7 +29,7 @@
     <object type="TW3Label">
       <Caption>Appearance</Caption>
       <Width>128</Width>
-      <Top>192</Top>
+      <Top>200</Top>
       <Left>8</Left>
       <Height>32</Height>
       <Name>W3Label2</Name>
