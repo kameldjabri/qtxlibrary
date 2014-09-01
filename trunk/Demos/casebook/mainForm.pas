@@ -2,19 +2,20 @@ unit mainForm;
 
 interface
 
+{.$DEFINE DEBUG_MODE}
+
 uses 
   w3panel, w3time, W3System, W3Graphics, W3Components, W3Forms, w3Panel,
   W3Fonts, W3Borders, W3Image, W3Application, W3Button, W3Label, w3dialogs,
-  w3effects, w3memo,
-  caselist,
+  w3effects, w3memo, qtxheader,
+  cbclasses,
   qtxEffects,
   qtxScrollController,
   qtxUtils,
   qtxlabel,
   qtxscrolltext;
 
-type
-
+  type
 
   TCBDialogInfo = Class(TObject)
   private
@@ -216,32 +217,32 @@ Begin
     FFirst:=False;
     w3_callback( procedure ()
       begin
-        if width>320 then
+        {$IFNDEF DEBUG_MODE}
+        if width<>320 then
         Begin
           application.ShowDialog('Display warning',#"
             This application was built for<br>
-            iPhone 5. Your display is presently<br>
+            iPhone 5. Your display may presently<br>
             not compatible with the layout",aoOK);
         end;
+        {$ENDIF}
       end,
       1000);
 
-
       (* Show welcome plack *)
+      {$IFNDEF DEBUG_MODE}
       var mX:=TCBNotifierPlack.Create(self);
       mx.Box.InnerHTML:='<br><center><b>Welcome to CaseBook</b><br>'
         + 'CaseBook was coded in <a href="http://www.smartmobilestudio.com">Smart Mobile Studio</a><br>'
         + 'The number one HTML5 authoring tool for<br>'
         + 'creating rich, object oriented HTML5 apps!';
       mX.Show;
-
+      {$ENDIF}
   end;
 
 end;
 
 procedure TForm1.InitializeForm;
-var
-  mLabel: TQTXLabel;
 begin
   inherited;
 
@@ -264,7 +265,6 @@ procedure TForm1.InitializeObject;
 const
   CNT_Height  = 34;
 var
-  mButton:  TCBGlyphButton;
   mDialog:  TCBDialogInfo;
 begin
   inherited;
@@ -286,6 +286,7 @@ begin
       FNewButton.left:=2;
       FNewButton.width:=80;
       FNewButton.height:=CNT_Height;
+      FNewButton.text.Autosize:=True;
       FNewButton.Text.Caption:='Post';
       FNewButton.Glyph.StyleClass:='fa fa-file';
       FNewButton.OnMouseTouchRelease:=Procedure (Sender: TObject; Button: TMouseButton;
@@ -317,8 +318,8 @@ begin
       FProfileButton.left:=84;
       FProfilebutton.width:=80;
       FProfilebutton.height:=CNT_Height;
+      FProfilebutton.text.Autosize:=True;
       Fprofilebutton.Text.Caption:='Profile';
-      Fprofilebutton.Text.width:=50;
       Fprofilebutton.Glyph.StyleClass:="fa fa-user";
       FProfilebutton.OnMouseTouchRelease:=Procedure (Sender: TObject; Button: TMouseButton;
         Shift: TShiftState; X, Y: Integer)
@@ -335,37 +336,30 @@ begin
       FHomeButton.left:=166;
       FHomeButton.width:=86;
       FHomeButton.height:=CNT_Height;
-      FHomeButton.Text.width:=50;
+      FHomeButton.Text.Autosize:=True;
       FHomeButton.Text.Caption:='Logout';
-      FHomeButton.Text.Autosize:=False;
-      FHomeButton.text.Height:=20;
       FHomeButton.LayoutChildren;
-
       FHomeButton.Glyph.StyleClass:="fa fa-arrow-circle-left";
       FHomeButton.OnMouseTouchRelease:=Procedure (Sender: TObject; Button: TMouseButton;
         Shift: TShiftState; X, Y: Integer)
-        var
-          mInfo:  TQTXFontInfo;
-          mTemp:  TQTXTextMetric;
-          mObj:   TQTXFontDetector;
-        Begin
-          showmessage('Here we go!');
+      var
+        mObj: TQTXFontDetector;
+        mInfo:  TQTXFontInfo;
+        mMetric:  TQTXTextMetric;
+        mtext:  String;
+      Begin
 
+        mObj:=TQTXFontDetector.Create;
+        try
+          mInfo:=mObj.getFontInfo(FHomeButton.handle);
+          mMetric:=mObj.MeasureText(mInfo,FHomeButton.Text.caption);
 
-          mObj:=TQTXFontDetector.Create;
-          try
-            mInfo:=mObj.getFontInfo(FHomeButton.Handle);
-            showmessage(mInfo.toString);
-
-            mTemp:=mObj.MeasureText(mInfo,FHomeButton.Text.Caption);
-            //showmessage(mInfo.toString + #13 + mTemp.toString);
-          finally
-            mObj.free;
-          end;
-
-        exit;
-
-
+          mText:=mInfo.toString + #13;
+          mText+=mMetric.toString;
+          showmessage(mText);
+        finally
+          mObj.free;
+        end;
 
 
           w3_callback( procedure ()
@@ -389,7 +383,7 @@ begin
     end;
 
     FMore:=TCBGlyphButton.Create(FPanel);
-    FMore.SetBounds(255 + 26,4,CNT_Height - 2,36);
+    FMore.SetBounds(255 + 26,4,CNT_Height+2,36);
     FMore.Text.Visible:=False;
     FMore.glyph.handle.style['color']:='#2d3642';
     FMore.Glyph.StyleClass:='fa fa-bars';
@@ -420,19 +414,17 @@ end;
 
 
 Procedure TForm1.Populate(const item:TCBNewsItem);
-var
-  mValue: Integer;
 Begin
   if (TCBNewsItem.Index mod 5)=0 then
   Begin
   item.Image.LoadFromURL('res/avatar01.jpg');
   item.title.Caption:='<b>Smart Mobile Studio</b>';
   Item.TimeInfo.caption:='SMARTMOBILESTUDIO.COM wrote @ ' + TimeToStr(now);
+
   item.Text.Caption:=#'The market has spoken: single source, multi-platform,
   HTML5 based, client-server application development is the future.
   Finally a “write once, run anywhere” solution that delivers!
   Presenting <a href="http://www.smartmobilestudio.com">Smart Mobile Studio</a> ..';
-  item.Height:=138;
   end else
   if (TCBNewsItem.Index mod 5)=1 then
   Begin
@@ -445,7 +437,6 @@ Begin
     +'Materials: 80% Polyester, 20% Cotton<br>'
     +'Style: With Hood '
     +'Features: Anti-Pilling, Anti-Shrink, Breathable';
-  item.Height:=154;
   end else
   if (TCBNewsItem.Index mod 5)=2 then
   Begin
@@ -456,7 +447,6 @@ Begin
           and PS Vita — including three-way cross buy support across
           those platforms. We apologize for any confusion the previous
           version of this post may have caused!';
-  item.Height:=142;
   end else
   if (TCBNewsItem.Index mod 5)=3 then
   Begin
@@ -470,7 +460,6 @@ Begin
       development environment, component framework with source code and full
       access to platform APIs. Extend your existing Windows applications
       with mobile companion apps.';
-  item.Height:=212;
   end else
   if (TCBNewsItem.Index mod 5)=4 then
   begin
@@ -483,9 +472,10 @@ Begin
     want from mobile app development software: a modern programming language,
     code sharing across all platforms, prebuilt backend connectors and
     no-compromise native user interfaces.';
-  item.Height:=232 + 10;
   end;
-  item.height:=iTem.Height+10;
+
+  //item.height:=item.Height+12;
+  //item.Text.Background.fromcolor(clRed);
   TCBNewsItem.Index:=TCBNewsItem.Index + 1;
 end;
 
@@ -501,7 +491,7 @@ begin
     mItem:=TCBNewsItem.Create(FList.Content);
     mItem.setBounds(2,dy,FList.Content.ClientWidth-4,100);
     Populate(mItem);
-    inc(dy,mItem.Height + 10);
+    inc(dy,mItem.Height + 10);;
   end;
   FList.Content.Height:=dy + 16;
   FList.ScrollApi.Refresh;

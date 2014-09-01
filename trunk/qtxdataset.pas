@@ -961,6 +961,7 @@ Begin
   raise EW3Dataset.Create(CNT_DATASET_NOT_ACTIVE);
 end;
 
+{$HINTS OFF}
 Procedure TQTXDataset.Post;
 var
   mDummy: TQTXDatasetPacket;
@@ -1003,6 +1004,7 @@ Begin
   end else
   raise EW3Dataset.Create(CNT_DATASET_NOT_ACTIVE);
 end;
+{$HINTS ON}
 
 Procedure TQTXDataset.First;
 var
@@ -1226,7 +1228,6 @@ end;
 
 function TQTXDatasetFields.DataExport:TQTXDatasetPacket;
 var
-  x:  Integer;
   mField:TQTXDatasetField;
 Begin
   result:=TVariant.CreateObject;

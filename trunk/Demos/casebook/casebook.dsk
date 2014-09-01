@@ -1,23 +1,17 @@
 <SMART>
   <state>
     <editor>
-      <tab filename="casebook" fullname="casebook.pas" topline="70" col="97" row="37" />
-      <tab filename="mainForm" fullname="mainForm.pas" topline="331" col="11" row="354">
-        <bookmark id="7" x="3" y="202" />
-      </tab>
-      <tab filename="qtxEffects" fullname="..\..\qtxEffects.pas" topline="9" col="47" row="257" />
-      <tab filename="qtxheader" fullname="..\..\qtxheader.pas" topline="1" col="4" row="299" />
-      <tab filename="qtxutils" fullname="..\..\qtxutils.pas" topline="1" col="3" row="566" />
-      <tab filename="formProfile" fullname="formProfile.pas" topline="53" col="24" row="80" />
-      <tab filename="formNew" fullname="formNew.pas" topline="20" col="57" row="18" />
-      <tab filename="formLogin" fullname="formLogin.pas" topline="1" col="13" row="20" />
-      <tab filename="iOS.css" topline="102" col="112" row="44" />
-      <tab filename="caseList" fullname="caseList.pas" topline="26" col="5" row="97" />
-      <tab filename="W3Forms" fullname="..\..\..\..\RTL\W3Forms.pas" topline="55" col="26" row="89" />
-      <tab filename="formAccount" fullname="formAccount.pas" topline="1" col="36" row="7" />
-      <tab filename="W3System" fullname="..\..\..\..\RTL\W3System.pas" topline="379" col="398" row="26" />
-      <tab filename="casebookApplication" fullname="casebookApplication.spr" topline="1" col="1" row="1" />
-      <activetab>casebook</activetab>
+      <tab filename="casebook" fullname="casebook.pas" topline="31" col="14" row="58" />
+      <tab filename="formLogin" fullname="formLogin.pas" topline="97" col="19" row="116" />
+      <tab filename="mainForm" fullname="mainForm.pas" topline="1" col="3" row="18" />
+      <tab filename="formProfile" fullname="formProfile.pas" topline="1" col="25" row="26" />
+      <tab filename="formAccount" fullname="formAccount.pas" topline="1" col="1" row="1" />
+      <tab filename="qtxlabel" fullname="..\..\qtxlabel.pas" topline="89" col="5" row="117" />
+      <tab filename="qtxutils" fullname="..\..\qtxutils.pas" topline="70" col="30" row="88" />
+      <tab filename="cbclasses" fullname="cbclasses.pas" topline="186" col="36" row="199" />
+      <tab filename="qtxheader" fullname="..\..\qtxheader.pas" topline="79" col="37" row="92" />
+      <tab filename="casebookApplication" fullname="casebookApplication.spr" topline="1" col="1" row="25" />
+      <activetab>mainForm</activetab>
     </editor>
   </state>
 </SMART>

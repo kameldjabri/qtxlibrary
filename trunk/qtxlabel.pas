@@ -35,6 +35,7 @@ type
   TQTXLabel = Class(TW3CustomControl)
   private
     FAuto:    Boolean;
+    FOnChanged: TNotifyEvent;
   protected
     procedure AdjustSize;virtual;
     procedure setAuto(const aValue:Boolean);virtual;
@@ -43,6 +44,7 @@ type
     function  MakeElementTagId: String; override;
     procedure InitializeObject;override;
   published
+    Property  OnChanged:TNotifyEvent read FOnChanged write FOnChanged;
     Property  Autosize:Boolean read FAuto write setAuto;
     Property  Caption:String read getCaption write setCaption;
   End;
@@ -68,10 +70,18 @@ end;
 procedure TQTXLabel.AdjustSize;
 var
   mSize: TQTXTextMetric;
+  mObj: TQTXFontDetector;
 Begin
   if FAuto then
   Begin
-    mSize:=TQTXTools.calcTextMetrics(innerHTML,Font.name,font.size);
+    mObj:=TQTXFontDetector.Create;
+    try
+      mSize:=mObj.MeasureText(mObj.getfontInfo(Handle),innerHTML);
+    finally
+      mObj.free;
+    end;
+
+    //mSize:=TQTXTools.calcTextMetrics(innerHTML,Font.name,font.size);
     if (mSize.tmWidth<1)
     or (mSize.tmHeight<1) then
     Begin
@@ -101,8 +111,15 @@ end;
 
 Procedure TQTXLabel.setCaption(Const aValue:String);
 Begin
-  innerHTML:=aValue;
-  AdjustSize;
+  if aValue<>innerHTML then
+  Begin
+    innerHTML:=aValue;
+
+    if assigned(FOnChanged) then
+    FOnChanged(self);
+
+    AdjustSize;
+  end;
 end;
 
 function  TQTXLabel.MakeElementTagId: String;

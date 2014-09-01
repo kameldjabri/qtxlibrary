@@ -143,7 +143,6 @@ end;
 
 Procedure TQTXStyleSheet.Add(const aRuleText:String);
 var
-  mRef: THandle;
   mDocument: THandle;
   mSheet: THandle;
 Begin
@@ -159,7 +158,6 @@ end;
 
 function TQTXStyleSheet.Add(aName:String;const aRules:String):String;
 var
-  mRef: THandle;
   mDocument: THandle;
   mSheet: THandle;
 Begin

@@ -49,7 +49,6 @@ type
   end;
 
   TQTXHandleHelper = helper for THandle
-  public
     function  Valid:Boolean;
     function  Ready:Boolean;
     procedure ReadyExecute(OnReady:TProcedureRef);
@@ -94,7 +93,6 @@ type
 
 
   TQTXAnimationHelper = helper for TW3CustomAnimation
-  public
     procedure Pause;
     procedure Resume;
     procedure Stop;
@@ -118,6 +116,8 @@ type
     FAccess:    TQTXAttrAccess;
   public
     Property    ElementData:TQTXAttrAccess read FAccess;
+    function    MeasureText(aContent:String):TQTXTextMetric;
+    function    MeasureTextFixed(aContent:String):TQTXTextMetric;
     Constructor Create(AOwner:TW3Component);override;
     Destructor  Destroy;Override;
   end;
@@ -195,7 +195,6 @@ begin
   end;
 end;
 
-
 function TQTXFontDetector.getFontInfo(const aHandle:THandle):TQTXFontInfo;
 var
   mName:  String;
@@ -230,100 +229,6 @@ Begin
   end;
 end;
 
-function TQTXFontDetector.MeasureText(aFontInfo:TQTXFontInfo;
-         aFixedWidth:Integer;
-         aContent:String):TQTXTextMetric;
-Begin
-  result:=MeasureText(aFontInfo.fiName,aFontInfo.fiSize,aFixedWidth,aContent);
-end;
-
-function TQTXFontDetector.MeasureText(aFontInfo:TQTXFontInfo;
-         aContent:String):TQTXTextMetric;
-Begin
-  result:=MeasureText(aFontInfo.fiName,aFontInfo.fiSize,aContent);
-end;
-
-function TQTXFontDetector.MeasureText(aFontName:String;aFontSize:Integer;
-         aFixedWidth:Integer;
-         aContent:String):TQTXTextMetric;
-var
-  mElement: THandle;
-Begin
-  if Detect(aFontName) then
-  begin
-    aContent:=trim(aContent);
-    if length(aContent)>0 then
-    begin
-      mElement:=BrowserAPi.document.createElement("div");
-      if (mElement) then
-      begin
-        mElement.style['font-family']:=aFontName;
-        mElement.style['font-size']:=TInteger.toPxStr(aFontSize);
-        mElement.style['overflow']:='scroll';
-
-        if aFixedWidth>0 then
-        Begin
-          mElement.style.maxWidth:=TInteger.toPxStr(aFixedWidth);
-          mElement.style.width:=TInteger.toPxStr(aFixedWidth);
-        end else
-        mElement.style.width :='10000px';
-        mElement.style.height:='10000px';
-
-        mElement.innerHTML := aContent;
-        Fh.appendChild(mElement);
-
-        mElement.style.width:="4px";
-        mElement.style.height:="4px";
-
-        result.tmWidth:=mElement.scrollWidth;
-        result.tmHeight:=mElement.scrollHeight;
-        Fh.removeChild(mElement);
-
-      end;
-    end;
-  end;
-end;
-
-function TQTXFontDetector.MeasureText(aFontName:String;aFontSize:Integer;
-         aContent:String):TQTXTextMetric;
-var
-  mElement: THandle;
-Begin
-
-  if Detect(aFontName) then
-  begin
-    aContent:=trim(aContent);
-    if length(aContent)>0 then
-    begin
-      mElement:=BrowserAPi.document.createElement("div");
-      if (mElement) then
-      begin
-        mElement.style['font-family']:=aFontName;
-        mElement.style['font-size']:=TInteger.toPxStr(aFontSize);
-        mElement.style['overflow']:='scroll';
-
-        mElement.style['display']:='inline-block';
-        mElement.style['white-space']:='nowrap';
-
-
-        mElement.style.width:='10000px';
-        mElement.style.height:='10000px';
-
-        mElement.innerHTML := aContent;
-        Fh.appendChild(mElement);
-
-        mElement.style.width:="4px";
-        mElement.style.height:="4px";
-
-        result.tmWidth:=mElement.scrollWidth;
-        result.tmHeight:=mElement.scrollHeight;
-        Fh.removeChild(mElement);
-
-      end;
-    end;
-  end;
-end;
-
 function TQTXFontDetector.Detect(aFont:String):Boolean;
 var
   x:  Integer;
@@ -341,6 +246,91 @@ Begin
       Fh.removeChild(Fs);
       if result then
       break;
+    end;
+  end;
+end;
+
+function TQTXFontDetector.MeasureText(aFontInfo:TQTXFontInfo;
+         aFixedWidth:Integer;
+         aContent:String):TQTXTextMetric;
+Begin
+  result:=MeasureText(aFontInfo.fiName,aFontInfo.fiSize,aFixedWidth,aContent);
+end;
+
+function TQTXFontDetector.MeasureText(aFontInfo:TQTXFontInfo;
+         aContent:String):TQTXTextMetric;
+Begin
+  result:=MeasureText(aFontInfo.fiName,aFontInfo.fiSize,aContent);
+end;
+
+function TQTXFontDetector.MeasureText(aFontName:String;aFontSize:Integer;
+         aContent:String):TQTXTextMetric;
+var
+  mElement: THandle;
+Begin
+  if Detect(aFontName) then
+  begin
+    aContent:=trim(aContent);
+    if length(aContent)>0 then
+    begin
+      mElement:=BrowserAPi.document.createElement("p");
+      if (mElement) then
+      begin
+        mElement.style['font-family']:=aFontName;
+        mElement.style['font-size']:=TInteger.toPxStr(aFontSize);
+        mElement.style['overflow']:='scroll';
+
+        mElement.style['display']:='inline-block';
+        mElement.style['white-space']:='nowrap';
+
+        //mElement.style.width:='10000px';
+        //mElement.style.height:='10000px';
+
+        mElement.innerHTML := aContent;
+        Fh.appendChild(mElement);
+
+        //mElement.style.width:="4px";
+        //mElement.style.height:="4px";
+
+        result.tmWidth:=mElement.scrollWidth;
+        result.tmHeight:=mElement.scrollHeight;
+        Fh.removeChild(mElement);
+
+      end;
+    end;
+  end;
+end;
+
+function TQTXFontDetector.MeasureText(aFontName:String;aFontSize:Integer;
+         aFixedWidth:Integer;
+         aContent:String):TQTXTextMetric;
+var
+  mElement: THandle;
+Begin
+  if Detect(aFontName) then
+  begin
+    aContent:=trim(aContent);
+    if length(aContent)>0 then
+    begin
+      mElement:=BrowserAPi.document.createElement("p");
+      if (mElement) then
+      begin
+        mElement.style['font-family']:=aFontName;
+        mElement.style['font-size']:=TInteger.toPxStr(aFontSize);
+        mElement.style['overflow']:='scroll';
+
+        mElement.style.maxWidth:=TInteger.toPxStr(aFixedWidth);
+        mElement.style.width:=TInteger.toPxStr(aFixedWidth);
+
+        mElement.innerHTML := aContent;
+        Fh.appendChild(mElement);
+
+        result.tmWidth:=mElement.scrollWidth;
+        result.tmHeight:=mElement.scrollHeight;
+
+        Fh.removeChild(mElement);
+
+      end;
     end;
   end;
 end;
@@ -520,6 +510,38 @@ Begin
   inherited;
 end;
 
+function TW3CustomControl.MeasureText(aContent:String):TQTXTextMetric;
+var
+  mObj: TQTXFontDetector;
+Begin
+  aContent:=trim(aContent);
+  if aContent.length>0 then
+  begin
+    mObj:=TQTXFontDetector.Create;
+    try
+      result:=mObj.MeasureText(mObj.getFontInfo(Handle),aContent);
+    finally
+      mObj.free;
+    end;
+  end;
+end;
+
+function TW3CustomControl.MeasureTextFixed(aContent:String):TQTXTextMetric;
+var
+  mObj: TQTXFontDetector;
+Begin
+  aContent:=trim(aContent);
+  if aContent.length>0 then
+  begin
+    mObj:=TQTXFontDetector.Create;
+    try
+      result:=mObj.MeasureText(mObj.getFontInfo(Handle),ClientWidth,aContent);
+    finally
+      mObj.free;
+    end;
+  end;
+end;
+
 //############################################################################
 // TQTXTextMetric
 //############################################################################
@@ -537,7 +559,6 @@ class procedure TQTXTools.LoadScript(aFilename:String;
       const aCallback:TProcedureRef);
 var
   mRef: THandle;
-  mLoaded:  Boolean;
 Begin
   asm
     @mRef = document.createElement("script");
@@ -562,8 +583,6 @@ end;
 
 class function TQTXTools.LoadImage(aFilename:String;
           const aCallback:TProcedureRef):THandle;
-var
-  mRef: THandle;
 Begin
 
   asm
@@ -644,7 +663,7 @@ begin
   end;
 end;       }
 
-class procedure TQTXTools.ExecuteOnDocumentReady(const aFunc:TProcedureRef)
+class procedure TQTXTools.ExecuteOnDocumentReady(const aFunc:TProcedureRef);
 Begin
   if getDocumentReady then
   aFunc() else

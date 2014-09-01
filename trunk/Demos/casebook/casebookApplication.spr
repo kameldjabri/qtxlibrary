@@ -1,4 +1,5 @@
-uses casebook, caseList, qtxEffects, qtxStyles, qtxTransformController, qtxutils, qtxdataset, qtxscrolltext, formLogin, qtxlabel, formProfile, formNew, imgSpartan, qtxheader, formAccount;
+uses casebook, cbclasses, qtxEffects, qtxStyles, qtxTransformController, qtxutils, qtxdataset,
+qtxscrolltext, formLogin, qtxlabel, formProfile, qtxheader, formAccount;
 
 {$IFDEF SMART_INTERNAL_HANDLE_EXCEPTIONS}
 uses W3System;
@@ -17,6 +18,8 @@ try
 
   Application := TApplication.Create;
   Application.RunApp;
+
+
 
 {$IFDEF SMART_INTERNAL_HANDLE_EXCEPTIONS}
 except
