@@ -27,7 +27,7 @@ unit qtxutils;
 interface
 
 uses 
-  W3System, w3Components, w3effects;
+  W3System, w3Components, w3effects, w3inet, w3c.dom;
 
 type
 
@@ -47,6 +47,14 @@ type
   public
     class function CreateGUID:String;
   end;
+
+  TQTXXMLDocumentReady = procedure (sender:TW3HttpRequest;aXML:JXMLDocument);
+
+  TQTXXMLAPI = Class(TObject)
+  public
+    class procedure LoadXML(aUrl:String; const OnComplete:TQTXXMLDocumentReady);
+  End;
+
 
   TQTXHandleHelper = helper for THandle
     function  Valid:Boolean;
@@ -153,6 +161,44 @@ type
   end;
 
 implementation
+
+//############################################################################
+// TQTXFontInfo
+//############################################################################
+
+class procedure TQTXXMLAPI.LoadXML(aUrl:String;
+      const OnComplete:TQTXXMLDocumentReady);
+var
+  mLoader:  TW3HttpRequest;
+Begin
+  mLoader:=TW3HttpRequest.Create;
+  mLoader.OnDataReady:=Procedure (sender:TW3HttpRequest)
+  Begin
+    try
+      try
+        if assigned(OnComplete) then
+        OnComplete(mLoader,JXMLDocument(mLoader.ResponseXML));
+      except
+        on e: exception do;
+      end;
+    finally
+      sender.free;
+    end;
+  end;
+  mLoader.OnError:=procedure (sender:TW3HttpRequest)
+    Begin
+      if assigned(OnComplete) then
+      OnComplete(mLoader,NIL);
+    end;
+  mLoader.Get(aUrl);
+end;
+
+(*
+  TQTXXMLDocumentReady = procedure (Url:String;aXML:JXMLDocument);
+  TQTXXMLAPI = Class(TObject)
+  public
+    class procedure LoadXML(aUrl:String; const OnComplete:TQTXXMLDocumentReady);
+  End;      *)
 
 //############################################################################
 // TQTXFontInfo
@@ -283,14 +329,8 @@ Begin
         mElement.style['display']:='inline-block';
         mElement.style['white-space']:='nowrap';
 
-        //mElement.style.width:='10000px';
-        //mElement.style.height:='10000px';
-
         mElement.innerHTML := aContent;
         Fh.appendChild(mElement);
-
-        //mElement.style.width:="4px";
-        //mElement.style.height:="4px";
 
         result.tmWidth:=mElement.scrollWidth;
         result.tmHeight:=mElement.scrollHeight;
@@ -334,7 +374,6 @@ Begin
     end;
   end;
 end;
-
 
 //############################################################################
 // TQTXAnimationHelper
