@@ -344,17 +344,24 @@ begin
       FHomeButton.Glyph.StyleClass:="fa fa-arrow-circle-left";
       FHomeButton.OnMouseTouchRelease:=Procedure (Sender: TObject; Button: TMouseButton;
         Shift: TShiftState; X, Y: Integer)
+        var
+          mInfo:  TQTXFontInfo;
+          mTemp:  TQTXTextMetric;
+          mObj:   TQTXFontDetector;
         Begin
+          showmessage('Here we go!');
 
 
-        var mObj:TQTXFontDetector := TQTXFontDetector.Create;
-        var mTemp:TQTXTextMetric := mObj.MeasureText('verdana',16,'this is cool!');
-        var mInfo:TQTXFontInfo;
+          mObj:=TQTXFontDetector.Create;
+          try
+            mInfo:=mObj.getFontInfo(FHomeButton.Handle);
+            showmessage(mInfo.toString);
 
-        mInfo:=mObj.getFontInfo(FHomeButton.Handle);
-
-          showmessage(mInfo.toString + #13 + mTemp.toString);
-
+            mTemp:=mObj.MeasureText(mInfo,FHomeButton.Text.Caption);
+            //showmessage(mInfo.toString + #13 + mTemp.toString);
+          finally
+            mObj.free;
+          end;
 
         exit;
 

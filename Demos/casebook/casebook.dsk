@@ -1,23 +1,23 @@
 <SMART>
   <state>
     <editor>
-      <tab filename="casebook" fullname="casebook.pas" topline="70" col="102" row="1" />
-      <tab filename="mainForm" fullname="mainForm.pas" topline="337" col="80" row="342">
+      <tab filename="casebook" fullname="casebook.pas" topline="70" col="37" row="97" />
+      <tab filename="mainForm" fullname="mainForm.pas" topline="331" col="354" row="11">
         <bookmark id="7" x="3" y="202" />
       </tab>
-      <tab filename="qtxEffects" fullname="..\..\qtxEffects.pas" topline="34" col="257" row="47" />
-      <tab filename="qtxheader" fullname="..\..\qtxheader.pas" topline="297" col="299" row="4" />
-      <tab filename="qtxutils" fullname="..\..\qtxutils.pas" topline="24" col="16" row="44" />
+      <tab filename="qtxEffects" fullname="..\..\qtxEffects.pas" topline="9" col="257" row="47" />
+      <tab filename="qtxheader" fullname="..\..\qtxheader.pas" topline="1" col="299" row="4" />
+      <tab filename="qtxutils" fullname="..\..\qtxutils.pas" topline="1" col="566" row="3" />
       <tab filename="formProfile" fullname="formProfile.pas" topline="53" col="80" row="24" />
       <tab filename="formNew" fullname="formNew.pas" topline="20" col="18" row="57" />
-      <tab filename="formLogin" fullname="formLogin.pas" topline="1" col="26" row="1" />
+      <tab filename="formLogin" fullname="formLogin.pas" topline="1" col="20" row="13" />
       <tab filename="iOS.css" topline="102" col="44" row="112" />
       <tab filename="caseList" fullname="caseList.pas" topline="26" col="97" row="5" />
       <tab filename="W3Forms" fullname="..\..\..\..\RTL\W3Forms.pas" topline="55" col="89" row="26" />
       <tab filename="formAccount" fullname="formAccount.pas" topline="1" col="7" row="36" />
       <tab filename="W3System" fullname="..\..\..\..\RTL\W3System.pas" topline="379" col="26" row="398" />
       <tab filename="casebookApplication" fullname="casebookApplication.spr" topline="1" col="1" row="1" />
-      <activetab>qtxutils</activetab>
+      <activetab>casebook</activetab>
     </editor>
   </state>
 </SMART>
