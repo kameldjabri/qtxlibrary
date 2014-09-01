@@ -108,7 +108,6 @@ uses
      your custom control from this baseclass. *)
   TQTXScrollWindow = Class(TW3CustomControl)
   private
-    FObj:     THandle;
     FContent: TQTXScrollWindowContent;
     FScroller:TQTXScrollController;
   protected

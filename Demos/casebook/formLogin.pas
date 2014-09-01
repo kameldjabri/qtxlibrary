@@ -111,11 +111,10 @@ begin
     end,
     500);
 
-  w3_callback( procedure ()
+  (* w3_callback( procedure ()
     var
       mApp: TApplication;
       x:  Integer;
-      mSave:  TRect;
     Begin
       mApp:=TApplication(application);
       for x:=0 to mApp.FormCount-1 do
@@ -130,7 +129,7 @@ begin
         end;
       end;
     end,
-    100);
+    100); *)
 end;
 
 Procedure TformLogin.UpdateCloud2;

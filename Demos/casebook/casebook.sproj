@@ -7,7 +7,7 @@
       <revision>0</revision>
     </version>
     <apple_specific>
-      <format_detection>1</format_detection>
+      <format_detection>0</format_detection>
       <statusbar_style>default</statusbar_style>
       <webapp_capable>0</webapp_capable>
     </apple_specific>
@@ -21,13 +21,13 @@
       <use_noinlinemagics>0</use_noinlinemagics>
       <use_nosourcelocation>0</use_nosourcelocation>
       <use_nortti>0</use_nortti>
-      <use_smartlinking>0</use_smartlinking>
+      <use_smartlinking>1</use_smartlinking>
       <use_sourcemap>0</use_sourcemap>
       <use_compresscss>0</use_compresscss>
       <use_assertions>1</use_assertions>
       <use_optimize>1</use_optimize>
       <use_closures>0</use_closures>
-      <use_devirtualize>1</use_devirtualize>
+      <use_devirtualize>0</use_devirtualize>
       <use_generate_manifest>1</use_generate_manifest>
       <use_serve_manifest>0</use_serve_manifest>
       <use_server>1</use_server>
@@ -73,9 +73,9 @@
         <filename>mainForm.pas</filename>
       </file>
       <file type="unit">
-        <name>caseList</name>
+        <name>cbclasses</name>
         <created>2014-08-12T21:59:44.847Z</created>
-        <filename>caseList.pas</filename>
+        <filename>cbclasses.pas</filename>
       </file>
       <file type="css">
         <name>iOS.css</name>
@@ -97,7 +97,7 @@ html, body
 }
 
 *{
-  font-family: "Segoe UI", "Helvetica neue";
+  font-family: "Segoe UI", "Helvetica neue", "Helvetica";
   font-color: Transparent;
 }
 
@@ -955,16 +955,6 @@ ul li:active {
         <name>formProfile</name>
         <created>2014-08-22T14:15:16.011Z</created>
         <filename>formProfile.pas</filename>
-      </file>
-      <file type="form">
-        <name>formNew</name>
-        <created>2014-08-22T14:33:06.337Z</created>
-        <filename>formNew.pas</filename>
-      </file>
-      <file type="unit">
-        <name>imgSpartan</name>
-        <created>2014-08-24T21:36:10.777Z</created>
-        <filename>imgSpartan.pas</filename>
       </file>
       <file type="resource">
         <name>avatar01.jpg</name>

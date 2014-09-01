@@ -23,7 +23,7 @@ type
 implementation
 
 { TformProfile}
-uses casebook, qtxheader, imgSpartan;
+uses casebook, qtxheader;
 
 procedure TformProfile.W3Button1Click(Sender: TObject);
 begin

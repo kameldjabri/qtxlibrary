@@ -199,7 +199,6 @@ type
 
   {$IFDEF USE_ANIM_HELPER}
   TQTXAnimationHelper = helper for TW3CustomAnimation
-  public
     procedure Pause;
     procedure Resume;
     procedure Stop;
