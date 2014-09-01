@@ -261,8 +261,12 @@ Begin
         mElement.style['font-size']:=TInteger.toPxStr(aFontSize);
         mElement.style['overflow']:='scroll';
 
-        mElement.style.maxWidth:=TInteger.toPxStr(aFixedWidth);
-        mElement.style.width:=TInteger.toPxStr(aFixedWidth);
+        if aFixedWidth>0 then
+        Begin
+          mElement.style.maxWidth:=TInteger.toPxStr(aFixedWidth);
+          mElement.style.width:=TInteger.toPxStr(aFixedWidth);
+        end else
+        mElement.style.width :='10000px';
         mElement.style.height:='10000px';
 
         mElement.innerHTML := aContent;
@@ -285,6 +289,7 @@ function TQTXFontDetector.MeasureText(aFontName:String;aFontSize:Integer;
 var
   mElement: THandle;
 Begin
+
   if Detect(aFontName) then
   begin
     aContent:=trim(aContent);
