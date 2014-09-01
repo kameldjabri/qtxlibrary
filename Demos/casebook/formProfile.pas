@@ -9,7 +9,6 @@ uses
 
 type
   TformProfile=class(TW3form)
-    procedure W3Button1Click(Sender: TObject);
   private
     {$I 'formProfile:intf'}
   protected
@@ -25,11 +24,6 @@ implementation
 { TformProfile}
 uses casebook, qtxheader;
 
-procedure TformProfile.W3Button1Click(Sender: TObject);
-begin
-  application.gotoForm('mainform',feToLeft);
-end;
-
 procedure TformProfile.InitializeForm;
 begin
   inherited;
@@ -43,9 +37,6 @@ var
 begin
   inherited;
   {$I 'formProfile:impl'}
-
-
-  w3button1.StyleClass:='CaseBookButton';
 
   mItem:=w3listmenu1.Items.Add;
   mItem.Text:='Your account';
