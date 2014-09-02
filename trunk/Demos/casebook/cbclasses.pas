@@ -72,6 +72,7 @@ type
     FTitle:     TQTXLabel;
     FTimeInfo:  TQTXLabel;
     FText:      TQTXLabel;
+    FUrl:       String;
     Procedure   HandleTextChange(sender:TObject);
   protected
     Procedure   Resize;Override;
@@ -80,6 +81,7 @@ type
     Procedure   FinalizeObject;Override;
   public
     class var Index:Integer;
+    Property    URL:String read FUrl write FUrl;
     Property    Image:TW3Image read FImage;
     Property    Title:TQTXLabel read FTitle;
     Property    TimeInfo:TQTXLabel read FTimeInfo;

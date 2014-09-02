@@ -7779,7 +7779,15 @@ var TForm1 = {
                TW3MovableControl.SetBounds$2$(mItem$1,2,dy$9,TW3MovableControl.ClientWidth(Self.FList.FContent$1)-4,100);
                mText$4 = mObjs.item(x$16).childNodes.item(1).textContent;
                TQTXLabel.setCaption$(mItem$1.FTitle$1,mText$4);
+               TQTXLabel.setCaption$(mItem$1.FTimeInfo,mObjs.item(x$16).childNodes.item(7).textContent);
+               mItem$1.FUrl = mObjs.item(x$16).childNodes.item(3).textContent;
                TQTXLabel.setCaption$(mItem$1.FText$3,mObjs.item(x$16).childNodes.item(9).textContent);
+               TW3CustomControl.SetOnMouseTouchRelease(mItem$1.FText$3,function (Sender$13, Button$7, Shift$6, X$9, Y$9) {
+                  var mRef$25 = "";
+                  mRef$25 = mItem$1.FUrl;
+                  
+                window.location.assign(mRef$25);
+                             });
                (dy$9+= (TW3MovableControl.GetHeight$1$(mItem$1)+10));
             }
          } else {
@@ -8330,12 +8338,12 @@ var TCBPanel = {
       TW3CustomControl.$Init($);
    }
    /// function TCBPanel.supportAdjustment() : Boolean
-   ///  [line: 101, column: 25, file: cbclasses]
+   ///  [line: 103, column: 25, file: cbclasses]
    ,supportAdjustment:function(Self) {
       return true;
    }
    /// function TCBPanel.DisplayMode() : String
-   ///  [line: 106, column: 25, file: cbclasses]
+   ///  [line: 108, column: 25, file: cbclasses]
    ,DisplayMode:function(Self) {
       return "inline";
    }
@@ -8419,7 +8427,7 @@ var TCBNotifierPlack = {
       $.FBox = null;
    }
    /// procedure TCBNotifierPlack.Show()
-   ///  [line: 325, column: 28, file: cbclasses]
+   ///  [line: 327, column: 28, file: cbclasses]
    ,Show:function(Self) {
       TQTXEffectsHelper$fxFadeIn$1(Self.FBox,0.5,function () {
          TQTXEffectsHelper$fxMoveTo(Self.FBox,TW3MovableControl.GetLeft$(Self.FBox),(($Div(TW3MovableControl.ClientHeight($As(Self.FBox.FParent,TW3CustomControl)),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FBox),2))),0.6,function () {
@@ -8432,13 +8440,13 @@ var TCBNotifierPlack = {
       });
    }
    /// constructor TCBNotifierPlack.Create(AOwner: TW3CustomControl)
-   ///  [line: 294, column: 30, file: cbclasses]
+   ///  [line: 296, column: 30, file: cbclasses]
    ,Create$61:function(Self, AOwner$8) {
       TObject.Create(Self);
       Self.FBox = TW3Component.Create$38$($New(TW3Panel),AOwner$8);
       TW3MovableControl.SetVisible$(Self.FBox,false);
       TW3MovableControl.SetBounds$2$(Self.FBox,($Div(TW3MovableControl.ClientWidth(AOwner$8),2))-140,TW3MovableControl.ClientHeight(AOwner$8)+100,280,100);
-      TW3CustomControl.SetOnMouseTouchClick(Self.FBox,function (Sender$13, Button$7, Shift$6, X$9, Y$9) {
+      TW3CustomControl.SetOnMouseTouchClick(Self.FBox,function (Sender$14, Button$8, Shift$7, X$10, Y$10) {
          TQTXEffectsHelper$fxFadeOut(Self.FBox,0.3,function () {
             TObject.Free(Self.FBox);
          });
@@ -8446,7 +8454,7 @@ var TCBNotifierPlack = {
       return Self
    }
    /// destructor TCBNotifierPlack.Destroy()
-   ///  [line: 319, column: 29, file: cbclasses]
+   ///  [line: 321, column: 29, file: cbclasses]
    ,Destroy:function(Self) {
       TObject.Free(Self.FBox);
       TObject.Destroy(Self);
@@ -8462,9 +8470,10 @@ var TCBNewsItem = {
    ,$Init:function ($) {
       TW3CustomControl.$Init($);
       $.FImage = $.FText$3 = $.FTimeInfo = $.FTitle$1 = null;
+      $.FUrl = "";
    }
    /// procedure TCBNewsItem.FinalizeObject()
-   ///  [line: 241, column: 23, file: cbclasses]
+   ///  [line: 243, column: 23, file: cbclasses]
    ,FinalizeObject:function(Self) {
       TObject.Free(Self.FImage);
       TObject.Free(Self.FTitle$1);
@@ -8473,7 +8482,7 @@ var TCBNewsItem = {
       TW3CustomControl.FinalizeObject(Self);
    }
    /// procedure TCBNewsItem.HandleTextChange(sender: TObject)
-   ///  [line: 257, column: 23, file: cbclasses]
+   ///  [line: 259, column: 23, file: cbclasses]
    ,HandleTextChange:function(Self, sender$1) {
       TW3TagObj.BeginUpdate(Self);
       try {
@@ -8484,7 +8493,7 @@ var TCBNewsItem = {
       }
    }
    /// procedure TCBNewsItem.InitializeObject()
-   ///  [line: 207, column: 23, file: cbclasses]
+   ///  [line: 209, column: 23, file: cbclasses]
    ,InitializeObject:function(Self) {
       TW3CustomControl.InitializeObject(Self);
       Self.FImage = TW3Component.Create$38$($New(TW3Image),Self);
@@ -8506,7 +8515,7 @@ var TCBNewsItem = {
       });
    }
    /// procedure TCBNewsItem.Resize()
-   ///  [line: 268, column: 23, file: cbclasses]
+   ///  [line: 270, column: 23, file: cbclasses]
    ,Resize:function(Self) {
       TW3MovableControl.Resize(Self);
       if (TQTXHandleHelper$Ready$3(Self.FHandle$4)) {
@@ -8519,7 +8528,7 @@ var TCBNewsItem = {
       }
    }
    /// procedure TCBNewsItem.StyleTagObject()
-   ///  [line: 250, column: 23, file: cbclasses]
+   ///  [line: 252, column: 23, file: cbclasses]
    ,StyleTagObject:function(Self) {
       TW3CustomControl.StyleTagObject(Self);
       TW3ControlBackground.FromColor(TW3MovableControl.GetBackGround(Self),16777215);
@@ -8604,14 +8613,14 @@ var TCBGlyphButton = {
       $.FCaption$3 = $.FGlyph = null;
    }
    /// procedure TCBGlyphButton.FinalizeObject()
-   ///  [line: 157, column: 26, file: cbclasses]
+   ///  [line: 159, column: 26, file: cbclasses]
    ,FinalizeObject:function(Self) {
       TObject.Free(Self.FGlyph);
       TObject.Free(Self.FCaption$3);
       TW3CustomControl.FinalizeObject(Self);
    }
    /// procedure TCBGlyphButton.InitializeObject()
-   ///  [line: 130, column: 26, file: cbclasses]
+   ///  [line: 132, column: 26, file: cbclasses]
    ,InitializeObject:function(Self) {
       TW3CustomControl.InitializeObject(Self);
       Self.FGlyph = TW3Component.Create$38$($New(TW3CustomControl),Self);
@@ -8633,7 +8642,7 @@ var TCBGlyphButton = {
       });
    }
    /// procedure TCBGlyphButton.Resize()
-   ///  [line: 164, column: 26, file: cbclasses]
+   ///  [line: 166, column: 26, file: cbclasses]
    ,Resize:function(Self) {
       var dx$7 = 0;
       var dy$10 = 0;
@@ -8741,7 +8750,7 @@ var TCBDialogInfo = {
       $.FBlocker = $.FBox$1 = $.FCancel = $.FEditor = $.FPost = $.FTitle$2 = null;
    }
    /// constructor TCBDialogInfo.Create()
-   ///  [line: 351, column: 27, file: cbclasses]
+   ///  [line: 353, column: 27, file: cbclasses]
    ,Create$62:function(Self) {
       var dx$8 = 0;
       var dy$11 = 0;
@@ -8777,7 +8786,7 @@ var TCBDialogInfo = {
       TW3TagObj.SetInnerHTML(Self.FCancel.FGlyph,"<i class=\"fa fa-times fa-2x\">");
       TW3CustomControl.LayoutChildren$(Self.FCancel);
       TW3MovableControl.setHeight$(Self.FCancel.FGlyph,26);
-      TW3CustomControl.SetOnMouseTouchRelease(Self.FCancel,function (Sender$14, Button$8, Shift$7, X$10, Y$10) {
+      TW3CustomControl.SetOnMouseTouchRelease(Self.FCancel,function (Sender$15, Button$9, Shift$8, X$11, Y$11) {
          TQTXEffectsHelper$fxZoomOut(Self.FBox$1,0.3,function () {
             TObject.Free(Self);
          });
@@ -8786,7 +8795,7 @@ var TCBDialogInfo = {
       return Self
    }
    /// destructor TCBDialogInfo.Destroy()
-   ///  [line: 408, column: 26, file: cbclasses]
+   ///  [line: 410, column: 26, file: cbclasses]
    ,Destroy:function(Self) {
       TObject.Free(Self.FPost);
       TObject.Free(Self.FTitle$2);
@@ -8906,7 +8915,7 @@ var TQTXScrollWindow = {
    ,getScrollContentClass$:function($){return $.ClassType.getScrollContentClass($)}
 };
 /// TCaseBookList = class (TQTXScrollWindow)
-///  [line: 90, column: 3, file: cbclasses]
+///  [line: 92, column: 3, file: cbclasses]
 var TCaseBookList = {
    $ClassName:"TCaseBookList",
    $Parent:TQTXScrollWindow
@@ -8914,7 +8923,7 @@ var TCaseBookList = {
       TQTXScrollWindow.$Init($);
    }
    /// procedure TCaseBookList.InitializeObject()
-   ///  [line: 116, column: 25, file: cbclasses]
+   ///  [line: 118, column: 25, file: cbclasses]
    ,InitializeObject:function(Self) {
       TQTXScrollWindow.InitializeObject(Self);
       TQTXTools.ExecuteOnElementReady(TQTXTools,Self.FHandle$4,function () {
@@ -9153,10 +9162,10 @@ function Clone$TQTXTextMetric($) {
 ///  [line: 446, column: 27, file: qtxUtils]
 function TQTXHandleHelper$Ready$3(Self$7) {
    var Result = false;
-   var mRef$25 = undefined;
+   var mRef$26 = undefined;
    if (TQTXHandleHelper$Valid(Self$7)) {
-      mRef$25 = TQTXHandleHelper$Root(Self$7);
-      Result = TQTXHandleHelper$Valid(mRef$25)&&mRef$25.body;
+      mRef$26 = TQTXHandleHelper$Root(Self$7);
+      Result = TQTXHandleHelper$Valid(mRef$26)&&mRef$26.body;
    }
    return Result
 }
@@ -9915,10 +9924,10 @@ function TQTXEffectsHelper$fxFadeIn$1(Self$13, Duration$2, OnFinished) {
       $As(mEffect,TQTXFadeAnimation).FFrom = 0;
       $As(mEffect,TQTXFadeAnimation).FTo = 1;
       TW3CustomAnimation.SetDuration(mEffect,Duration$2);
-      mEffect.FOnEnds = function (Sender$15) {
+      mEffect.FOnEnds = function (Sender$16) {
          w3_Callback(function () {
-            TObject.Free($As(Sender$15,TW3CustomAnimation));
-            AfterEffect(Self$13,$As(Sender$15,TW3CustomAnimation));
+            TObject.Free($As(Sender$16,TW3CustomAnimation));
+            AfterEffect(Self$13,$As(Sender$16,TW3CustomAnimation));
             if (OnFinished) {
                OnFinished();
             }
@@ -9947,11 +9956,11 @@ function TQTXEffectsHelper$fxFadeOut(Self$15, Duration$4, OnFinished$1) {
       $As(mEffect$1,TQTXFadeAnimation).FFrom = 1;
       $As(mEffect$1,TQTXFadeAnimation).FTo = 0;
       TW3CustomAnimation.SetDuration(mEffect$1,Duration$4);
-      mEffect$1.FOnEnds = function (Sender$16) {
+      mEffect$1.FOnEnds = function (Sender$17) {
          TW3MovableControl.SetVisible$(Self$15,false);
          w3_Callback(function () {
-            TObject.Free($As(Sender$16,TW3CustomAnimation));
-            AfterEffect(Self$15,$As(Sender$16,TW3CustomAnimation));
+            TObject.Free($As(Sender$17,TW3CustomAnimation));
+            AfterEffect(Self$15,$As(Sender$17,TW3CustomAnimation));
             if (OnFinished$1) {
                OnFinished$1();
             }
@@ -10242,10 +10251,10 @@ function TQTXEffectsHelper$fxWarpIn(Self$26, Duration$14, OnFinished$10) {
    } else {
       mEffect$10 = TW3CustomAnimation.Create$41$($New(TW3WarpInTransition));
       TW3CustomAnimation.SetDuration(mEffect$10,Duration$14);
-      mEffect$10.FOnEnds = function (Sender$17) {
+      mEffect$10.FOnEnds = function (Sender$18) {
          w3_Callback(function () {
-            TObject.Free($As(Sender$17,TW3CustomAnimation));
-            AfterEffect(Self$26,$As(Sender$17,TW3CustomAnimation));
+            TObject.Free($As(Sender$18,TW3CustomAnimation));
+            AfterEffect(Self$26,$As(Sender$18,TW3CustomAnimation));
             if (OnFinished$10) {
                OnFinished$10();
             }
@@ -10272,11 +10281,11 @@ function TQTXEffectsHelper$fxWarpOut(Self$28, Duration$16, OnFinished$11) {
    } else {
       mEffect$11 = TW3CustomAnimation.Create$41$($New(TW3WarpOutTransition));
       TW3CustomAnimation.SetDuration(mEffect$11,Duration$16);
-      mEffect$11.FOnEnds = function (Sender$18) {
+      mEffect$11.FOnEnds = function (Sender$19) {
          TW3MovableControl.SetVisible$(Self$28,false);
          w3_Callback(function () {
-            TObject.Free($As(Sender$18,TW3CustomAnimation));
-            AfterEffect(Self$28,$As(Sender$18,TW3CustomAnimation));
+            TObject.Free($As(Sender$19,TW3CustomAnimation));
+            AfterEffect(Self$28,$As(Sender$19,TW3CustomAnimation));
             if (OnFinished$11) {
                OnFinished$11();
             }
@@ -10302,10 +10311,10 @@ function TQTXEffectsHelper$fxZoomIn$1(Self$30, Duration$18, OnFinished$12) {
    } else {
       mEffect$12 = TW3CustomAnimation.Create$41$($New(TW3ZoomInTransition));
       TW3CustomAnimation.SetDuration(mEffect$12,Duration$18);
-      mEffect$12.FOnEnds = function (Sender$19) {
+      mEffect$12.FOnEnds = function (Sender$20) {
          w3_Callback(function () {
-            TObject.Free($As(Sender$19,TW3CustomAnimation));
-            AfterEffect(Self$30,$As(Sender$19,TW3CustomAnimation));
+            TObject.Free($As(Sender$20,TW3CustomAnimation));
+            AfterEffect(Self$30,$As(Sender$20,TW3CustomAnimation));
             if (OnFinished$12) {
                OnFinished$12();
             }
@@ -10332,11 +10341,11 @@ function TQTXEffectsHelper$fxZoomOut(Self$32, Duration$20, OnFinished$13) {
    } else {
       mEffect$13 = TW3CustomAnimation.Create$41$($New(TW3ZoomOutTransition));
       TW3CustomAnimation.SetDuration(mEffect$13,Duration$20);
-      mEffect$13.FOnEnds = function (Sender$20) {
+      mEffect$13.FOnEnds = function (Sender$21) {
          TW3MovableControl.SetVisible$(Self$32,false);
          w3_Callback(function () {
-            TObject.Free($As(Sender$20,TW3CustomAnimation));
-            AfterEffect(Self$32,$As(Sender$20,TW3CustomAnimation));
+            TObject.Free($As(Sender$21,TW3CustomAnimation));
+            AfterEffect(Self$32,$As(Sender$21,TW3CustomAnimation));
             if (OnFinished$13) {
                OnFinished$13();
             }
@@ -11268,7 +11277,7 @@ var TformLogin = {
    }
    /// procedure TformLogin.W3Button1Click(Sender: TObject)
    ///  [line: 45, column: 22, file: formLogin]
-   ,W3Button1Click:function(Self, Sender$21) {
+   ,W3Button1Click:function(Self, Sender$22) {
       w3_Callback(function () {
          Self.FFirst$1 = false;
          TQTXEffectsHelper$fxFadeOut$1(Self.W3Label2$1,0.5);
@@ -12148,19 +12157,19 @@ var EW3DatasetField = {
 };
 function UnifiedRelease(control$1, onRelease) {
    if (onRelease) {
-      TW3CustomControl._setMouseUp(control$1,function (Sender$22, Button$9, shiftState$11, X$11, Y$11) {
-         MouseButton = Button$9;
-         MousePosition.X$1 = X$11;
-         MousePosition.Y$1 = Y$11;
-         onRelease(Sender$22,Button$9,shiftState$11,X$11,Y$11);
+      TW3CustomControl._setMouseUp(control$1,function (Sender$23, Button$10, shiftState$11, X$12, Y$12) {
+         MouseButton = Button$10;
+         MousePosition.X$1 = X$12;
+         MousePosition.Y$1 = Y$12;
+         onRelease(Sender$23,Button$10,shiftState$11,X$12,Y$12);
       });
-      TW3CustomControl._setTouchEnds(control$1,function (Sender$23, Info$1) {
+      TW3CustomControl._setTouchEnds(control$1,function (Sender$24, Info$1) {
          var sr$7 = {Bottom$1:0,Left$1:0,Right$1:0,Top$1:0};
          sr$7 = TW3MovableControl.ScreenRect(control$1);
          MousePosition.X$1 = TW3TouchList.a$2(TW3TouchData.GetChanged(Info$1),0).FScreenX-sr$7.Left$1;
          MousePosition.Y$1 = TW3TouchList.a$2(TW3TouchData.GetChanged(Info$1),0).FScreenY-sr$7.Top$1;
          TShiftState.SetKeyStateEvent(TShiftState.Current(),event);
-         onRelease(Sender$23,0,TShiftState.Current(),MousePosition.X$1,MousePosition.Y$1);
+         onRelease(Sender$24,0,TShiftState.Current(),MousePosition.X$1,MousePosition.Y$1);
       });
    } else {
       TW3CustomControl._setMouseUp(control$1,null);
@@ -12169,20 +12178,20 @@ function UnifiedRelease(control$1, onRelease) {
 };
 function UnifiedClick(control$2, onClick) {
    if (onClick) {
-      TW3CustomControl._setMouseDown(control$2,function (Sender$24, Button$10, Shift$8, X$12, Y$12) {
-         MouseButton = Button$10;
-         MousePosition.X$1 = X$12;
-         MousePosition.Y$1 = Y$12;
-         onClick(Sender$24,Button$10,Shift$8,X$12,Y$12);
+      TW3CustomControl._setMouseDown(control$2,function (Sender$25, Button$11, Shift$9, X$13, Y$13) {
+         MouseButton = Button$11;
+         MousePosition.X$1 = X$13;
+         MousePosition.Y$1 = Y$13;
+         onClick(Sender$25,Button$11,Shift$9,X$13,Y$13);
       });
-      TW3CustomControl._setTouchBegins(control$2,function (Sender$25, Info$2) {
+      TW3CustomControl._setTouchBegins(control$2,function (Sender$26, Info$2) {
          var sr$8 = {Bottom$1:0,Left$1:0,Right$1:0,Top$1:0};
          MouseButton = 0;
          sr$8 = TW3MovableControl.ScreenRect(control$2);
          MousePosition.X$1 = TW3TouchList.a$2(TW3TouchData.GetChanged(Info$2),0).FScreenX-sr$8.Left$1;
          MousePosition.Y$1 = TW3TouchList.a$2(TW3TouchData.GetChanged(Info$2),0).FScreenY-sr$8.Top$1;
          TShiftState.SetKeyStateEvent(TShiftState.Current(),event);
-         onClick(Sender$25,0,TShiftState.Current(),MousePosition.X$1,MousePosition.Y$1);
+         onClick(Sender$26,0,TShiftState.Current(),MousePosition.X$1,MousePosition.Y$1);
       });
    } else {
       TW3CustomControl._setMouseDown(control$2,null);
