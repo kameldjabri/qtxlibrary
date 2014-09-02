@@ -127,69 +127,70 @@ type
   End;
 
   TQTXEffectsHelper = Class helper for TW3CustomControl
-    Procedure fxFadeOut(const Duration:Float);overload;
+
+    function  fxFadeOut(const Duration:Float):TW3CustomControl;overload;
     Procedure fxFadeOut(const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
-    Procedure fxFadeIn(const Duration:Float);overload;
+    function  fxFadeIn(const Duration:Float):TW3CustomControl;
     Procedure fxFadeIn(const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
-    Procedure fxWarpOut(const Duration:Float);overload;
+    function  fxWarpOut(const Duration:Float):TW3CustomControl;overload;
     Procedure fxWarpOut(const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
-    procedure fxWarpIn(const Duration:Float);overload;
+    function  fxWarpIn(const Duration:Float):TW3CustomControl;overload;
     procedure fxWarpIn(const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
-    Procedure fxZoomIn(const Duration:Float);overload;
+    function  fxZoomIn(const Duration:Float):TW3CustomControl;overload;
     Procedure fxZoomIn(const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
-    Procedure fxZoomOut(const Duration:Float);overload;
+    function  fxZoomOut(const Duration:Float):TW3CustomControl;overload;
     Procedure fxZoomOut(const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
-    Procedure fxScaleTo(const aToX,aToY,aToWidth,aToHeight:Integer;
-              const Duration:Float);overload;
+    function  fxScaleTo(const aToX,aToY,aToWidth,aToHeight:Integer;
+              const Duration:Float):TW3CustomControl;overload;
     Procedure fxScaleTo(const aToX,aToY,aToWidth,aToHeight:Integer;
               const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
-    Procedure fxMoveTo(const dx,dy:Integer;
-              const Duration:Float);overload;
-
+    function  fxMoveTo(const dx,dy:Integer;
+              const Duration:Float):TW3CustomControl;overload;
     Procedure fxMoveTo(const dx,dy:Integer;
               const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
-    Procedure fxMoveBy(const dx,dy:Integer;
-              const Duration:Float);overload;
-
+    function  fxMoveBy(const dx,dy:Integer;
+              const Duration:Float):TW3CustomControl;overload;
     Procedure fxMoveBy(const dx,dy:Integer;
               const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
-    Procedure fxMoveUp(const Duration:Float);overload;
+    function  fxMoveUp(const Duration:Float):TW3CustomControl;overload;
     Procedure fxMoveUp(const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
-    Procedure fxMoveDown(const Duration:Float);overload;
+    function  fxMoveDown(const Duration:Float):TW3CustomControl;overload;
     procedure fxMoveDown(const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
-    Procedure fxSizeTo(const aWidth,aHeight:Integer;
-              const Duration:Float);overload;
+    function  fxSizeTo(const aWidth,aHeight:Integer;
+              const Duration:Float):TW3CustomControl;overload;
     Procedure fxSizeTo(const aWidth,aHeight:Integer;
               const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
-    procedure fxScaleDown(aFactor:Integer;const Duration:Float);overload;
+    function fxScaleDown(aFactor:Integer;
+              const Duration:Float):TW3CustomControl;overload;
     procedure fxScaleDown(aFactor:Integer;const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
-    Procedure fxScaleUp(aFactor:Integer;const Duration:Float);overload;
+    function  fxScaleUp(aFactor:Integer;
+              const Duration:Float):TW3CustomControl;overload;
     Procedure fxScaleUp(aFactor:Integer;const Duration:Float;
               const OnFinished:TProcedureRef);overload;
 
@@ -377,10 +378,11 @@ Begin
   self.elementdata.write('fxBusy','yes');
 end;
 
-Procedure TQTXEffectsHelper.fxScaleUp(aFactor:Integer;
-          const Duration:Float);
+function TQTXEffectsHelper.fxScaleUp(aFactor:Integer;
+          const Duration:Float):TW3CustomControl;
 Begin
   fxScaleUp(aFactor,Duration,NIL);
+  result:=self;
 end;
 
 Procedure TQTXEffectsHelper.fxScaleUp(aFactor:Integer;const Duration:Float;
@@ -441,10 +443,11 @@ Begin
     CNT_CACHE_DELAY);
 end;
 
-procedure TQTXEffectsHelper.fxScaleDown(aFactor:Integer;
-          const Duration:Float);
+function TQTXEffectsHelper.fxScaleDown(aFactor:Integer;
+          const Duration:Float):TW3CustomControl;
 Begin
   fxScaleDown(aFactor,Duration,NIL);
+  result:=self;
 end;
 
 procedure TQTXEffectsHelper.fxScaleDown(aFactor:Integer;const Duration:Float;
@@ -498,10 +501,11 @@ Begin
     CNT_CACHE_DELAY);
 end;
 
-Procedure TQTXEffectsHelper.fxSizeTo(const aWidth,aHeight:Integer;
-          const Duration:Float);
+function TQTXEffectsHelper.fxSizeTo(const aWidth,aHeight:Integer;
+          const Duration:Float):TW3CustomControl;
 Begin
   fxSizeTo(aWidth,aHeight,Duration,NIL);
+  result:=self;
 end;
 
 Procedure TQTXEffectsHelper.fxSizeTo(const aWidth,aHeight:Integer;
@@ -557,6 +561,12 @@ Begin
   end;
 end;
 
+function TQTXEffectsHelper.fxMoveUp(const Duration:Float):TW3CustomControl;
+begin
+  fxMoveUp(Duration,NIL);
+  result:=self;
+end;
+
 Procedure TQTXEffectsHelper.fxMoveUp(const Duration:Float;
           const OnFinished:TProcedureRef);
 var
@@ -595,11 +605,6 @@ Begin
       fxMoveUp(duration,OnFinished);
     end,
     CNT_CACHE_DELAY);
-end;
-
-Procedure TQTXEffectsHelper.fxMoveUp(const Duration:Float);
-begin
-  fxMoveUp(Duration,NIL);
 end;
 
 procedure TQTXEffectsHelper.fxMoveDown(const Duration:Float;
@@ -641,15 +646,17 @@ Begin
     CNT_CACHE_DELAY);
 end;
 
-Procedure TQTXEffectsHelper.fxMoveDown(const Duration:Float);
+function TQTXEffectsHelper.fxMoveDown(const Duration:Float):TW3CustomControl;
 Begin
   fxMoveDown(Duration,NIL);
+  result:=self;
 end;
 
-Procedure TQTXEffectsHelper.fxMoveBy(const dx,dy:Integer;
-              const Duration:Float);
+function TQTXEffectsHelper.fxMoveBy(const dx,dy:Integer;
+              const Duration:Float):TW3CustomControl;
 Begin
   fxMoveBy(dx,dy,Duration,NIL);
+  result:=self;
 end;
 
 Procedure TQTXEffectsHelper.fxMoveBy(const dx,dy:Integer;
@@ -694,10 +701,11 @@ Begin
     CNT_CACHE_DELAY);
 end;
 
-Procedure TQTXEffectsHelper.fxScaleTo(const aToX,aToY,aToWidth,aToHeight:Integer;
-          const Duration:Float);
+function TQTXEffectsHelper.fxScaleTo(const aToX,aToY,aToWidth,aToHeight:Integer;
+          const Duration:Float):TW3CustomControl;
 Begin
   fxScaleTo(aToX,aToY,aToWidth,aToHeight,Duration,NIL);
+  result:=self;
 end;
 
 Procedure TQTXEffectsHelper.fxScaleTo(const aToX,aToY,aToWidth,aToHeight:Integer;
@@ -747,9 +755,11 @@ Begin
     CNT_CACHE_DELAY);
 end;
 
-Procedure TQTXEffectsHelper.fxMoveTo(const dx,dy:Integer;const Duration:Float);
+function TQTXEffectsHelper.fxMoveTo(const dx,dy:Integer;
+         const Duration:Float):TW3CustomControl;
 Begin
   fxMoveTo(dx,dy,Duration,NIL);
+  result:=self;
 end;
 
 Procedure TQTXEffectsHelper.fxMoveTo(const dx,dy:Integer;
@@ -795,9 +805,10 @@ Begin
     CNT_CACHE_DELAY);
 end;
 
-Procedure TQTXEffectsHelper.fxZoomIn(const Duration:Float);
+function TQTXEffectsHelper.fxZoomIn(const Duration:Float):TW3CustomControl;
 Begin
   fxZoomIn(Duration,NIL);
+  result:=self;
 end;
 
 Procedure TQTXEffectsHelper.fxZoomIn(const Duration:Float;
@@ -835,9 +846,10 @@ Begin
     100);
 end;
 
-Procedure TQTXEffectsHelper.fxZoomOut(const Duration:Float);
+function TQTXEffectsHelper.fxZoomOut(const Duration:Float):TW3CustomControl;
 Begin
   fxZoomOut(Duration,NIL);
+  result:=self;
 end;
 
 Procedure TQTXEffectsHelper.fxZoomOut(const Duration:Float;
@@ -875,9 +887,10 @@ Begin
     CNT_CACHE_DELAY);
 end;
 
-Procedure TQTXEffectsHelper.fxWarpOut(const Duration:Float);
+function TQTXEffectsHelper.fxWarpOut(const Duration:Float):TW3CustomControl;
 begin
   fxWarpOut(Duration,NIL);
+  result:=NIL;
 end;
 
 Procedure TQTXEffectsHelper.fxWarpOut(const Duration:Float;
@@ -915,9 +928,10 @@ Begin
     CNT_CACHE_DELAY);
 end;
 
-procedure TQTXEffectsHelper.fxWarpIn(const Duration:Float);
+function TQTXEffectsHelper.fxWarpIn(const Duration:Float):TW3CustomControl;
 Begin
   fxWarpIn(Duration,NIL);
+  result:=self;
 end;
 
 procedure TQTXEffectsHelper.fxWarpIn(const Duration:Float;
@@ -955,9 +969,10 @@ Begin
     CNT_CACHE_DELAY);
 end;
 
-Procedure TQTXEffectsHelper.fxFadeIn(const Duration:Float);
+function TQTXEffectsHelper.fxFadeIn(const Duration:Float):TW3CustomControl;
 Begin
   fxFadeIn(Duration,NIL);
+  result:=Self;
 end;
 
 Procedure TQTXEffectsHelper.fxFadeIn(const Duration:Float;
@@ -998,9 +1013,10 @@ Begin
     CNT_CACHE_DELAY);
 end;
 
-Procedure TQTXEffectsHelper.fxFadeOut(const Duration:Float);
+function TQTXEffectsHelper.fxFadeOut(const Duration:Float):TW3CustomControl;
 Begin
   fxFadeOut(Duration,NIL);
+  result:=self;
 end;
 
 Procedure TQTXEffectsHelper.fxFadeOut(const Duration:Float;

@@ -49,10 +49,22 @@ type
   end;
 
   TQTXXMLDocumentReady = procedure (sender:TW3HttpRequest;aXML:JXMLDocument);
+  TQTDocumentLoaded = Procedure (sender:TW3HttpRequest;Data:String);
 
-  TQTXXMLAPI = Class(TObject)
+
+  TQTXIO = Class(TObject)
   public
     class procedure LoadXML(aUrl:String; const OnComplete:TQTXXMLDocumentReady);
+    class procedure LoadFile(aUrl:String; const OnComplete:TQTDocumentLoaded);
+
+    class function LoadCSS(const aRel,aHref:String;
+         const aCallback:TProcedureRef):THandle;
+
+    class Procedure LoadScript(aFilename:String;
+          const aCallback:TProcedureRef);
+
+    class function LoadImage(aFilename:String;
+          const aCallback:TProcedureRef):THandle;
   End;
 
 
@@ -150,23 +162,117 @@ type
 
     class function getDocumentReady:Boolean;
 
-    class function LoadCSS(const aRel,aHref:String;
-         const aCallback:TProcedureRef):THandle;
-
-    class Procedure LoadScript(aFilename:String;
-          const aCallback:TProcedureRef);
-
-    class function LoadImage(aFilename:String;
-          const aCallback:TProcedureRef):THandle;
   end;
 
 implementation
 
 //############################################################################
-// TQTXFontInfo
+// TQTXIO
 //############################################################################
 
-class procedure TQTXXMLAPI.LoadXML(aUrl:String;
+
+class procedure TQTXIO.LoadScript(aFilename:String;
+      const aCallback:TProcedureRef);
+var
+  mRef: THandle;
+Begin
+  asm
+    @mRef = document.createElement("script");
+  end;
+  if mRef.valid then
+  begin
+    mRef.setAttribute("src",aFilename);
+    if assigned(aCallback) then
+    mRef.onload := procedure ()
+      begin
+        aCallback();
+      end;
+
+    asm
+      document.getElementsByTagName('head')[0].appendChild(@mRef);
+    end;
+
+  end else
+  raise exception.Create('Failed to allocate script element error');
+end;
+
+class function TQTXIO.LoadImage(aFilename:String;
+          const aCallback:TProcedureRef):THandle;
+Begin
+
+  asm
+    @result = new Image();
+  end;
+
+  if result.valid then
+  Begin
+    if assigned(aCallback) then
+    result.onload := procedure ()
+      begin
+        aCallback();
+      end;
+
+    result.src := aFilename;
+  end;
+end;
+
+class function TQTXIO.LoadCSS(const aRel,aHref:String;
+      const aCallback:TProcedureRef):THandle;
+var
+  mLink:  THandle;
+Begin
+  //REL: Can be "stylesheet" and many more values.
+  //     See http://www.w3schools.com/tags/att_link_rel.asp
+  //     for a list of all options
+  asm
+    @mLink = document.createElement('link');
+    (@mLink).href = @aHref;
+    (@mLink).rel=@aRel;
+    document.head.appendChild(@mLink);
+  end;
+  if assigned(aCallback) then
+  mLink.onload := procedure ()
+  Begin
+    aCallback();
+  end;
+
+  result:=mLink;
+end;
+
+
+class procedure TQTXIO.LoadFile(aUrl:String;
+      const OnComplete:TQTDocumentLoaded);
+var
+  mLoader:  TW3HttpRequest;
+Begin
+  mLoader:=TW3HttpRequest.Create;
+  mLoader.OnDataReady:=Procedure (sender:TW3HttpRequest)
+  Begin
+    try
+      try
+        if assigned(OnComplete) then
+        OnComplete(mLoader,sender.responseText);
+      except
+        on e: exception do;
+      end;
+    finally
+      mLoader.free;
+    end;
+  end;
+  mLoader.OnError:=procedure (sender:TW3HttpRequest)
+    Begin
+      try
+        if assigned(OnComplete) then
+        OnComplete(mLoader,'');
+      finally
+        mLoader.free;
+      end;
+    end;
+  mLoader.Get(aUrl);
+end;
+
+
+class procedure TQTXIO.LoadXML(aUrl:String;
       const OnComplete:TQTXXMLDocumentReady);
 var
   mLoader:  TW3HttpRequest;
@@ -187,8 +293,12 @@ Begin
   end;
   mLoader.OnError:=procedure (sender:TW3HttpRequest)
     Begin
-      if assigned(OnComplete) then
-      OnComplete(mLoader,NIL);
+      try
+        if assigned(OnComplete) then
+        OnComplete(mLoader,NIL);
+      finally
+        mLoader.free;
+      end;
     end;
   mLoader.Get(aUrl);
 end;
@@ -593,75 +703,6 @@ end;
 //############################################################################
 // TQTXTools
 //############################################################################
-
-class procedure TQTXTools.LoadScript(aFilename:String;
-      const aCallback:TProcedureRef);
-var
-  mRef: THandle;
-Begin
-  asm
-    @mRef = document.createElement("script");
-  end;
-  if mRef.valid then
-  begin
-    mRef.setAttribute("src",aFilename);
-    if assigned(aCallback) then
-    mRef.onload := procedure ()
-      begin
-        aCallback();
-      end;
-
-    asm
-      document.getElementsByTagName('head')[0].appendChild(@mRef);
-    end;
-
-  end else
-  raise exception.Create('Failed to allocate script element error');
-end;
-
-
-class function TQTXTools.LoadImage(aFilename:String;
-          const aCallback:TProcedureRef):THandle;
-Begin
-
-  asm
-    @result = new Image();
-  end;
-
-  if result.valid then
-  Begin
-    if assigned(aCallback) then
-    result.onload := procedure ()
-      begin
-        aCallback();
-      end;
-
-    result.src := aFilename;
-  end;
-end;
-
-class function TQTXTools.LoadCSS(const aRel,aHref:String;
-      const aCallback:TProcedureRef):THandle;
-var
-  mLink:  THandle;
-Begin
-  //REL: Can be "stylesheet" and many more values.
-  //     See http://www.w3schools.com/tags/att_link_rel.asp
-  //     for a list of all options
-  asm
-    @mLink = document.createElement('link');
-    (@mLink).href = @aHref;
-    (@mLink).rel=@aRel;
-    document.head.appendChild(@mLink);
-  end;
-  if assigned(aCallback) then
-  mLink.onload := procedure ()
-  Begin
-    aCallback();
-  end;
-
-  result:=mLink;
-end;
 
 class function TQTXTools.getDocumentReady:Boolean;
 begin

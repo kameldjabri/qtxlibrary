@@ -343,9 +343,10 @@ end;
 Procedure TForm1.setupItems;
 var
   mXML:JXMLDocument;
+  mUrl: String;
 begin
 
-  TQTXXMLApi.LoadXML('http://feeds.feedburner.com/delphifeeds?format=xml',
+  TQTXIO.LoadXML('http://feeds.feedburner.com/delphifeeds?format=xml',
     procedure (sender:TW3HttpRequest;aXML:JXMLDocument)
     var
       x:  Integer;
@@ -369,18 +370,15 @@ begin
           var mItem:=TCBNewsItem.Create(FList.Content);
           mItem.setBounds(2,dy,FList.Content.ClientWidth-4,100);
 
-
+          (* Get URL target for article *)
           mItem.Url:=mObjs[x].childnodes[3].textContent;
-
 
           (* get the title *)
           mtext:=mObjs[x].childNodes[1].textContent;
           mItem.title.caption:='<a href="' + mItem.Url +'">' + mText + '</a>';
 
-          mItem.TimeInfo.Caption:=mObjs[x].childnodes[7].textContent;
-
-          mItem.Text.caption:=mObjs[x].childnodes[9].textContent;
-          mItem.title.OnMouseTouchClick:=Procedure (Sender: TObject; Button: TMouseButton;
+          (* setup event for image *)
+          mItem.Image.OnMouseTouchClick:=Procedure (Sender: TObject; Button: TMouseButton;
             Shift: TShiftState; X, Y: Integer)
             var
               mRef: String;
@@ -391,6 +389,15 @@ begin
                 window.location.assign(@mRef);
               end;
             end;
+
+
+          (* Get signature origin *)
+          mItem.TimeInfo.Caption:=mObjs[x].childnodes[7].textContent;
+
+          (* get text snippet *)
+          mItem.Text.caption:=mObjs[x].childnodes[9].textContent;
+
+
 
           (* just loop through avatar images at this point *)
           var mNames:Array of String =
