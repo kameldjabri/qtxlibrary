@@ -7764,8 +7764,10 @@ var TForm1 = {
          var dy$9 = 0;
          var mItem = null;
          var mText$4 = "";
+         var idx = 0;
          var mObjs = null;
          var mItem$1 = null;
+         var mNames = [];
          dy$9 = 4;
          if (aXML!==null) {
             mObjs = aXML.getElementsByTagName("item");
@@ -7777,17 +7779,23 @@ var TForm1 = {
             for(x$16 = 0,$temp23 = mObjs.length;x$16<$temp23;x$16++) {
                mItem$1 = TW3Component.Create$38$($New(TCBNewsItem),Self.FList.FContent$1);
                TW3MovableControl.SetBounds$2$(mItem$1,2,dy$9,TW3MovableControl.ClientWidth(Self.FList.FContent$1)-4,100);
-               mText$4 = mObjs.item(x$16).childNodes.item(1).textContent;
-               TQTXLabel.setCaption$(mItem$1.FTitle$1,mText$4);
-               TQTXLabel.setCaption$(mItem$1.FTimeInfo,mObjs.item(x$16).childNodes.item(7).textContent);
                mItem$1.FUrl = mObjs.item(x$16).childNodes.item(3).textContent;
+               mText$4 = mObjs.item(x$16).childNodes.item(1).textContent;
+               TQTXLabel.setCaption$(mItem$1.FTitle$1,("<a href=\""+mItem$1.FUrl+"\">"+mText$4+"</a>"));
+               TQTXLabel.setCaption$(mItem$1.FTimeInfo,mObjs.item(x$16).childNodes.item(7).textContent);
                TQTXLabel.setCaption$(mItem$1.FText$3,mObjs.item(x$16).childNodes.item(9).textContent);
-               TW3CustomControl.SetOnMouseTouchRelease(mItem$1.FText$3,function (Sender$13, Button$7, Shift$6, X$9, Y$9) {
+               TW3CustomControl.SetOnMouseTouchClick(mItem$1.FTitle$1,function (Sender$13, Button$7, Shift$6, X$9, Y$9) {
                   var mRef$25 = "";
                   mRef$25 = mItem$1.FUrl;
                   
                 window.location.assign(mRef$25);
                              });
+               mNames = ["avatar01.jpg","avatar02.jpg","avatar03.png","avatar04.jpg","avatar05.png"].slice();
+               TW3Image.LoadFromURL(mItem$1.FImage,"/res/"+mNames[idx]);
+               ++idx;
+               if (idx>4) {
+                  idx = 0;
+               }
                (dy$9+= (TW3MovableControl.GetHeight$1$(mItem$1)+10));
             }
          } else {

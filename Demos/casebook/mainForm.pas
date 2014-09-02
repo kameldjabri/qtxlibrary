@@ -341,14 +341,10 @@ Begin
 end;
 
 Procedure TForm1.setupItems;
-//var
-  //x:  Integer;
-  //dy:Integer;
-  //mItem:  TCBNewsItem;
+var
+  mXML:JXMLDocument;
 begin
 
-
-  var mXML:JXMLDocument;
   TQTXXMLApi.LoadXML('http://feeds.feedburner.com/delphifeeds?format=xml',
     procedure (sender:TW3HttpRequest;aXML:JXMLDocument)
     var
@@ -356,6 +352,7 @@ begin
       dy: Integer;
       mItem:  TCBNewsItem;
       mText:  String;
+      idx:  Integer;
       mObjs:  JHTMLCollection;
     begin
       dy:=4;
@@ -372,17 +369,19 @@ begin
           var mItem:=TCBNewsItem.Create(FList.Content);
           mItem.setBounds(2,dy,FList.Content.ClientWidth-4,100);
 
-          (* get the title *)
-          mtext:=mObjs[x].childNodes[1].textContent;
-          mItem.title.caption:=mText;
-
-          mItem.TimeInfo.Caption:=mObjs[x].childnodes[7].textContent;
 
           mItem.Url:=mObjs[x].childnodes[3].textContent;
 
+
+          (* get the title *)
+          mtext:=mObjs[x].childNodes[1].textContent;
+          mItem.title.caption:='<a href="' + mItem.Url +'">' + mText + '</a>';
+
+          mItem.TimeInfo.Caption:=mObjs[x].childnodes[7].textContent;
+
           mItem.Text.caption:=mObjs[x].childnodes[9].textContent;
-          mItem.text.OnMouseTouchRelease:=Procedure (Sender: TObject; Button: TMouseButton;
-                Shift: TShiftState; X, Y: Integer)
+          mItem.title.OnMouseTouchClick:=Procedure (Sender: TObject; Button: TMouseButton;
+            Shift: TShiftState; X, Y: Integer)
             var
               mRef: String;
             begin
@@ -392,6 +391,20 @@ begin
                 window.location.assign(@mRef);
               end;
             end;
+
+          (* just loop through avatar images at this point *)
+          var mNames:Array of String =
+            [
+            'avatar01.jpg',
+            'avatar02.jpg',
+            'avatar03.png',
+            'avatar04.jpg',
+            'avatar05.png'
+            ];
+          mItem.Image.LoadFromURL('/res/' + mNames[idx]);
+          inc(idx);
+          if idx>4 then
+          idx:=0;
 
           inc(dy,mItem.Height + 10);
         end;
@@ -411,19 +424,6 @@ begin
       FList.ScrollApi.Refresh;
 
     end);
-
-
-  (*
-  dy:=4;
-  for x:=1 to 10 do
-  begin
-    mItem:=TCBNewsItem.Create(FList.Content);
-    mItem.setBounds(2,dy,FList.Content.ClientWidth-4,100);
-    Populate(mItem);
-    inc(dy,mItem.Height + 10);
-  end;
-  FList.Content.Height:=dy + 16;
-  FList.ScrollApi.Refresh;   *)
 end;
 
  
