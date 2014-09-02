@@ -1557,7 +1557,7 @@ var TApplication = {
    /// procedure TApplication.ApplicationStarting()
    ///  [line: 38, column: 24, file: casebook]
    ,ApplicationStarting:function(Self) {
-      TQTXTools.LoadCSS(TQTXTools,"stylesheet","http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css",null);
+      TQTXIO.LoadCSS(TQTXIO,"stylesheet","http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css",null);
       TQTXTools.ExecuteOnDocumentReady(TQTXTools,function () {
          Self.FHeader$1 = TW3Component.Create$38$($New(TQTXHeaderBar),Self.FDisplay);
          TW3MovableControl.setTop$(Self.FHeader$1,(-1));
@@ -3655,14 +3655,14 @@ var TW3CustomControl = {
       }
    }
    /// constructor TW3CustomControl.Create(AOwner: TW3Component)
-   ///  [line: 540, column: 30, file: qtxUtils]
+   ///  [line: 650, column: 30, file: qtxUtils]
    ,Create$38:function(Self, AOwner$2) {
       TW3Component.Create$38(Self,AOwner$2);
       Self.FAccess = TQTXAttrAccess.Create$47$($New(TQTXAttrAccess),Self.FHandle$4);
       return Self
    }
    /// destructor TW3CustomControl.Destroy()
-   ///  [line: 546, column: 29, file: qtxUtils]
+   ///  [line: 656, column: 29, file: qtxUtils]
    ,Destroy:function(Self) {
       TObject.Free(Self.FAccess);
       TW3TagObj.Destroy(Self);
@@ -3897,7 +3897,7 @@ var TW3CustomControl = {
       }
    }
    /// function TW3CustomControl.MeasureTextFixed(aContent: String) : TQTXTextMetric
-   ///  [line: 568, column: 27, file: qtxUtils]
+   ///  [line: 678, column: 27, file: qtxUtils]
    ,MeasureTextFixed:function(Self, aContent) {
       var Result = {tmWidth:0,tmHeight:0};
       var mObj$2 = null;
@@ -7759,7 +7759,8 @@ var TForm1 = {
    ///  [line: 343, column: 18, file: mainForm]
    ,setupItems:function(Self) {
       var mXML = null;
-      TQTXXMLAPI.LoadXML(TQTXXMLAPI,"http://feeds.feedburner.com/delphifeeds?format=xml",function (sender, aXML) {
+      var mUrl = "";
+      TQTXIO.LoadXML(TQTXIO,"http://feeds.feedburner.com/delphifeeds?format=xml",function (sender, aXML) {
          var x$16 = 0;
          var dy$9 = 0;
          var mItem = null;
@@ -7782,14 +7783,14 @@ var TForm1 = {
                mItem$1.FUrl = mObjs.item(x$16).childNodes.item(3).textContent;
                mText$4 = mObjs.item(x$16).childNodes.item(1).textContent;
                TQTXLabel.setCaption$(mItem$1.FTitle$1,("<a href=\""+mItem$1.FUrl+"\">"+mText$4+"</a>"));
-               TQTXLabel.setCaption$(mItem$1.FTimeInfo,mObjs.item(x$16).childNodes.item(7).textContent);
-               TQTXLabel.setCaption$(mItem$1.FText$3,mObjs.item(x$16).childNodes.item(9).textContent);
-               TW3CustomControl.SetOnMouseTouchClick(mItem$1.FTitle$1,function (Sender$13, Button$7, Shift$6, X$9, Y$9) {
+               TW3CustomControl.SetOnMouseTouchClick(mItem$1.FImage,function (Sender$13, Button$7, Shift$6, X$9, Y$9) {
                   var mRef$25 = "";
                   mRef$25 = mItem$1.FUrl;
                   
                 window.location.assign(mRef$25);
                              });
+               TQTXLabel.setCaption$(mItem$1.FTimeInfo,mObjs.item(x$16).childNodes.item(7).textContent);
+               TQTXLabel.setCaption$(mItem$1.FText$3,mObjs.item(x$16).childNodes.item(9).textContent);
                mNames = ["avatar01.jpg","avatar02.jpg","avatar03.png","avatar04.jpg","avatar05.png"].slice();
                TW3Image.LoadFromURL(mItem$1.FImage,"/res/"+mNames[idx]);
                ++idx;
@@ -8320,6 +8321,17 @@ var TW3HttpRequest = {
    ///  [line: 226, column: 26, file: w3inet]
    ,Open:function(Self, aMeth, aURL$3) {
       Self.FReqObj.open(aMeth,aURL$3);
+   }
+   /// function TW3HttpRequest.ResponseText() : String
+   ///  [line: 266, column: 25, file: w3inet]
+   ,ResponseText:function(Self) {
+      var Result = "";
+      var r$2 = undefined;
+      r$2 = Self.FReqObj.responseText;
+      if (r$2) {
+         Result = ""+r$2;
+      }
+      return Result
    }
    /// function TW3HttpRequest.ResponseXML() : Variant
    ///  [line: 261, column: 25, file: w3inet]
@@ -9009,44 +9021,8 @@ var TCaseBookList = {
    ,SetEnabled:TW3CustomControl.SetEnabled
    ,getScrollContentClass:TQTXScrollWindow.getScrollContentClass
 };
-/// TQTXXMLAPI = class (TObject)
-///  [line: 53, column: 3, file: qtxUtils]
-var TQTXXMLAPI = {
-   $ClassName:"TQTXXMLAPI",
-   $Parent:TObject
-   ,$Init:function ($) {
-      TObject.$Init($);
-   }
-   /// procedure TQTXXMLAPI.LoadXML(aUrl: String; const OnComplete: TQTXXMLDocumentReady)
-   ///  [line: 169, column: 28, file: qtxUtils]
-   ,LoadXML:function(Self, aUrl$1, OnComplete) {
-      var mLoader = null;
-      mLoader = TW3HttpRequest.Create$16$($New(TW3HttpRequest));
-      mLoader.FOnDataReady$1 = function (sender$2) {
-         try {
-            try {
-               if (OnComplete) {
-                  OnComplete(mLoader,TW3HttpRequest.ResponseXML(mLoader));
-               }
-            } catch ($e) {
-               var e$11 = $W($e);
-               /* null */
-            }
-         } finally {
-            TObject.Free(sender$2);
-         }
-      };
-      mLoader.FOnError = function (sender$3) {
-         if (OnComplete) {
-            OnComplete(mLoader,null);
-         }
-      };
-      TW3HttpRequest.Get(mLoader,aUrl$1);
-   }
-   ,Destroy:TObject.Destroy
-};
 /// TQTXTools = class (TObject)
-///  [line: 133, column: 3, file: qtxUtils]
+///  [line: 145, column: 3, file: qtxUtils]
 var TQTXTools = {
    $ClassName:"TQTXTools",
    $Parent:TObject
@@ -9054,7 +9030,7 @@ var TQTXTools = {
       TObject.$Init($);
    }
    /// function TQTXTools.calcTextMetrics(const aText: String; const aFontName: String; const aFontSize: Integer) : TQTXTextMetric
-   ///  [line: 766, column: 26, file: qtxUtils]
+   ///  [line: 807, column: 26, file: qtxUtils]
    ,calcTextMetrics:function(Self, aText$3, aFontName, aFontSize) {
       var Result = {tmWidth:0,tmHeight:0};
       var mHandle$2 = undefined;
@@ -9085,56 +9061,109 @@ var TQTXTools = {
     document.body.removeChild(mHandle$2);
   return Result
    }
-   /// procedure TQTXTools.ExecuteOnDocumentReady(const aFunc: TProcedureRef)
-   ///  [line: 705, column: 27, file: qtxUtils]
-   ,ExecuteOnDocumentReady:function(Self, aFunc) {
-      if (TQTXTools.getDocumentReady(Self)) {
-         aFunc();
-      } else {
-         w3_Callback(function () {
-            TQTXTools.ExecuteOnDocumentReady(Self,aFunc);
-         },100);
-      }
-   }
    /// procedure TQTXTools.ExecuteOnElementReady(const aElement: THandle; const aFunc: TProcedureRef)
-   ///  [line: 719, column: 27, file: qtxUtils]
-   ,ExecuteOnElementReady:function(Self, aElement$2, aFunc$1) {
+   ///  [line: 760, column: 27, file: qtxUtils]
+   ,ExecuteOnElementReady:function(Self, aElement$2, aFunc) {
       if (aElement$2) {
-         if (aFunc$1) {
+         if (aFunc) {
             if (TQTXHandleHelper$Ready$3(aElement$2)) {
-               aFunc$1();
+               aFunc();
             } else {
                w3_Callback(function () {
-                  TQTXHandleHelper$ReadyExecute(aElement$2,aFunc$1);
+                  TQTXHandleHelper$ReadyExecute(aElement$2,aFunc);
                },100);
             }
          }
       }
    }
    /// procedure TQTXTools.ExecuteRepeat(const aFunc: TProcedureRef; const aCount: Integer; const aDelay: Integer)
-   ///  [line: 740, column: 27, file: qtxUtils]
-   ,ExecuteRepeat:function(Self, aFunc$2, aCount, aDelay$1) {
-      if (aFunc$2) {
+   ///  [line: 781, column: 27, file: qtxUtils]
+   ,ExecuteRepeat:function(Self, aFunc$1, aCount, aDelay$1) {
+      if (aFunc$1) {
          if (aCount>0) {
-            aFunc$2();
+            aFunc$1();
             if (aCount>1) {
                w3_Callback(function () {
-                  TQTXTools.ExecuteRepeat(Self,aFunc$2,(aCount-1),aDelay$1);
+                  TQTXTools.ExecuteRepeat(Self,aFunc$1,(aCount-1),aDelay$1);
                },(aDelay$1));
             }
          }
       }
    }
+   /// procedure TQTXTools.ExecuteOnDocumentReady(const aFunc: TProcedureRef)
+   ///  [line: 746, column: 27, file: qtxUtils]
+   ,ExecuteOnDocumentReady:function(Self, aFunc$2) {
+      if (TQTXTools.getDocumentReady(Self)) {
+         aFunc$2();
+      } else {
+         w3_Callback(function () {
+            TQTXTools.ExecuteOnDocumentReady(Self,aFunc$2);
+         },100);
+      }
+   }
    /// function TQTXTools.getDocumentReady() : Boolean
-   ///  [line: 666, column: 26, file: qtxUtils]
+   ///  [line: 707, column: 26, file: qtxUtils]
    ,getDocumentReady:function(Self) {
       var Result = false;
       
     Result = document.readyState == "complete";
   return Result
    }
-   /// function TQTXTools.LoadCSS(const aRel: String; const aHref: String; const aCallback: TProcedureRef) : THandle
-   ///  [line: 643, column: 26, file: qtxUtils]
+   ,Destroy:TObject.Destroy
+};
+/// TQTXTextMetric = record
+///  [line: 34, column: 3, file: qtxUtils]
+function Copy$TQTXTextMetric(s,d) {
+   d.tmWidth=s.tmWidth;
+   d.tmHeight=s.tmHeight;
+   return d;
+}
+function Clone$TQTXTextMetric($) {
+   return {
+      tmWidth:$.tmWidth,
+      tmHeight:$.tmHeight
+   }
+}
+/// TQTXIO = class (TObject)
+///  [line: 55, column: 3, file: qtxUtils]
+var TQTXIO = {
+   $ClassName:"TQTXIO",
+   $Parent:TObject
+   ,$Init:function ($) {
+      TObject.$Init($);
+   }
+   /// procedure TQTXIO.LoadXML(aUrl: String; const OnComplete: TQTXXMLDocumentReady)
+   ///  [line: 275, column: 24, file: qtxUtils]
+   ,LoadXML:function(Self, aUrl$1, OnComplete) {
+      var mLoader = null;
+      mLoader = TW3HttpRequest.Create$16$($New(TW3HttpRequest));
+      mLoader.FOnDataReady$1 = function (sender$2) {
+         try {
+            try {
+               if (OnComplete) {
+                  OnComplete(mLoader,TW3HttpRequest.ResponseXML(mLoader));
+               }
+            } catch ($e) {
+               var e$11 = $W($e);
+               /* null */
+            }
+         } finally {
+            TObject.Free(sender$2);
+         }
+      };
+      mLoader.FOnError = function (sender$3) {
+         try {
+            if (OnComplete) {
+               OnComplete(mLoader,null);
+            }
+         } finally {
+            TObject.Free(mLoader);
+         }
+      };
+      TW3HttpRequest.Get(mLoader,aUrl$1);
+   }
+   /// function TQTXIO.LoadCSS(const aRel: String; const aHref: String; const aCallback: TProcedureRef) : THandle
+   ///  [line: 219, column: 23, file: qtxUtils]
    ,LoadCSS:function(Self, aRel, aHref, aCallback) {
       var Result = undefined;
       var mLink = undefined;
@@ -9153,21 +9182,8 @@ var TQTXTools = {
    }
    ,Destroy:TObject.Destroy
 };
-/// TQTXTextMetric = record
-///  [line: 34, column: 3, file: qtxUtils]
-function Copy$TQTXTextMetric(s,d) {
-   d.tmWidth=s.tmWidth;
-   d.tmHeight=s.tmHeight;
-   return d;
-}
-function Clone$TQTXTextMetric($) {
-   return {
-      tmWidth:$.tmWidth,
-      tmHeight:$.tmHeight
-   }
-}
 /// function TQTXHandleHelper.Ready(const Self: THandle) : Boolean
-///  [line: 446, column: 27, file: qtxUtils]
+///  [line: 556, column: 27, file: qtxUtils]
 function TQTXHandleHelper$Ready$3(Self$7) {
    var Result = false;
    var mRef$26 = undefined;
@@ -9178,7 +9194,7 @@ function TQTXHandleHelper$Ready$3(Self$7) {
    return Result
 }
 /// procedure TQTXHandleHelper.ReadyExecute(const Self: THandle; OnReady: TProcedureRef)
-///  [line: 464, column: 28, file: qtxUtils]
+///  [line: 574, column: 28, file: qtxUtils]
 function TQTXHandleHelper$ReadyExecute(Self$8, OnReady) {
    if (TQTXHandleHelper$Valid(Self$8)) {
       if (OnReady) {
@@ -9193,7 +9209,7 @@ function TQTXHandleHelper$ReadyExecute(Self$8, OnReady) {
    }
 }
 /// function TQTXHandleHelper.Root(const Self: THandle) : THandle
-///  [line: 411, column: 27, file: qtxUtils]
+///  [line: 521, column: 27, file: qtxUtils]
 function TQTXHandleHelper$Root(Self$9) {
    var Result = undefined;
    var mAncestor = undefined;
@@ -9209,7 +9225,7 @@ function TQTXHandleHelper$Root(Self$9) {
    return Result
 }
 /// function TQTXHandleHelper.Valid(const Self: THandle) : Boolean
-///  [line: 432, column: 27, file: qtxUtils]
+///  [line: 542, column: 27, file: qtxUtils]
 function TQTXHandleHelper$Valid(Self$10) {
    var Result = false;
    
@@ -9225,7 +9241,7 @@ var TQTXGUID = {
       TObject.$Init($);
    }
    /// function TQTXGUID.CreateGUID() : String
-   ///  [line: 820, column: 25, file: qtxUtils]
+   ///  [line: 861, column: 25, file: qtxUtils]
    ,CreateGUID:function(Self) {
       var Result = "";
       
@@ -9258,7 +9274,7 @@ function Clone$TQTXFontInfo($) {
    }
 }
 /// TQTXFontDetector = class (TObject)
-///  [line: 71, column: 3, file: qtxUtils]
+///  [line: 83, column: 3, file: qtxUtils]
 var TQTXFontDetector = {
    $ClassName:"TQTXFontDetector",
    $Parent:TObject
@@ -9272,7 +9288,7 @@ var TQTXFontDetector = {
       $.FtestString = "mmmmmmmmmmlli";
    }
    /// constructor TQTXFontDetector.Create()
-   ///  [line: 216, column: 30, file: qtxUtils]
+   ///  [line: 326, column: 30, file: qtxUtils]
    ,Create$46:function(Self) {
       var x$17 = 0;
       TObject.Create(Self);
@@ -9298,7 +9314,7 @@ var TQTXFontDetector = {
       return Self
    }
    /// function TQTXFontDetector.Detect(aFont: String) : Boolean
-   ///  [line: 278, column: 27, file: qtxUtils]
+   ///  [line: 388, column: 27, file: qtxUtils]
    ,Detect:function(Self, aFont) {
       var Result = false;
       var x$18 = 0;
@@ -9320,7 +9336,7 @@ var TQTXFontDetector = {
       return Result
    }
    /// function TQTXFontDetector.getFontInfo(const aHandle: THandle) : TQTXFontInfo
-   ///  [line: 244, column: 27, file: qtxUtils]
+   ///  [line: 354, column: 27, file: qtxUtils]
    ,getFontInfo:function(Self, aHandle$1) {
       var Result = {fiName:"",fiSize:0};
       var mName = "";
@@ -9349,7 +9365,7 @@ var TQTXFontDetector = {
       return Result
    }
    /// function TQTXFontDetector.MeasureText(aFontName: String; aFontSize: Integer; aFixedWidth: Integer; aContent: String) : TQTXTextMetric
-   ///  [line: 344, column: 27, file: qtxUtils]
+   ///  [line: 454, column: 27, file: qtxUtils]
    ,MeasureText$5:function(Self, aFontName$1, aFontSize$1, aFixedWidth, aContent$1) {
       var Result = {tmWidth:0,tmHeight:0};
       var mElement = undefined;
@@ -9374,7 +9390,7 @@ var TQTXFontDetector = {
       return Result
    }
    /// function TQTXFontDetector.MeasureText(aFontName: String; aFontSize: Integer; aContent: String) : TQTXTextMetric
-   ///  [line: 312, column: 27, file: qtxUtils]
+   ///  [line: 422, column: 27, file: qtxUtils]
    ,MeasureText$4:function(Self, aFontName$2, aFontSize$2, aContent$2) {
       var Result = {tmWidth:0,tmHeight:0};
       var mElement$1 = undefined;
@@ -9399,12 +9415,12 @@ var TQTXFontDetector = {
       return Result
    }
    /// function TQTXFontDetector.MeasureText(aFontInfo: TQTXFontInfo; aFixedWidth: Integer; aContent: String) : TQTXTextMetric
-   ///  [line: 299, column: 27, file: qtxUtils]
+   ///  [line: 409, column: 27, file: qtxUtils]
    ,MeasureText$3:function(Self, aFontInfo, aFixedWidth$1, aContent$3) {
       return TQTXFontDetector.MeasureText$5(Self,aFontInfo.fiName,aFontInfo.fiSize,aFixedWidth$1,aContent$3);
    }
    /// function TQTXFontDetector.MeasureText(aFontInfo: TQTXFontInfo; aContent: String) : TQTXTextMetric
-   ///  [line: 306, column: 27, file: qtxUtils]
+   ///  [line: 416, column: 27, file: qtxUtils]
    ,MeasureText$2:function(Self, aFontInfo$1, aContent$4) {
       return TQTXFontDetector.MeasureText$4(Self,aFontInfo$1.fiName,aFontInfo$1.fiSize,aContent$4);
    }
@@ -9412,7 +9428,7 @@ var TQTXFontDetector = {
    ,Create$46$:function($){return $.ClassType.Create$46($)}
 };
 /// TQTXAttrAccess = class (TObject)
-///  [line: 109, column: 3, file: qtxUtils]
+///  [line: 121, column: 3, file: qtxUtils]
 var TQTXAttrAccess = {
    $ClassName:"TQTXAttrAccess",
    $Parent:TObject
@@ -9421,7 +9437,7 @@ var TQTXAttrAccess = {
       $.FHandle$5 = undefined;
    }
    /// function TQTXAttrAccess.Exists(aName: String) : Boolean
-   ///  [line: 498, column: 26, file: qtxUtils]
+   ///  [line: 608, column: 26, file: qtxUtils]
    ,Exists:function(Self, aName$1) {
       var Result = false;
       var mName$1 = "";
@@ -9430,7 +9446,7 @@ var TQTXAttrAccess = {
       return Result
    }
    /// function TQTXAttrAccess.Read(aName: String) : Variant
-   ///  [line: 506, column: 26, file: qtxUtils]
+   ///  [line: 616, column: 26, file: qtxUtils]
    ,Read:function(Self, aName$2) {
       var Result = undefined;
       var mName$2 = "";
@@ -9448,7 +9464,7 @@ var TQTXAttrAccess = {
       return Result
    }
    /// procedure TQTXAttrAccess.Write(aName: String; const aValue: Variant)
-   ///  [line: 522, column: 26, file: qtxUtils]
+   ///  [line: 632, column: 26, file: qtxUtils]
    ,Write:function(Self, aName$3, aValue$62) {
       var mName$3 = "";
       try {
@@ -9460,7 +9476,7 @@ var TQTXAttrAccess = {
       }
    }
    /// constructor TQTXAttrAccess.Create(const aHandle: THandle)
-   ///  [line: 489, column: 28, file: qtxUtils]
+   ///  [line: 599, column: 28, file: qtxUtils]
    ,Create$47:function(Self, aHandle$2) {
       TObject.Create(Self);
       if (TQTXHandleHelper$Valid(aHandle$2)) {
@@ -9851,7 +9867,7 @@ var TQTXSizeAnimation = {
       $.FFromHeight = $.FFromWidth = $.FFromX = $.FFromY = $.FToHeight = $.FToWidth = $.FToX = $.FToY = 0;
    }
    /// function TQTXSizeAnimation.KeyFramesCSS() : String
-   ///  [line: 331, column: 28, file: qtxEffects]
+   ///  [line: 332, column: 28, file: qtxEffects]
    ,KeyFramesCSS:function(Self) {
       return ("from {\r\n  left: "+Self.FFromX.toString()+"px;\r\n  top:  "+Self.FFromY.toString()+"px;\r\n  width: "+Self.FFromWidth.toString()+"px;\r\n  height: "+Self.FFromHeight.toString()+"px;\r\n} to {\r\n  left: "+Self.FToX.toString()+"px;\r\n  top:  "+Self.FToY.toString()+"px;\r\n  width: "+Self.FToWidth.toString()+"px;\r\n  height: "+Self.FToHeight.toString()+"px;\r\n}");
    }
@@ -9872,7 +9888,7 @@ var TQTXMoveAnimation = {
       $.FFromX$1 = $.FFromY$1 = $.FToX$1 = $.FToY$1 = 0;
    }
    /// function TQTXMoveAnimation.KeyFramesCSS() : String
-   ///  [line: 352, column: 28, file: qtxEffects]
+   ///  [line: 353, column: 28, file: qtxEffects]
    ,KeyFramesCSS:function(Self) {
       return ("from {\r\n  left: "+Self.FFromX$1.toString()+"px;\r\n  top:  "+Self.FFromY$1.toString()+"px;\r\n} to {\r\n  left: "+Self.FToX$1.toString()+"px;\r\n  top: "+Self.FToY$1.toString()+"px;\r\n}");
    }
@@ -9893,7 +9909,7 @@ var TQTXFadeAnimation = {
       $.FFrom = $.FTo = 0;
    }
    /// function TQTXFadeAnimation.KeyFramesCSS() : String
-   ///  [line: 320, column: 28, file: qtxEffects]
+   ///  [line: 321, column: 28, file: qtxEffects]
    ,KeyFramesCSS:function(Self) {
       return "\r\n    0% { opacity: "+(Self.FFrom).toString()+"; }\r\n    100% { opacity: "+(Self.FTo).toString()+"; }";
    }
@@ -9905,7 +9921,7 @@ var TQTXFadeAnimation = {
    ,KeyFramesName:TW3TransitionAnimation.KeyFramesName
 };
 /// function TQTXEffectsHelper.fxBusy(Self: TW3CustomControl) : Boolean
-///  [line: 368, column: 28, file: qtxEffects]
+///  [line: 369, column: 28, file: qtxEffects]
 function TQTXEffectsHelper$fxBusy(Self$11) {
    var Result = false;
    if (TQTXAttrAccess.Exists(Self$11.FAccess,"fxBusy")) {
@@ -9914,13 +9930,16 @@ function TQTXEffectsHelper$fxBusy(Self$11) {
    TQTXAttrAccess.Write(Self$11.FAccess,"fxBusy","no");
    return Result
 }
-/// procedure TQTXEffectsHelper.fxFadeIn(Self: TW3CustomControl; const Duration: Float)
-///  [line: 958, column: 29, file: qtxEffects]
+/// function TQTXEffectsHelper.fxFadeIn(Self: TW3CustomControl; const Duration: Float) : TW3CustomControl
+///  [line: 972, column: 28, file: qtxEffects]
 function TQTXEffectsHelper$fxFadeIn(Self$12, Duration$1) {
+   var Result = null;
    TQTXEffectsHelper$fxFadeIn$1(Self$12,Duration$1,null);
+   Result = Self$12;
+   return Result
 }
 /// procedure TQTXEffectsHelper.fxFadeIn(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-///  [line: 963, column: 29, file: qtxEffects]
+///  [line: 978, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxFadeIn$1(Self$13, Duration$2, OnFinished) {
    var mEffect = null;
    if (TQTXEffectsHelper$fxBusy(Self$13)) {
@@ -9946,13 +9965,16 @@ function TQTXEffectsHelper$fxFadeIn$1(Self$13, Duration$2, OnFinished) {
       TW3CustomAnimation.Execute(mEffect,Self$13);
    }
 }
-/// procedure TQTXEffectsHelper.fxFadeOut(Self: TW3CustomControl; const Duration: Float)
-///  [line: 1001, column: 29, file: qtxEffects]
+/// function TQTXEffectsHelper.fxFadeOut(Self: TW3CustomControl; const Duration: Float) : TW3CustomControl
+///  [line: 1016, column: 28, file: qtxEffects]
 function TQTXEffectsHelper$fxFadeOut$1(Self$14, Duration$3) {
+   var Result = null;
    TQTXEffectsHelper$fxFadeOut(Self$14,Duration$3,null);
+   Result = Self$14;
+   return Result
 }
 /// procedure TQTXEffectsHelper.fxFadeOut(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-///  [line: 1006, column: 29, file: qtxEffects]
+///  [line: 1022, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxFadeOut(Self$15, Duration$4, OnFinished$1) {
    var mEffect$1 = null;
    if (TQTXEffectsHelper$fxBusy(Self$15)) {
@@ -9979,7 +10001,7 @@ function TQTXEffectsHelper$fxFadeOut(Self$15, Duration$4, OnFinished$1) {
    }
 }
 /// procedure TQTXEffectsHelper.fxMoveBy(Self: TW3CustomControl; const dx: Integer; const dy: Integer; const Duration: Float; const OnFinished: TProcedureRef)
-///  [line: 655, column: 29, file: qtxEffects]
+///  [line: 662, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxMoveBy(Self$16, dx$9, dy$12, Duration$5, OnFinished$2) {
    var mEffect$2 = null;
    if (TQTXEffectsHelper$fxBusy(Self$16)) {
@@ -10010,7 +10032,7 @@ function TQTXEffectsHelper$fxMoveBy(Self$16, dx$9, dy$12, Duration$5, OnFinished
    }
 }
 /// procedure TQTXEffectsHelper.fxMoveDown(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-///  [line: 605, column: 29, file: qtxEffects]
+///  [line: 610, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxMoveDown(Self$17, Duration$6, OnFinished$3) {
    var mEffect$3 = null;
    if (TQTXEffectsHelper$fxBusy(Self$17)) {
@@ -10040,7 +10062,7 @@ function TQTXEffectsHelper$fxMoveDown(Self$17, Duration$6, OnFinished$3) {
    }
 }
 /// procedure TQTXEffectsHelper.fxMoveTo(Self: TW3CustomControl; const dx: Integer; const dy: Integer; const Duration: Float; const OnFinished: TProcedureRef)
-///  [line: 755, column: 29, file: qtxEffects]
+///  [line: 765, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxMoveTo(Self$18, dx$10, dy$13, Duration$7, OnFinished$4) {
    var mEffect$4 = null;
    if (TQTXEffectsHelper$fxBusy(Self$18)) {
@@ -10070,13 +10092,16 @@ function TQTXEffectsHelper$fxMoveTo(Self$18, dx$10, dy$13, Duration$7, OnFinishe
       TW3CustomAnimation.Execute(mEffect$4,Self$18);
    }
 }
-/// procedure TQTXEffectsHelper.fxMoveTo(Self: TW3CustomControl; const dx: Integer; const dy: Integer; const Duration: Float)
-///  [line: 750, column: 29, file: qtxEffects]
+/// function TQTXEffectsHelper.fxMoveTo(Self: TW3CustomControl; const dx: Integer; const dy: Integer; const Duration: Float) : TW3CustomControl
+///  [line: 758, column: 28, file: qtxEffects]
 function TQTXEffectsHelper$fxMoveTo$1(Self$19, dx$11, dy$14, Duration$8) {
+   var Result = null;
    TQTXEffectsHelper$fxMoveTo(Self$19,dx$11,dy$14,Duration$8,null);
+   Result = Self$19;
+   return Result
 }
 /// procedure TQTXEffectsHelper.fxMoveUp(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-///  [line: 560, column: 29, file: qtxEffects]
+///  [line: 570, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxMoveUp(Self$20, Duration$9, OnFinished$5) {
    var mEffect$5 = null;
    if (TQTXEffectsHelper$fxBusy(Self$20)) {
@@ -10106,7 +10131,7 @@ function TQTXEffectsHelper$fxMoveUp(Self$20, Duration$9, OnFinished$5) {
    }
 }
 /// procedure TQTXEffectsHelper.fxScaleDown(Self: TW3CustomControl; aFactor: Integer; const Duration: Float; const OnFinished: TProcedureRef)
-///  [line: 450, column: 29, file: qtxEffects]
+///  [line: 453, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxScaleDown(Self$21, aFactor, Duration$10, OnFinished$6) {
    var mEffect$6 = null;
    if (TQTXEffectsHelper$fxBusy(Self$21)) {
@@ -10141,7 +10166,7 @@ function TQTXEffectsHelper$fxScaleDown(Self$21, aFactor, Duration$10, OnFinished
    }
 }
 /// procedure TQTXEffectsHelper.fxScaleTo(Self: TW3CustomControl; const aToX: Integer; const aToY: Integer; const aToWidth: Integer; const aToHeight: Integer; const Duration: Float; const OnFinished: TProcedureRef)
-///  [line: 703, column: 29, file: qtxEffects]
+///  [line: 711, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxScaleTo(Self$22, aToX, aToY, aToWidth, aToHeight, Duration$11, OnFinished$7) {
    var mEffect$7 = null;
    if (TQTXEffectsHelper$fxBusy(Self$22)) {
@@ -10175,7 +10200,7 @@ function TQTXEffectsHelper$fxScaleTo(Self$22, aToX, aToY, aToWidth, aToHeight, D
    }
 }
 /// procedure TQTXEffectsHelper.fxScaleUp(Self: TW3CustomControl; aFactor: Integer; const Duration: Float; const OnFinished: TProcedureRef)
-///  [line: 386, column: 29, file: qtxEffects]
+///  [line: 388, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxScaleUp(Self$23, aFactor$1, Duration$12, OnFinished$8) {
    var mEffect$8 = null;
    if (TQTXEffectsHelper$fxBusy(Self$23)) {
@@ -10210,12 +10235,12 @@ function TQTXEffectsHelper$fxScaleUp(Self$23, aFactor$1, Duration$12, OnFinished
    }
 }
 /// procedure TQTXEffectsHelper.fxSetBusy(Self: TW3CustomControl; const aValue: Boolean)
-///  [line: 375, column: 29, file: qtxEffects]
+///  [line: 376, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxSetBusy(Self$24, aValue$65) {
    TQTXAttrAccess.Write(Self$24.FAccess,"fxBusy","yes");
 }
 /// procedure TQTXEffectsHelper.fxSizeTo(Self: TW3CustomControl; const aWidth: Integer; const aHeight: Integer; const Duration: Float; const OnFinished: TProcedureRef)
-///  [line: 507, column: 29, file: qtxEffects]
+///  [line: 511, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxSizeTo(Self$25, aWidth$3, aHeight$3, Duration$13, OnFinished$9) {
    var mEffect$9 = null;
    if (TQTXEffectsHelper$fxBusy(Self$25)) {
@@ -10249,7 +10274,7 @@ function TQTXEffectsHelper$fxSizeTo(Self$25, aWidth$3, aHeight$3, Duration$13, O
    }
 }
 /// procedure TQTXEffectsHelper.fxWarpIn(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-///  [line: 923, column: 29, file: qtxEffects]
+///  [line: 937, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxWarpIn(Self$26, Duration$14, OnFinished$10) {
    var mEffect$10 = null;
    if (TQTXEffectsHelper$fxBusy(Self$26)) {
@@ -10273,13 +10298,16 @@ function TQTXEffectsHelper$fxWarpIn(Self$26, Duration$14, OnFinished$10) {
       TW3CustomAnimation.Execute(mEffect$10,Self$26);
    }
 }
-/// procedure TQTXEffectsHelper.fxWarpIn(Self: TW3CustomControl; const Duration: Float)
-///  [line: 918, column: 29, file: qtxEffects]
+/// function TQTXEffectsHelper.fxWarpIn(Self: TW3CustomControl; const Duration: Float) : TW3CustomControl
+///  [line: 931, column: 28, file: qtxEffects]
 function TQTXEffectsHelper$fxWarpIn$1(Self$27, Duration$15) {
+   var Result = null;
    TQTXEffectsHelper$fxWarpIn(Self$27,Duration$15,null);
+   Result = Self$27;
+   return Result
 }
 /// procedure TQTXEffectsHelper.fxWarpOut(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-///  [line: 883, column: 29, file: qtxEffects]
+///  [line: 896, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxWarpOut(Self$28, Duration$16, OnFinished$11) {
    var mEffect$11 = null;
    if (TQTXEffectsHelper$fxBusy(Self$28)) {
@@ -10303,13 +10331,16 @@ function TQTXEffectsHelper$fxWarpOut(Self$28, Duration$16, OnFinished$11) {
       TW3CustomAnimation.Execute(mEffect$11,Self$28);
    }
 }
-/// procedure TQTXEffectsHelper.fxWarpOut(Self: TW3CustomControl; const Duration: Float)
-///  [line: 878, column: 29, file: qtxEffects]
+/// function TQTXEffectsHelper.fxWarpOut(Self: TW3CustomControl; const Duration: Float) : TW3CustomControl
+///  [line: 890, column: 28, file: qtxEffects]
 function TQTXEffectsHelper$fxWarpOut$1(Self$29, Duration$17) {
+   var Result = null;
    TQTXEffectsHelper$fxWarpOut(Self$29,Duration$17,null);
+   Result = null;
+   return Result
 }
 /// procedure TQTXEffectsHelper.fxZoomIn(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-///  [line: 803, column: 29, file: qtxEffects]
+///  [line: 814, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxZoomIn$1(Self$30, Duration$18, OnFinished$12) {
    var mEffect$12 = null;
    if (TQTXEffectsHelper$fxBusy(Self$30)) {
@@ -10333,13 +10364,16 @@ function TQTXEffectsHelper$fxZoomIn$1(Self$30, Duration$18, OnFinished$12) {
       TW3CustomAnimation.Execute(mEffect$12,Self$30);
    }
 }
-/// procedure TQTXEffectsHelper.fxZoomIn(Self: TW3CustomControl; const Duration: Float)
-///  [line: 798, column: 29, file: qtxEffects]
+/// function TQTXEffectsHelper.fxZoomIn(Self: TW3CustomControl; const Duration: Float) : TW3CustomControl
+///  [line: 808, column: 28, file: qtxEffects]
 function TQTXEffectsHelper$fxZoomIn(Self$31, Duration$19) {
+   var Result = null;
    TQTXEffectsHelper$fxZoomIn$1(Self$31,Duration$19,null);
+   Result = Self$31;
+   return Result
 }
 /// procedure TQTXEffectsHelper.fxZoomOut(Self: TW3CustomControl; const Duration: Float; const OnFinished: TProcedureRef)
-///  [line: 843, column: 29, file: qtxEffects]
+///  [line: 855, column: 29, file: qtxEffects]
 function TQTXEffectsHelper$fxZoomOut(Self$32, Duration$20, OnFinished$13) {
    var mEffect$13 = null;
    if (TQTXEffectsHelper$fxBusy(Self$32)) {
