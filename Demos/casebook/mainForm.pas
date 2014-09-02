@@ -376,8 +376,22 @@ begin
           mtext:=mObjs[x].childNodes[1].textContent;
           mItem.title.caption:=mText;
 
+          mItem.TimeInfo.Caption:=mObjs[x].childnodes[7].textContent;
+
+          mItem.Url:=mObjs[x].childnodes[3].textContent;
+
           mItem.Text.caption:=mObjs[x].childnodes[9].textContent;
-          //mItem.Text.Caption:=mObjs.items[x].
+          mItem.text.OnMouseTouchRelease:=Procedure (Sender: TObject; Button: TMouseButton;
+                Shift: TShiftState; X, Y: Integer)
+            var
+              mRef: String;
+            begin
+              (* Navigate to the selected article *)
+              mRef:=mItem.url;
+              asm
+                window.location.assign(@mRef);
+              end;
+            end;
 
           inc(dy,mItem.Height + 10);
         end;
