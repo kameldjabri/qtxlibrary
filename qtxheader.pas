@@ -121,6 +121,7 @@ end;
 // TQTXBackButton
 //#############################################################################
 
+
 procedure TQTXBackButton.setVisible(const aValue:Boolean);
 var
   mParent:  TQTXHeaderBar;
@@ -130,7 +131,7 @@ Begin
      button is injected into the DOM *)
   if  ObjectReady
   and Handle.Ready
-  and TQTXTools.getDocumentReady then
+  and TQTXRuntime.Ready then
   Begin
     (* Make sure parent is valid *)
     if Parent<>NIL then
@@ -209,7 +210,7 @@ var
 Begin
   (* Make sure element is ready and inserted into the DOM *)
   if  ObjectReady
-  and TQTXTools.getDocumentReady
+  and TQTXRuntime.Ready
   and Handle.Ready then
   Begin
     (* make sure parent is valid *)
@@ -281,7 +282,7 @@ Procedure TQTXHeaderTitle.setCaption(const aValue:String);
 begin
   (* Make sure we can do this *)
   if  ObjectReady
-  and TQTXTools.getDocumentReady
+  and TQTXRuntime.Ready
   and Handle.Ready then
   Begin
     (* Check valid parent *)
@@ -340,7 +341,8 @@ Begin
   //FCaption.handle.style['background-color']:='rgba(255,255,255,0.3)';
 
   (* hook up events when element is injected in the DOM *)
-  TQTXTools.ExecuteOnElementReady(Handle, procedure ()
+  //TQTXTools.ExecuteOnElementReady(Handle, procedure ()
+  Handle.ReadyExecute( procedure ()
     Begin
       (* Use update mechanism, which forces an internal
          resize when sized flag is set *)
@@ -371,7 +373,7 @@ Begin
     (* If the element is not ready, try again
        in 100 ms *)
     if  ObjectReady
-    and TQTXTools.getDocumentReady
+    and TQTXRuntime.Ready
     and Handle.Ready then
     Begin
       BeginUpdate;
@@ -427,30 +429,30 @@ Begin
   true:
     Begin
 
-        dx:=FMargin;
-        if FBackButton.visible then
-        inc(dx,FBackButton.Width + FMargin);
+      dx:=FMargin;
+      if FBackButton.visible then
+      inc(dx,FBackButton.Width + FMargin);
 
-        wd:=ClientWidth - (2 * FMargin);
-        if FBackButton.Visible then
-        dec(wd,FBackButton.width);
-        dec(wd,FNextButton.Width);
+      wd:=ClientWidth - (2 * FMargin);
+      if FBackButton.Visible then
+      dec(wd,FBackButton.width);
+      dec(wd,FNextButton.Width);
 
-        dec(wd,FMargin * 2);
+      dec(wd,FMargin * 2);
 
-        {$IFDEF USE_ANIMFRAME_SYNC}
-        w3_requestAnimationFrame( procedure ()
-        begin
-        {$ENDIF}
-          FCaption.fxSizeTo(wd,FCaption.Height,CNT_ANIM_DELAY,
-          procedure ()
-          Begin
-            FCaption.fxMoveTo(dx,
-            (clientHeight div 2) - FCaption.Height div 2, CNT_ANIM_DELAY);
-          end);
-        {$IFDEF USE_ANIMFRAME_SYNC}
+      {$IFDEF USE_ANIMFRAME_SYNC}
+      w3_requestAnimationFrame( procedure ()
+      begin
+      {$ENDIF}
+        FCaption.fxSizeTo(wd,FCaption.Height,CNT_ANIM_DELAY,
+        procedure ()
+        Begin
+          FCaption.fxMoveTo(dx,
+          (clientHeight div 2) - FCaption.Height div 2, CNT_ANIM_DELAY);
         end);
-        {$ENDIF}
+      {$IFDEF USE_ANIMFRAME_SYNC}
+      end);
+      {$ENDIF}
 
     end;
   end;

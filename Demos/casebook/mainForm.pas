@@ -96,7 +96,8 @@ begin
   FList.content.handle.style['background-color']:='transparent';
   Flist.handle.style['background-color']:='transparent';
 
-  TQTXTools.ExecuteOnElementReady(self.handle, procedure ()
+    Handle.readyExecute( procedure ()
+  //TQTXMarshal.ExecuteOnElementReady(self.handle, procedure ()
     begin
       w3_callback( procedure ()
         Begin
@@ -341,12 +342,12 @@ Begin
 end;
 
 Procedure TForm1.setupItems;
-var
-  mXML:JXMLDocument;
-  mUrl: String;
+//var
+  //mXML:JXMLDocument;
+  //mUrl: String;
 begin
 
-  TQTXIO.LoadXML('http://feeds.feedburner.com/delphifeeds?format=xml',
+  TQTXIOAccess.LoadXML('http://feeds.feedburner.com/delphifeeds?format=xml',
     procedure (sender:TW3HttpRequest;aXML:JXMLDocument)
     var
       x:  Integer;

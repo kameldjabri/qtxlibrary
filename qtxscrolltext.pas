@@ -42,7 +42,7 @@ begin
 
   FContent.handle.style.background:='transparent';
 
-  TQTXTools.ExecuteOnElementReady(Handle, procedure ()
+  Handle.readyExecute( procedure ()
     Begin
       Font.Name:='verdana';
       Font.Size:=16;
@@ -112,7 +112,9 @@ Begin
       FContent.handle.style['font']:='22px Verdana';
       FContent.handle.style.background:='transparent';
 
-      mMetrics:=TQTXTools.calcTextMetrics(FText,'Verdana',22);
+      mMetrics:=self.MeasureText(FText);
+
+      //mMetrics:=TQTXTools.calcTextMetrics(FText,'Verdana',22);
       FContent.Width:=mMetrics.tmWidth;
       FContent.Height:=mMetrics.tmHeight;
 

@@ -5,6 +5,7 @@ interface
 uses 
   W3System, W3Components, W3Forms, W3Application,
   mainForm, w3header,w3toolbutton, w3graphics,
+
   qtxutils,
   qtxeffects,
   qtxheader,
@@ -34,18 +35,19 @@ type
 implementation
 
 { TApplication}
+uses qtxutils;
 
 procedure TApplication.ApplicationStarting;
 begin
   (* Link to Font-Awesome *)
-  TQTXIO.loadCSS('stylesheet',
+  TQTXIOAccess.loadCSS('stylesheet',
   'http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css',NIL);
-
 
   (* Setup global header control.
      We have to add a little delay here due to the nature of
      how this control works. *)
-  TQTXTools.ExecuteOnDocumentReady( procedure ()
+
+  TQTXRuntime.ExecuteDocumentReady( procedure ()
   begin
     Fheader:=TQTXHeaderBar.Create(display);
     FHeader.top:=-1;
