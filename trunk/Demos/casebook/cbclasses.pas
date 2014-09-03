@@ -118,7 +118,8 @@ end;
 Procedure TCaseBookList.InitializeObject;
 Begin
   inherited;
-  TQTXTools.ExecuteOnElementReady(Handle, procedure ()
+  //TQTXTools.ExecuteOnElementReady(Handle, procedure ()
+  Handle.readyExecute( procedure ()
   Begin
     resize;
   end);
@@ -150,7 +151,8 @@ Begin
   FCaption.Width:=40;
   FCaption.Caption:='';
 
-  TQTXTools.ExecuteOnElementReady(Handle, procedure ()
+  //TQTXTools.ExecuteOnElementReady(Handle, procedure ()
+  Handle.readyExecute( procedure ()
     Begin
       LayoutChildren;
     end);

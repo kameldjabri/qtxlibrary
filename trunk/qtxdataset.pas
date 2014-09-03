@@ -1298,7 +1298,7 @@ end;
 
 Procedure TQTXGUIDField.Generate;
 Begin
-  inherited setValue(uppercase(TQTXGUID.createGUID));
+  inherited setValue(uppercase(String.createGUID));
 end;
 
 //#############################################################################

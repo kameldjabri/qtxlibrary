@@ -77,6 +77,7 @@ CNT_CACHE_DELAY   = 50;
 
 type
 
+
   TQTXMoveAnimation = class(TW3TransitionAnimation)
   private
     FFromX: Integer;

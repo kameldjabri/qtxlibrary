@@ -1,5 +1,7 @@
 unit qtxlabel;
 
+
+
 //#############################################################################
 //
 //  Unit:       qtxlabel.pas
@@ -27,8 +29,8 @@ unit qtxlabel;
 interface
 
 uses 
-  W3System, w3graphics, w3components,
-  qtxutils;
+  qtxutils,
+  W3System, w3graphics, w3components;
 
 type
 
@@ -60,7 +62,8 @@ Begin
   inherited;
   setAuto(True);
   setCaption(ClassName);
-  TQTXTools.ExecuteOnElementReady(Handle, Procedure ()
+
+  Handle.readyExecute( Procedure ()
     Begin
       //Handle.style['overflow']:='hidden';
       AdjustSize;

@@ -31,42 +31,48 @@ uses
 
 type
 
+  (*  TextMetric information record.
+      Returned by MeasureText() functions
+      in response to measuring the width and height
+      if a piece of HTML within an element's context *)
   TQTXTextMetric  = Record
     tmWidth:  Integer;
     tmHeight: Integer;
     function  toString:String;
   End;
 
+  (* FontInfo information record.
+     Returned by getFontInfo() functions, which is a
+     function that uses font detection to avail what
+     font is selected into an element's context *)
   TQTXFontInfo = Record
     fiName: String;
     fiSize: Integer;
     function  toString:String;
   End;
 
-  TQTXGUID = Class
+  TQTXTextDataReadyEvent = procedure
+    (sender:TW3HttpRequest;aText:String);
+
+  TQTXXMLDataReadyEvent = procedure
+    (sender:TW3HttpRequest;aObject:JXMLDocument);
+
+  TQTXIOAccess = Class(TObject)
   public
-    class function CreateGUID:String;
-  end;
-
-  TQTXXMLDocumentReady = procedure (sender:TW3HttpRequest;aXML:JXMLDocument);
-  TQTDocumentLoaded = Procedure (sender:TW3HttpRequest;Data:String);
-
-
-  TQTXIO = Class(TObject)
-  public
-    class procedure LoadXML(aUrl:String; const OnComplete:TQTXXMLDocumentReady);
-    class procedure LoadFile(aUrl:String; const OnComplete:TQTDocumentLoaded);
+    class procedure LoadXML
+          (aFilename:String;const OnComplete:TQTXXMLDataReadyEvent);
+    class procedure LoadFile
+          (aFilename:String;const OnComplete:TQTXTextDataReadyEvent);
 
     class function LoadCSS(const aRel,aHref:String;
-         const aCallback:TProcedureRef):THandle;
+         const OnComplete:TProcedureRef):THandle;
 
     class Procedure LoadScript(aFilename:String;
-          const aCallback:TProcedureRef);
+          const OnComplete:TProcedureRef);
 
     class function LoadImage(aFilename:String;
-          const aCallback:TProcedureRef):THandle;
+          const OnComplete:TProcedureRef):THandle;
   End;
-
 
   TQTXHandleHelper = helper for THandle
     function  Valid:Boolean;
@@ -79,6 +85,24 @@ type
     function  Root:THandle;
   end;
 
+  TQTXIntegerHelper = helper for Integer
+    function  toHex(digits:Integer):String;
+    function  Negative:Boolean;
+    function  Positive:Boolean;
+    function  DividableBy(const aDivisor:Integer):Boolean;
+  end;
+
+  TQTXStringHelper = Helper for String
+    function  Numeric:Boolean;
+    function  Explode(const separator:String):Array of String;
+    class function  CreateGUID:String;
+  End;
+
+  TQTXAnimationHelper = helper for TW3CustomAnimation
+    procedure Pause;
+    procedure Resume;
+    procedure Stop;
+  End;
 
   TQTXFontDetector = Class(TObject)
   private
@@ -111,22 +135,15 @@ type
     Constructor Create;virtual;
   End;
 
-
-  TQTXAnimationHelper = helper for TW3CustomAnimation
-    procedure Pause;
-    procedure Resume;
-    procedure Stop;
-  End;
-
   TQTXAttrAccess = Class(TObject)
   private
-    FHandle:  THandle;
+    FHandle:    THandle;
   public
-    Property  Handle:THandle read FHandle;
+    Property    Handle:THandle read FHandle;
 
-    function  Exists(aName:String):Boolean;
-    function  Read(aName:String):Variant;
-    procedure Write(aName:String;const aValue:Variant);
+    function    Exists(aName:String):Boolean;
+    function    Read(aName:String):Variant;
+    procedure   Write(aName:String;const aValue:Variant);
 
     Constructor Create(Const aHandle:THandle);virtual;
   End;
@@ -136,43 +153,80 @@ type
     FAccess:    TQTXAttrAccess;
   public
     Property    ElementData:TQTXAttrAccess read FAccess;
-    function    MeasureText(aContent:String):TQTXTextMetric;
-    function    MeasureTextFixed(aContent:String):TQTXTextMetric;
+
+    function    MeasureText(aContent:String):TQTXTextMetric;overload;
+    function    MeasureTextFixed(aContent:String):TQTXTextMetric;overload;
+
+    class function MeasureTextSize(const aHandle:THandle;
+          const aContent:String):TQTXTextMetric;
+
+    class function MeasureTextSizeF(const aHandle:THandle;
+          const aWidth:Integer;const aContent:String):TQTXTextMetric;
+
+    function    getFontInfo:TQTXFontInfo;overload;
+    class function  getFontInfo(const aHandle:THandle):TQTXFontInfo;overload;
+
     Constructor Create(AOwner:TW3Component);override;
     Destructor  Destroy;Override;
   end;
 
-  TQTXTools = Class
+  TQTXRuntime = class(TObject)
   public
-    class function calcTextMetrics(const aText:String;
-          const aFontName:String;
-          const aFontSize:Integer):TQTXTextMetric;
+    class procedure Execute(const OnExecute:TProcedureRef;
+            const aCount:Integer;
+            const aDelay:Integer);
 
-    class function calcTextAverage(const aFontName:String;
-          const aFontSize:Integer):TQTXTextMetric;
-
-    class procedure ExecuteOnElementReady(const aElement:THandle;
-          const aFunc:TProcedureRef);
-
-    class procedure ExecuteRepeat(const aFunc:TProcedureRef;
-          const aCount:Integer;
-          const aDelay:Integer);
-
-    class procedure ExecuteOnDocumentReady(const aFunc:TProcedureRef);
-
-    class function getDocumentReady:Boolean;
+    class function  Ready:Boolean;
+    class procedure ExecuteDocumentReady(const OnReady:TProcedureRef);
 
   end;
 
 implementation
 
+var
+_FontDetect:TQTXFontDetector;
+
+Initialization
+begin
+  _FontDetect:=TQTXFontDetector.Create;
+end;
+
+//#############################################################################
+// TQTXIntegerHelper
+//#############################################################################
+
+function  TQTXIntegerHelper.toHex(digits:Integer):String;
+var
+  mText:  String;
+begin
+  mtext:=IntToHex(self,digits);
+  if (mtext.Length>0)
+  and (mText[1] <> '-') then
+  result:='$' + copy(mText,2,length(mtext));
+end;
+
+function TQTXIntegerHelper.Negative:Boolean;
+begin
+  result:=self<0;
+end;
+
+function TQTXIntegerHelper.Positive:Boolean;
+begin
+  result:=self>0;
+end;
+
+function TQTXIntegerHelper.DividableBy(const aDivisor:Integer):Boolean;
+Begin
+  result:=((self div aDivisor) * aDivisor) = self;
+end;
+
 //############################################################################
-// TQTXIO
+// TQTXIOAccess
 //############################################################################
 
 
-class procedure TQTXIO.LoadScript(aFilename:String;
-      const aCallback:TProcedureRef);
+class procedure TQTXIOAccess.LoadScript(aFilename:String;
+      const OnComplete:TProcedureRef);
 var
   mRef: THandle;
 Begin
@@ -182,10 +236,10 @@ Begin
   if mRef.valid then
   begin
     mRef.setAttribute("src",aFilename);
-    if assigned(aCallback) then
+    if assigned(OnComplete) then
     mRef.onload := procedure ()
       begin
-        aCallback();
+        OnComplete();
       end;
 
     asm
@@ -196,8 +250,8 @@ Begin
   raise exception.Create('Failed to allocate script element error');
 end;
 
-class function TQTXIO.LoadImage(aFilename:String;
-          const aCallback:TProcedureRef):THandle;
+class function TQTXIOAccess.LoadImage(aFilename:String;
+          const OnComplete:TProcedureRef):THandle;
 Begin
 
   asm
@@ -206,18 +260,18 @@ Begin
 
   if result.valid then
   Begin
-    if assigned(aCallback) then
+    if assigned(OnComplete) then
     result.onload := procedure ()
       begin
-        aCallback();
+        OnComplete();
       end;
 
     result.src := aFilename;
   end;
 end;
 
-class function TQTXIO.LoadCSS(const aRel,aHref:String;
-      const aCallback:TProcedureRef):THandle;
+class function TQTXIOAccess.LoadCSS(const aRel,aHref:String;
+      const OnComplete:TProcedureRef):THandle;
 var
   mLink:  THandle;
 Begin
@@ -230,18 +284,18 @@ Begin
     (@mLink).rel=@aRel;
     document.head.appendChild(@mLink);
   end;
-  if assigned(aCallback) then
+  if assigned(OnComplete) then
   mLink.onload := procedure ()
   Begin
-    aCallback();
+    OnComplete();
   end;
 
   result:=mLink;
 end;
 
 
-class procedure TQTXIO.LoadFile(aUrl:String;
-      const OnComplete:TQTDocumentLoaded);
+class procedure TQTXIOAccess.LoadFile(aFilename:String;
+      const OnComplete:TQTXTextDataReadyEvent);
 var
   mLoader:  TW3HttpRequest;
 Begin
@@ -268,12 +322,12 @@ Begin
         mLoader.free;
       end;
     end;
-  mLoader.Get(aUrl);
+  mLoader.Get(aFilename);
 end;
 
 
-class procedure TQTXIO.LoadXML(aUrl:String;
-      const OnComplete:TQTXXMLDocumentReady);
+class procedure TQTXIOAccess.LoadXML(aFilename:String;
+      const OnComplete:TQTXXMLDataReadyEvent);
 var
   mLoader:  TW3HttpRequest;
 Begin
@@ -300,15 +354,8 @@ Begin
         mLoader.free;
       end;
     end;
-  mLoader.Get(aUrl);
+  mLoader.Get(aFilename);
 end;
-
-(*
-  TQTXXMLDocumentReady = procedure (Url:String;aXML:JXMLDocument);
-  TQTXXMLAPI = Class(TObject)
-  public
-    class procedure LoadXML(aUrl:String; const OnComplete:TQTXXMLDocumentReady);
-  End;      *)
 
 //############################################################################
 // TQTXFontInfo
@@ -659,34 +706,108 @@ Begin
   inherited;
 end;
 
+function TW3CustomControl.getFontInfo:TQTXFontInfo;
+//var
+//  mObj: TQTXFontDetector;
+Begin
+  result:=_FontDetect.getFontInfo(Handle);
+  (*
+  mObj:=TQTXFontDetector.Create;
+  try
+    result:=mObj.getFontInfo(Handle);
+  finally
+    mObj.free;
+  end; *)
+end;
+
+class function  TW3CustomControl.getFontInfo(const aHandle:THandle):TQTXFontInfo;
+(* var
+  mObj: TQTXFontDetector; *)
+Begin
+  result:=_FontDetect.getFontInfo(aHandle);
+  (* mObj:=TQTXFontDetector.Create;
+  try
+    result:=mObj.getFontInfo(aHandle);
+  finally
+    mObj.free;
+  end;  *)
+end;
+
 function TW3CustomControl.MeasureText(aContent:String):TQTXTextMetric;
-var
-  mObj: TQTXFontDetector;
+(* var
+  mObj: TQTXFontDetector; *)
 Begin
   aContent:=trim(aContent);
   if aContent.length>0 then
   begin
+    result:=_FontDetect.MeasureText(
+    _FontDetect.getFontInfo(Handle),aContent);
+    (*
     mObj:=TQTXFontDetector.Create;
     try
       result:=mObj.MeasureText(mObj.getFontInfo(Handle),aContent);
     finally
       mObj.free;
-    end;
+    end; *)
   end;
 end;
 
 function TW3CustomControl.MeasureTextFixed(aContent:String):TQTXTextMetric;
-var
-  mObj: TQTXFontDetector;
+//var
+//  mObj: TQTXFontDetector;
 Begin
   aContent:=trim(aContent);
   if aContent.length>0 then
   begin
-    mObj:=TQTXFontDetector.Create;
+    result:=_FontDetect.MeasureText(
+    _FontDetect.getFontInfo(Handle),ClientWidth,aContent);
+    (* mObj:=TQTXFontDetector.Create;
     try
       result:=mObj.MeasureText(mObj.getFontInfo(Handle),ClientWidth,aContent);
     finally
       mObj.free;
+    end; *)
+  end;
+end;
+
+class function TW3CustomControl.MeasureTextSize(const aHandle:THandle;
+      const aContent:String):TQTXTextMetric;
+//var
+//  mObj: TQTXFontDetector;
+Begin
+  if aHandle.valid then
+  begin
+    if aContent.length>0 then
+    begin
+      result:=_FontDetect.MeasureText(
+      _FontDetect.getFontInfo(aHandle),aContent);
+      (* mObj:=TQTXFontDetector.Create;
+      try
+        result:=mObj.MeasureText(mObj.getFontInfo(aHandle),-1,aContent);
+      finally
+        mObj.free;
+      end; *)
+    end;
+  end;
+end;
+
+class function TW3CustomControl.MeasureTextSizeF(const aHandle:THandle;
+      const aWidth:Integer;const aContent:String):TQTXTextMetric;
+//var
+//  mObj: TQTXFontDetector;
+Begin
+  if aHandle.valid then
+  begin
+    if aContent.length>0 then
+    begin
+      result:=_FontDetect.MeasureText(
+      _FontDetect.getFontInfo(aHandle),aWidth,aContent);
+      (* mObj:=TQTXFontDetector.Create;
+      try
+        result:=mObj.MeasureText(mObj.getFontInfo(aHandle),aWidth,aContent);
+      finally
+        mObj.free;
+      end; *)
     end;
   end;
 end;
@@ -701,164 +822,106 @@ Begin
 end;
 
 //############################################################################
-// TQTXTools
+// TQTXRuntime
 //############################################################################
 
-class function TQTXTools.getDocumentReady:Boolean;
+class procedure TQTXRuntime.ExecuteDocumentReady(const OnReady:TProcedureRef);
+Begin
+  if Ready then
+  OnReady() else
+  Begin
+    w3_callback( procedure ()
+      begin
+        ExecuteDocumentReady(OnReady);
+      end,
+      100);
+  end;
+end;
+
+class function TQTXRuntime.Ready:Boolean;
 begin
   asm
     @result = document.readyState == "complete";
   end;
 end;
 
-{
-class function TQTXTools.getHandleReady(const aHandle:THandle):Boolean;
-Begin
-  if (aHandle) then
-  result:=getElementInDOM(aHandle);
-end;
-
-class function TQTXTools.getElementRootAncestor(const aElement:THandle):THandle;
-var
-  mAncestor:  THandle;
-Begin
-  if (aElement) then
-  Begin
-    mAncestor:=aElement;
-    while (mAncestor.parentNode) do
-    mAncestor:=mAncestor.parentNode;
-    result:=mAncestor;
-  end;
-end;
-
-class function TQTXTools.getElementInDOM(const aElement:THandle):Boolean;
-var
-  mRef: THandle;
-begin
-  if (aElement) then
-  Begin
-    (* Check that top-level ancestor is window->document->body *)
-    mRef:=getElementRootAncestor(aElement);
-    result:=(mRef.body);
-  end;
-end;       }
-
-class procedure TQTXTools.ExecuteOnDocumentReady(const aFunc:TProcedureRef);
-Begin
-  if getDocumentReady then
-  aFunc() else
-  Begin
-    w3_callback( procedure ()
-      begin
-        ExecuteOnDocumentReady(aFunc);
-      end,
-      100);
-  end;
-end;
-
-
-class procedure TQTXTools.ExecuteOnElementReady(const aElement:THandle;
-      const aFunc:TProcedureRef);
-Begin
-  if (aElement) then
-  begin
-    if assigned(aFunc) then
-    Begin
-      //if TQTXTools.getElementInDOM(aElement) then
-      if aElement.ready then
-      aFunc() else
-      w3_callback(
-        procedure ()
-        begin
-          aElement.readyExecute(aFunc);
-          //TQTXTools.ExecuteOnElementReady(aElement,aFunc);
-        end,
-        100);
-    end;
-  end;
-end;
-
-class procedure TQTXTools.ExecuteRepeat(const aFunc:TProcedureRef;
+class procedure TQTXRuntime.Execute(const OnExecute:TProcedureRef;
       const aCount:Integer;
       const aDelay:Integer);
 Begin
-  if assigned(aFunc) then
+  if assigned(OnExecute) then
   begin
     if aCount>0 then
     begin
-      aFunc();
+      OnExecute();
       if aCount>1 then
       w3_callback(
         procedure ()
         begin
-          ExecuteRepeat(aFunc,aCount-1,aDelay);
+          Execute(OnExecute,aCount-1,aDelay);
         end,
         aDelay);
     end;
   end;
 end;
 
-class function TQTXTools.calcTextAverage(const aFontName:String;
-      const aFontSize:Integer):TQTXTextMetric;
-Begin
-  result:=calcTextMetrics('mmMMMwwWWW',afontName,aFontSize);
-end;
+//#############################################################################
+// TQTXStringHelper
+//#############################################################################
 
-class function TQTXTools.calcTextMetrics(const aText:String;
-  const aFontName:String;const aFontSize:Integer):TQTXTextMetric;
+function TQTXStringHelper.Explode(const separator:String):Array of String;
 var
-  mHandle:  THandle;
+  mText:  String;
 Begin
+  mText:=self;
   asm
-    @mHandle = document.createElement("PRE");
-  end;
-
-  mHandle.style['display']:='block';
-  mHandle.style['overflow']:='scroll';
-  mHandle.style['visibility']:='hidden';
-  mHandle.style['font']:=TInteger.toPxStr(aFontSize) + ' ' + aFontName;
-  mHandle.style['text-wrap']:='none';
-  mHandle.style['border-style']:='none';
-  mHandle.style['borderWidth']:='0px';
-  mHandle.style['margin-top']:='0px';
-  mHandle.style['margin-bottom']:='0px';
-  mHandle.style['margin-right']:='0px';
-  mHandle.style['margin-left']:='0px';
-
-  (* scale out large *)
-  mHandle.style.width:='10000px';
-  mHandle.style.height:='10000px';
-
-  (* set content *)
-  mhandle.innerText := aText ;
-
-  (* Insert into DOM *)
-  asm
-    document.body.appendChild(@mHandle);
-  end;
-
-  (* scale down, force scrolling region we can measure *)
-  mHandle.style.width:='4px';
-  mHandle.style.height:='4px';
-
-  (* get calculated width/height *)
-  result.tmWidth := mHandle.scrollWidth;
-  result.tmHeight :=mHandle.scrollHeight;
-
-  inc(result.tmHeight,4);
-
-  asm
-    document.body.removeChild(@mHandle);
+    @result = (@mText).split(@separator);
   end;
 end;
 
+function TQTXStringHelper.Numeric:Boolean;
+const
+  CNT_NUMBERS = '0123456789';
+  CNT_HEX     = '0123456789abcdef';
+var
+  x:  Integer;
+begin
+  if self.length>0 then
+  Begin
+    result:=true;
+    for x:=self.low to self.high do
+    Begin
+      if pos(self[x],CNT_NUMBERS)<1 then
+      begin
 
-//#############################################################################
-// TQTXGUID
-//#############################################################################
+        if (self[x]<>'.') then
+        Begin
+          result:=False;
+          break;
+        end else
+        begin
+          (* Comma must have prefix numbers, like 0.3 or 12.5, not .50 *)
+          if x<=1 then
+          Begin
+            result:=False;
+            break;
+          end;
+        end;
+
+        if pos(self[x],CNT_HEX)<1 then
+        begin
+          result:=False;
+          Break;
+        end;
+
+      end;
+    end;
+  end;
+end;
+
 
 // http://www.ietf.org/rfc/rfc4122.txt
-class function TQTXGUID.CreateGUID:String;
+class function TQTXStringHelper.CreateGUID:String;
 Begin
   asm
     var s = [];
