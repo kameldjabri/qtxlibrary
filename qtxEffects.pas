@@ -68,7 +68,8 @@ unit qtxEffects;
 interface
 
 uses 
-  w3System, w3Components, w3Effects,
+  System.Types, SmartCL.System, SmartCL.Components, SmartCL.Effects,
+  w3c.dom,
   qtxutils;
 
 const

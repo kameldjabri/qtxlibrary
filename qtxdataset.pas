@@ -27,7 +27,7 @@ unit qtxdataset;
 interface
 
 uses
-  W3System, qtxutils;
+  System.Types, SmartCL.System, qtxutils;
 
 type
 

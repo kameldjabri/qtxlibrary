@@ -29,8 +29,9 @@ unit qtxlabel;
 interface
 
 uses 
-  qtxutils,
-  W3System, w3graphics, w3components;
+  System.Types, SmartCL.System, SmartCL.Components, SmartCL.Effects,
+  w3c.dom,
+  qtxutils;
 
 type
 

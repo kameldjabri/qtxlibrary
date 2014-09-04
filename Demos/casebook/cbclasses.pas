@@ -328,7 +328,6 @@ end;
 
 procedure TCBNotifierPlack.Show;
 Begin
-  (*
   FBox.fxFadeIn(0.5, procedure ()
   begin
     FBox.fxMoveTo(FBox.Left,
@@ -345,7 +344,7 @@ Begin
           end,
           1000 * 8);
       end);
-  end); *)
+  end);
 end;
 
 //#############################################################################
