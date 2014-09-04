@@ -131,6 +131,7 @@ html, body
 }
 
 
+
 /* =============================================
  * TW3ProgressBar:
  * ============================================= */
@@ -545,11 +546,64 @@ to
  }
 }
 
+
+@-webkit-keyframes wobble-vertical {
+  16.65% {
+    -webkit-transform: translateY(8px);
+    transform: translateY(8px);
+  }
+
+  33.3% {
+    -webkit-transform: translateY(-6px);
+    transform: translateY(-6px);
+  }
+
+  49.95% {
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);
+  }
+
+  66.6% {
+    -webkit-transform: translateY(-2px);
+    transform: translateY(-2px);
+  }
+
+  83.25% {
+    -webkit-transform: translateY(1px);
+    transform: translateY(1px);
+  }
+
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+.TCBGlyphButton {
+  border-radius: 4px;
+
+            cursor: pointer;
+            text-shadow: 0 1px 1px #FFFFFF;
+}
+
+.TCBGlyphButton:hover {
+  -webkit-animation-name: wobble-vertical;
+  animation-name: wobble-vertical;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+
 .TW3ToolButton
 {
 
-	-webkit-box-shadow: 0 1px 1px #9aa5bb, 0 -1px 1px #8e96a5;
-	box-shadow: 0 1px 1px #9aa5bb, 0 -1px 1px #8e96a5;
+  box-shadow: 1px 1px 1px #000000;
+	//-webkit-box-shadow: 0 1px 1px #9aa5bb, 0 -1px 1px #8e96a5;
+	//box-shadow: 0 1px 1px #9aa5bb, 0 -1px 1px #8e96a5;
 
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
@@ -567,6 +621,7 @@ to
 
 .TW3ToolButton:active:enabled
 {
+  box-shadow: 0px 0px 1px 0px #000000;
 	background: rgb(146,161,191); /* Old browsers */
   background: -webkit-linear-gradient(top,  rgba(146,161,191,1) 0%,rgba(121,138,173,1) 25%,rgba(98,118,160,1) 50%,rgba(85,106,151,1) 53%,rgba(86,108,152,1) 75%,rgba(84,105,147,1) 95%); /* Chrome10+,Safari5.1+ */
   background: linear-gradient(to top,  rgba(146,161,191,1) 0%,rgba(121,138,173,1) 25%,rgba(98,118,160,1) 50%,rgba(85,106,151,1) 53%,rgba(86,108,152,1) 75%,rgba(84,105,147,1) 95%); /* W3C */
@@ -715,10 +770,13 @@ to
 
 .TW3HeaderControl
 {
+
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+
 	cursor: default;
 	border-bottom: 1px solid #2d3642;
 	//border-top: 1px solid #cdd5df;
-	box-shadow: 0 1px 1px rgba(33, 33, 33, 0.2);
+	//box-shadow: 0 1px 1px rgba(33, 33, 33, 0.2);
   background: #425f9e;
   //background: rgb(178,187,202);   /* Old browsers */
   //background: -webkit-linear-gradient(top,  rgba(178,187,202,1) 1%,rgba(167,176,195,1) 25%,rgba(144,156,179,1) 47%,rgba(133,147,172,1) 50%,rgba(124,139,165,1) 75%,rgba(115,131,159,1) 100%); /* Chrome10+,Safari5.1+ */

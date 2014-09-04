@@ -65,7 +65,6 @@ Begin
 
   Handle.readyExecute( Procedure ()
     Begin
-      //Handle.style['overflow']:='hidden';
       AdjustSize;
     end);
 end;

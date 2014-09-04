@@ -328,11 +328,11 @@ end;
 
 procedure TCBNotifierPlack.Show;
 Begin
+  (*
   FBox.fxFadeIn(0.5, procedure ()
   begin
     FBox.fxMoveTo(FBox.Left,
     (TW3CustomControl(FBox.Parent).ClientHeight div 2) - FBox.Height div 2,
-    //(TW3CustomControl(FBox.Parent).ClientHeight div 2) - FBox.height div 2,
     0.6, procedure ()
       begin
         TQTXRuntime.DelayedDispatch( procedure ()
@@ -345,7 +345,7 @@ Begin
           end,
           1000 * 8);
       end);
-  end);
+  end); *)
 end;
 
 //#############################################################################
