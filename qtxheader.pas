@@ -35,7 +35,8 @@ uses
   qtxeffects,
   qtxlabel;
 
-{.$DEFINE USE_ANIMFRAME_SYNC}
+{$DEFINE USE_ANIMFRAME_SYNC}
+
 
 const
 CNT_ANIM_DELAY  = 0.22;

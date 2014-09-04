@@ -59,6 +59,7 @@ html, body
 }
 
 
+
 /* =============================================
  * TW3ProgressBar:
  * ============================================= */
@@ -473,11 +474,64 @@ to
  }
 }
 
+
+@-webkit-keyframes wobble-vertical {
+  16.65% {
+    -webkit-transform: translateY(8px);
+    transform: translateY(8px);
+  }
+
+  33.3% {
+    -webkit-transform: translateY(-6px);
+    transform: translateY(-6px);
+  }
+
+  49.95% {
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);
+  }
+
+  66.6% {
+    -webkit-transform: translateY(-2px);
+    transform: translateY(-2px);
+  }
+
+  83.25% {
+    -webkit-transform: translateY(1px);
+    transform: translateY(1px);
+  }
+
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+.TCBGlyphButton {
+  border-radius: 4px;
+
+            cursor: pointer;
+            text-shadow: 0 1px 1px #FFFFFF;
+}
+
+.TCBGlyphButton:hover {
+  -webkit-animation-name: wobble-vertical;
+  animation-name: wobble-vertical;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-timing-function: linear;
+  animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+
 .TW3ToolButton
 {
 
-	-webkit-box-shadow: 0 1px 1px #9aa5bb, 0 -1px 1px #8e96a5;
-	box-shadow: 0 1px 1px #9aa5bb, 0 -1px 1px #8e96a5;
+  box-shadow: 1px 1px 1px #000000;
+	//-webkit-box-shadow: 0 1px 1px #9aa5bb, 0 -1px 1px #8e96a5;
+	//box-shadow: 0 1px 1px #9aa5bb, 0 -1px 1px #8e96a5;
 
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
@@ -495,6 +549,7 @@ to
 
 .TW3ToolButton:active:enabled
 {
+  box-shadow: 0px 0px 1px 0px #000000;
 	background: rgb(146,161,191); /* Old browsers */
   background: -webkit-linear-gradient(top,  rgba(146,161,191,1) 0%,rgba(121,138,173,1) 25%,rgba(98,118,160,1) 50%,rgba(85,106,151,1) 53%,rgba(86,108,152,1) 75%,rgba(84,105,147,1) 95%); /* Chrome10+,Safari5.1+ */
   background: linear-gradient(to top,  rgba(146,161,191,1) 0%,rgba(121,138,173,1) 25%,rgba(98,118,160,1) 50%,rgba(85,106,151,1) 53%,rgba(86,108,152,1) 75%,rgba(84,105,147,1) 95%); /* W3C */
@@ -643,10 +698,13 @@ to
 
 .TW3HeaderControl
 {
+
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+
 	cursor: default;
 	border-bottom: 1px solid #2d3642;
 	//border-top: 1px solid #cdd5df;
-	box-shadow: 0 1px 1px rgba(33, 33, 33, 0.2);
+	//box-shadow: 0 1px 1px rgba(33, 33, 33, 0.2);
   background: #425f9e;
   //background: rgb(178,187,202);   /* Old browsers */
   //background: -webkit-linear-gradient(top,  rgba(178,187,202,1) 1%,rgba(167,176,195,1) 25%,rgba(144,156,179,1) 47%,rgba(133,147,172,1) 50%,rgba(124,139,165,1) 75%,rgba(115,131,159,1) 100%); /* Chrome10+,Safari5.1+ */
@@ -8453,15 +8511,7 @@ var TCBNotifierPlack = {
    /// procedure TCBNotifierPlack.Show()
    ///  [line: 329, column: 28, file: cbclasses]
    ,Show:function(Self) {
-      TQTXEffectsHelper$fxFadeIn$1(Self.FBox,0.5,function () {
-         TQTXEffectsHelper$fxMoveTo(Self.FBox,TW3MovableControl.GetLeft$(Self.FBox),(($Div(TW3MovableControl.ClientHeight($As(Self.FBox.FParent,TW3CustomControl)),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FBox),2))),0.6,function () {
-            TQTXRuntime.DelayedDispatch(TQTXRuntime,function () {
-               TQTXEffectsHelper$fxFadeOut(Self.FBox,0.3,function () {
-                  TObject.Free(Self);
-               });
-            },8000);
-         });
-      });
+      /* null */
    }
    /// constructor TCBNotifierPlack.Create(AOwner: TW3CustomControl)
    ///  [line: 298, column: 30, file: cbclasses]
@@ -9460,7 +9510,7 @@ var TQTXLabel = {
       $.FOnChanged$1 = null;
    }
    /// procedure TQTXLabel.AdjustSize()
-   ///  [line: 73, column: 21, file: qtxlabel]
+   ///  [line: 72, column: 21, file: qtxlabel]
    ,AdjustSize:function(Self) {
       var mSize$1 = {tmWidth:0,tmHeight:0};
       var mObj$9 = null;
@@ -9483,7 +9533,7 @@ var TQTXLabel = {
       }
    }
    /// function TQTXLabel.getCaption() : String
-   ///  [line: 109, column: 20, file: qtxlabel]
+   ///  [line: 108, column: 20, file: qtxlabel]
    ,getCaption:function(Self) {
       return TW3TagObj.GetInnerHTML(Self);
    }
@@ -9498,12 +9548,12 @@ var TQTXLabel = {
       });
    }
    /// function TQTXLabel.MakeElementTagId() : String
-   ///  [line: 127, column: 21, file: qtxlabel]
+   ///  [line: 126, column: 21, file: qtxlabel]
    ,MakeElementTagId:function(Self) {
       return "PRE";
    }
    /// procedure TQTXLabel.setAuto(const aValue: Boolean)
-   ///  [line: 99, column: 21, file: qtxlabel]
+   ///  [line: 98, column: 21, file: qtxlabel]
    ,setAuto:function(Self, aValue$63) {
       if (aValue$63!=Self.FAuto) {
          Self.FAuto = aValue$63;
@@ -9513,7 +9563,7 @@ var TQTXLabel = {
       }
    }
    /// procedure TQTXLabel.setCaption(const aValue: String)
-   ///  [line: 114, column: 21, file: qtxlabel]
+   ///  [line: 113, column: 21, file: qtxlabel]
    ,setCaption:function(Self, aValue$64) {
       if (aValue$64!=TW3TagObj.GetInnerHTML(Self)) {
          TW3TagObj.SetInnerHTML(Self,aValue$64);
@@ -10472,7 +10522,7 @@ var TW3ToolButton = {
    ,setCaption$1$:function($){return $.ClassType.setCaption$1.apply($.ClassType, arguments)}
 };
 /// TQTXHeaderButton = class (TW3ToolButton)
-///  [line: 48, column: 3, file: qtxheader]
+///  [line: 49, column: 3, file: qtxheader]
 var TQTXHeaderButton = {
    $ClassName:"TQTXHeaderButton",
    $Parent:TW3ToolButton
@@ -10481,7 +10531,7 @@ var TQTXHeaderButton = {
       $.FOnVisible = null;
    }
    /// procedure TQTXHeaderButton.setInheritedVisible(const aValue: Boolean)
-   ///  [line: 115, column: 28, file: qtxheader]
+   ///  [line: 116, column: 28, file: qtxheader]
    ,setInheritedVisible:function(Self, aValue$66) {
       TW3MovableControl.SetVisible(Self,aValue$66);
    }
@@ -10558,7 +10608,7 @@ var TQTXHeaderButton = {
    ,setCaption$1:TW3ToolButton.setCaption$1
 };
 /// TQTXNextButton = class (TQTXHeaderButton)
-///  [line: 67, column: 3, file: qtxheader]
+///  [line: 68, column: 3, file: qtxheader]
 var TQTXNextButton = {
    $ClassName:"TQTXNextButton",
    $Parent:TQTXHeaderButton
@@ -10566,7 +10616,7 @@ var TQTXNextButton = {
       TQTXHeaderButton.$Init($);
    }
    /// procedure TQTXNextButton.setVisible(const aValue: Boolean)
-   ///  [line: 205, column: 26, file: qtxheader]
+   ///  [line: 206, column: 26, file: qtxheader]
    ,setVisible:function(Self, aValue$67) {
       var dy$15 = 0;
       var dx$12 = 0;
@@ -10579,12 +10629,16 @@ var TQTXNextButton = {
                   TQTXHeaderButton.setInheritedVisible(Self,true);
                   dy$15 = TW3MovableControl.GetTop$(Self);
                   dx$12 = TW3MovableControl.ClientWidth(mParent)-mParent.FMargin-TW3MovableControl.GetWidth$1$(Self);
-                  TQTXEffectsHelper$fxMoveTo$1(Self,dx$12,dy$15,0.22);
+                  w3_RequestAnimationFrame(function () {
+                     TQTXEffectsHelper$fxMoveTo$1(Self,dx$12,dy$15,0.22);
+                  });
                } else {
                   dy$15 = TW3MovableControl.GetTop$(Self);
                   dx$12 = TW3MovableControl.GetWidth$1$(mParent);
-                  TQTXEffectsHelper$fxMoveTo(Self,dx$12,dy$15,0.22,function () {
-                     TQTXHeaderButton.setInheritedVisible(Self,false);
+                  w3_RequestAnimationFrame(function () {
+                     TQTXEffectsHelper$fxMoveTo(Self,dx$12,dy$15,0.22,function () {
+                        TQTXHeaderButton.setInheritedVisible(Self,false);
+                     });
                   });
                }
                if (Self.FOnVisible) {
@@ -10669,7 +10723,7 @@ var TQTXNextButton = {
    ,setCaption$1:TW3ToolButton.setCaption$1
 };
 /// TQTXHeaderTitle = class (TQTXLabel)
-///  [line: 75, column: 3, file: qtxheader]
+///  [line: 76, column: 3, file: qtxheader]
 var TQTXHeaderTitle = {
    $ClassName:"TQTXHeaderTitle",
    $Parent:TQTXLabel
@@ -10677,19 +10731,21 @@ var TQTXHeaderTitle = {
       TQTXLabel.$Init($);
    }
    /// procedure TQTXHeaderTitle.SetInheritedCaption(const aValue: String)
-   ///  [line: 276, column: 27, file: qtxheader]
+   ///  [line: 277, column: 27, file: qtxheader]
    ,SetInheritedCaption:function(Self, aValue$68) {
       TQTXLabel.setCaption(Self,aValue$68);
    }
    /// procedure TQTXHeaderTitle.setCaption(const aValue: String)
-   ///  [line: 281, column: 27, file: qtxheader]
+   ///  [line: 282, column: 27, file: qtxheader]
    ,setCaption:function(Self, aValue$69) {
       if ((Self.FObjReady&&TQTXRuntime.Ready(TQTXRuntime))&&TQTXHandleHelper$Ready$4(Self.FHandle$4)) {
          if (Self.FParent!==null) {
             if ($As(Self.FParent,TQTXHeaderBar).FFader) {
-               TQTXEffectsHelper$fxFadeOut(Self,0.22,function () {
-                  TQTXHeaderTitle.SetInheritedCaption(Self,aValue$69);
-                  TQTXEffectsHelper$fxFadeIn(Self,0.22);
+               w3_RequestAnimationFrame(function () {
+                  TQTXEffectsHelper$fxFadeOut(Self,0.22,function () {
+                     TQTXHeaderTitle.SetInheritedCaption(Self,aValue$69);
+                     TQTXEffectsHelper$fxFadeIn(Self,0.22);
+                  });
                });
             } else {
                TQTXHeaderTitle.SetInheritedCaption(Self,aValue$69);
@@ -10776,7 +10832,7 @@ var TQTXHeaderTitle = {
    ,setCaption$:function($){return $.ClassType.setCaption.apply($.ClassType, arguments)}
 };
 /// TQTXHeaderBar = class (TW3CustomControl)
-///  [line: 84, column: 3, file: qtxheader]
+///  [line: 85, column: 3, file: qtxheader]
 var TQTXHeaderBar = {
    $ClassName:"TQTXHeaderBar",
    $Parent:TW3CustomControl
@@ -10787,7 +10843,7 @@ var TQTXHeaderBar = {
       $.FMargin = 4;
    }
    /// procedure TQTXHeaderBar.FinalizeObject()
-   ///  [line: 361, column: 25, file: qtxheader]
+   ///  [line: 362, column: 25, file: qtxheader]
    ,FinalizeObject:function(Self) {
       TObject.Free(Self.FBackButton);
       TObject.Free(Self.FNextButton);
@@ -10795,14 +10851,18 @@ var TQTXHeaderBar = {
       TW3CustomControl.FinalizeObject(Self);
    }
    /// procedure TQTXHeaderBar.HandleBackButtonVisibleChange(sender: TObject; aVisible: Boolean)
-   ///  [line: 462, column: 25, file: qtxheader]
+   ///  [line: 463, column: 25, file: qtxheader]
    ,HandleBackButtonVisibleChange:function(Self, sender$12, aVisible) {
       var dx$13 = 0;
       var wd$6 = 0;
       if (aVisible) {
-         TQTXEffectsHelper$fxMoveTo$1(Self.FBackButton,Self.FMargin,(($Div(TW3MovableControl.ClientHeight(Self),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FBackButton),2))),0.22);
+         w3_RequestAnimationFrame(function () {
+            TQTXEffectsHelper$fxMoveTo$1(Self.FBackButton,Self.FMargin,(($Div(TW3MovableControl.ClientHeight(Self),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FBackButton),2))),0.22);
+         });
       } else {
-         TQTXEffectsHelper$fxMoveTo$1(Self.FBackButton,(-TW3MovableControl.GetWidth$1$(Self.FBackButton)),(($Div(TW3MovableControl.ClientHeight(Self),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FBackButton),2))),0.22);
+         w3_RequestAnimationFrame(function () {
+            TQTXEffectsHelper$fxMoveTo$1(Self.FBackButton,(-TW3MovableControl.GetWidth$1$(Self.FBackButton)),(($Div(TW3MovableControl.ClientHeight(Self),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FBackButton),2))),0.22);
+         });
       }
       if (aVisible) {
          dx$13 = Self.FMargin+TW3MovableControl.GetWidth$1$(Self.FBackButton)+Self.FMargin;
@@ -10814,18 +10874,22 @@ var TQTXHeaderBar = {
          } else {
             (wd$6-= Self.FMargin);
          }
-         TQTXEffectsHelper$fxScaleTo(Self.FCaption,dx$13,(($Div(TW3MovableControl.ClientHeight(Self),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FCaption),2))),wd$6,TW3MovableControl.GetHeight$1$(Self.FCaption),0.22,null);
+         w3_RequestAnimationFrame(function () {
+            TQTXEffectsHelper$fxScaleTo(Self.FCaption,dx$13,(($Div(TW3MovableControl.ClientHeight(Self),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FCaption),2))),wd$6,TW3MovableControl.GetHeight$1$(Self.FCaption),0.22,null);
+         });
       } else {
          wd$6 = TW3MovableControl.ClientWidth(Self)-(Self.FMargin*2);
          if (TW3MovableControl.getVisible$(Self.FNextButton)) {
             (wd$6-= TW3MovableControl.GetWidth$1$(Self.FNextButton));
             (wd$6-= Self.FMargin);
          }
-         TQTXEffectsHelper$fxScaleTo(Self.FCaption,Self.FMargin,(($Div(TW3MovableControl.ClientHeight(Self),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FCaption),2))),wd$6,TW3MovableControl.GetHeight$1$(Self.FCaption),0.22,null);
+         w3_RequestAnimationFrame(function () {
+            TQTXEffectsHelper$fxScaleTo(Self.FCaption,Self.FMargin,(($Div(TW3MovableControl.ClientHeight(Self),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FCaption),2))),wd$6,TW3MovableControl.GetHeight$1$(Self.FCaption),0.22,null);
+         });
       }
    }
    /// procedure TQTXHeaderBar.HandleNextButtonVisibleChange(sender: TObject; aVisible: Boolean)
-   ///  [line: 391, column: 25, file: qtxheader]
+   ///  [line: 392, column: 25, file: qtxheader]
    ,HandleNextButtonVisibleChange:function(Self, sender$13, aVisible$1) {
       var wd$7 = 0;
       var dx$14 = 0;
@@ -10840,8 +10904,10 @@ var TQTXHeaderBar = {
          }
          (wd$7-= TW3MovableControl.GetWidth$1$(Self.FNextButton));
          (wd$7-= (Self.FMargin*2));
-         TQTXEffectsHelper$fxSizeTo(Self.FCaption,wd$7,TW3MovableControl.GetHeight$1$(Self.FCaption),0.22,function () {
-            TQTXEffectsHelper$fxMoveTo$1(Self.FCaption,dx$14,(($Div(TW3MovableControl.ClientHeight(Self),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FCaption),2))),0.22);
+         w3_RequestAnimationFrame(function () {
+            TQTXEffectsHelper$fxSizeTo(Self.FCaption,wd$7,TW3MovableControl.GetHeight$1$(Self.FCaption),0.22,function () {
+               TQTXEffectsHelper$fxMoveTo$1(Self.FCaption,dx$14,(($Div(TW3MovableControl.ClientHeight(Self),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FCaption),2))),0.22);
+            });
          });
       } else {
          wd$7 = TW3MovableControl.ClientWidth(Self);
@@ -10855,13 +10921,15 @@ var TQTXHeaderBar = {
          }
          if (Self.FObjReady&&TQTXHandleHelper$Ready$4(Self.FHandle$4)) {
             wd$7-=Self.FMargin;
-            TQTXEffectsHelper$fxScaleTo(Self.FCaption,dx$14,(($Div(TW3MovableControl.ClientHeight(Self),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FCaption),2))),wd$7,TW3MovableControl.GetHeight$1$(Self.FCaption),0.22,null);
+            w3_RequestAnimationFrame(function () {
+               TQTXEffectsHelper$fxScaleTo(Self.FCaption,dx$14,(($Div(TW3MovableControl.ClientHeight(Self),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FCaption),2))),wd$7,TW3MovableControl.GetHeight$1$(Self.FCaption),0.22,null);
+            });
          }
       }
       TW3MovableControl.Resize$(Self);
    }
    /// procedure TQTXHeaderBar.InitializeObject()
-   ///  [line: 319, column: 25, file: qtxheader]
+   ///  [line: 320, column: 25, file: qtxheader]
    ,InitializeObject:function(Self) {
       TW3CustomControl.InitializeObject(Self);
       TW3CustomControl.setStyleClass(Self,"TW3HeaderControl");
@@ -10891,7 +10959,7 @@ var TQTXHeaderBar = {
       });
    }
    /// procedure TQTXHeaderBar.Resize()
-   ///  [line: 550, column: 25, file: qtxheader]
+   ///  [line: 551, column: 25, file: qtxheader]
    ,Resize:function(Self) {
       var dx$15 = 0;
       var wd$8 = 0;
@@ -10919,7 +10987,7 @@ var TQTXHeaderBar = {
       TW3MovableControl.SetBounds$2$(Self.FCaption,dx$15,($Div(TW3MovableControl.ClientHeight(Self),2))-($Div(TW3MovableControl.GetHeight$1$(Self.FCaption),2)),wd$8,TW3MovableControl.GetHeight$1$(Self.FCaption));
    }
    /// procedure TQTXHeaderBar.setMargin(const aValue: Integer)
-   ///  [line: 369, column: 25, file: qtxheader]
+   ///  [line: 370, column: 25, file: qtxheader]
    ,setMargin:function(Self, aValue$70) {
       if (aValue$70!=Self.FMargin) {
          if ((Self.FObjReady&&TQTXRuntime.Ready(TQTXRuntime))&&TQTXHandleHelper$Ready$4(Self.FHandle$4)) {
@@ -11005,7 +11073,7 @@ var TQTXHeaderBar = {
    ,SetEnabled:TW3CustomControl.SetEnabled
 };
 /// TQTXBackButton = class (TQTXHeaderButton)
-///  [line: 59, column: 3, file: qtxheader]
+///  [line: 60, column: 3, file: qtxheader]
 var TQTXBackButton = {
    $ClassName:"TQTXBackButton",
    $Parent:TQTXHeaderButton
@@ -11013,7 +11081,7 @@ var TQTXBackButton = {
       TQTXHeaderButton.$Init($);
    }
    /// procedure TQTXBackButton.setVisible(const aValue: Boolean)
-   ///  [line: 125, column: 26, file: qtxheader]
+   ///  [line: 126, column: 26, file: qtxheader]
    ,setVisible$1:function(Self, aValue$71) {
       var mParent$1 = null;
       var dx$16 = 0;
@@ -11025,12 +11093,16 @@ var TQTXBackButton = {
                   TQTXHeaderButton.setInheritedVisible(Self,true);
                   TW3MovableControl.MoveTo$1$(Self,-TW3MovableControl.GetWidth$1$(Self),($Div(TW3MovableControl.ClientHeight(mParent$1),2))-($Div(TW3MovableControl.GetHeight$1$(Self),2)));
                   if (mParent$1.FObjReady&&TQTXHandleHelper$Ready$4(mParent$1.FHandle$4)) {
-                     TQTXEffectsHelper$fxMoveTo$1(Self,mParent$1.FMargin,(($Div(TW3MovableControl.ClientHeight(mParent$1),2))-($Div(TW3MovableControl.GetHeight$1$(Self),2))),0.22);
+                     w3_RequestAnimationFrame(function () {
+                        TQTXEffectsHelper$fxMoveTo$1(Self,mParent$1.FMargin,(($Div(TW3MovableControl.ClientHeight(mParent$1),2))-($Div(TW3MovableControl.GetHeight$1$(Self),2))),0.22);
+                     });
                   }
                } else if (mParent$1.FObjReady&&TQTXHandleHelper$Ready$4(mParent$1.FHandle$4)) {
                   dx$16 = -TW3MovableControl.GetWidth$1$(Self);
-                  TQTXEffectsHelper$fxMoveTo(Self,dx$16,TW3MovableControl.GetTop$(Self),0.22,function () {
-                     TQTXHeaderButton.setInheritedVisible(Self,false);
+                  w3_RequestAnimationFrame(function () {
+                     TQTXEffectsHelper$fxMoveTo(Self,dx$16,TW3MovableControl.GetTop$(Self),0.22,function () {
+                        TQTXHeaderButton.setInheritedVisible(Self,false);
+                     });
                   });
                } else {
                   TQTXHeaderButton.setInheritedVisible(Self,false);
