@@ -417,7 +417,7 @@ Begin
           TQTXSizeAnimation(mEffect).toWidth,
           TQTXSizeAnimation(mEffect).toHeight);
 
-        w3_callback( Procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
         Begin
           (* Release effect object *)
           TW3CustomAnimation(sender).free;
@@ -437,7 +437,7 @@ Begin
     (* Execute effect *)
     mEffect.execute(self);
   end else
-  w3_callback( procedure ()
+  TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       fxScaleUp(afactor,duration,OnFinished);
     end,
@@ -479,7 +479,7 @@ Begin
           TQTXSizeAnimation(mEffect).toTop,
           TQTXSizeAnimation(mEffect).toWidth,
           TQTXSizeAnimation(mEffect).toHeight);
-        w3_callback( Procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
         Begin
           (* Release effect object *)
           TW3CustomAnimation(sender).free;
@@ -495,7 +495,7 @@ Begin
     BeforeEffect(self,mEffect);
     mEffect.execute(self);
   end else
-  w3_callback( procedure ()
+  TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       fxScaleDown(aFactor,duration,OnFinished);
     end,
@@ -538,7 +538,7 @@ Begin
           TQTXSizeAnimation(mEffect).toTop,
           TQTXSizeAnimation(mEffect).toWidth,
           TQTXSizeAnimation(mEffect).toHeight);
-        w3_callback( Procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
         Begin
           (* Release effect object *)
           TW3CustomAnimation(sender).free;
@@ -554,7 +554,7 @@ Begin
     BeforeEffect(self,mEffect);
     mEffect.execute(self);
   end else
-  w3_callback( procedure ()
+  TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       fxSizeTo(aWidth,aHeight,duration,OnFinished);
     end,
@@ -585,7 +585,7 @@ Begin
     mEffect.onAnimationEnds:=Procedure (sender:TObject)
       Begin
         self.top:=0;
-        w3_callback( Procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
         Begin
           (* Release effect object *)
           TW3CustomAnimation(sender).free;
@@ -601,7 +601,7 @@ Begin
     BeforeEffect(self,mEffect);
     mEffect.execute(self);
   end else
-  w3_callback( procedure ()
+  TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       fxMoveUp(duration,OnFinished);
     end,
@@ -625,7 +625,7 @@ Begin
     mEffect.onAnimationEnds:=Procedure (sender:TObject)
       Begin
         self.top:=TW3MovableControl(self.Parent).Height-Self.Height;;
-        w3_callback( Procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
         Begin
             (* Release effect object *)
             TW3CustomAnimation(sender).free;
@@ -640,7 +640,7 @@ Begin
     BeforeEffect(self,mEffect);
     mEffect.execute(self);
   end else
-  w3_callback( procedure ()
+  TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       fxMoveDown(duration,OnFinished);
     end,
@@ -679,7 +679,7 @@ Begin
       Begin
         self.left:=dx;
         self.top:=dy;
-        w3_callback( Procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
         Begin
           (* Release effect object *)
           TW3CustomAnimation(sender).free;
@@ -695,7 +695,7 @@ Begin
     BeforeEffect(self,mEffect);
     mEffect.execute(self);
   end else
-  w3_callback( procedure ()
+  TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       fxMoveBy(dx,dy,duration,OnFinished);
     end,
@@ -733,7 +733,7 @@ Begin
     mEffect.onAnimationEnds:=Procedure (sender:TObject)
       Begin
         self.setBounds(aToX,aToY,aToWidth,aToHeight);
-        w3_callback( Procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
         Begin
           (* Release effect object *)
           TW3CustomAnimation(sender).free;
@@ -749,7 +749,7 @@ Begin
     BeforeEffect(self,mEffect);
     mEffect.execute(self);
   end else
-  w3_callback( procedure ()
+  TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       fxScaleTo(aToX,aToY,aToWidth,aToHeight,duration,OnFinished);
     end,
@@ -783,7 +783,7 @@ Begin
       Begin
         self.left:=dx;
         self.top:=dy;
-        w3_callback( Procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
         Begin
           (* Release effect object *)
           TW3CustomAnimation(sender).free;
@@ -799,7 +799,7 @@ Begin
     BeforeEffect(self,mEffect);
     mEffect.execute(self);
   end else
-  w3_callback( procedure ()
+  TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       fxMoveTo(dx,dy,duration,OnFinished);
     end,
@@ -823,7 +823,7 @@ Begin
     mEffect.Duration:=Duration;
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
       Begin
-        w3_callback( Procedure ()
+      TQTXRuntime.DelayedDispatch( procedure ()
           Begin
             (* Release effect object *)
             TW3CustomAnimation(sender).free;
@@ -840,7 +840,7 @@ Begin
     BeforeEffect(self,mEffect);
     mEffect.Execute(self);
   end else
-  w3_callback( procedure ()
+  TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       fxZoomIn(duration,OnFinished);
     end,
@@ -865,7 +865,7 @@ Begin
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
       Begin
         self.Visible:=false;
-        w3_callback( Procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
           Begin
             (* Release effect object *)
             TW3CustomAnimation(sender).free;
@@ -881,7 +881,7 @@ Begin
     BeforeEffect(self,mEffect);
     mEffect.Execute(self);
   end else
-  w3_callback( procedure ()
+  TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       fxZoomOut(duration,OnFinished);
     end,
@@ -906,7 +906,7 @@ Begin
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
       Begin
         self.Visible:=false;
-        w3_callback( Procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
           Begin
             (* Release effect object *)
             TW3CustomAnimation(sender).free;
@@ -922,7 +922,7 @@ Begin
     BeforeEffect(self,mEffect);
     mEffect.Execute(self);
   end else
-  w3_callback( procedure ()
+  TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       fxWarpOut(duration,OnFinished);
     end,
@@ -946,7 +946,7 @@ Begin
     mEffect.Duration:=Duration;
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
       Begin
-        w3_callback( Procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
           Begin
             (* Release effect object *)
             TW3CustomAnimation(sender).free;
@@ -963,7 +963,7 @@ Begin
     self.Visible:=true;
     mEffect.Execute(self);
   end else
-  w3_callback( procedure ()
+  TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       fxWarpIn(duration,OnFinished);
     end,
@@ -990,7 +990,7 @@ Begin
     mEffect.Duration:=Duration;
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
       Begin
-        w3_callback( Procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
           Begin
             (* Release effect object *)
             TW3CustomAnimation(sender).free;
@@ -1007,7 +1007,7 @@ Begin
     self.Visible:=true;
     mEffect.Execute(self);
   end else
-  w3_callback( procedure ()
+  TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       fxFadeIn(duration,OnFinished);
     end,
@@ -1034,7 +1034,7 @@ Begin
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)
       Begin
         self.Visible:=False;
-        w3_callback( Procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
           Begin
             (* Release effect object *)
             TW3CustomAnimation(sender).free;
@@ -1050,7 +1050,7 @@ Begin
     BeforeEffect(self,mEffect);
     mEffect.Execute(self);
   end else
-  w3_callback( procedure ()
+  TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       fxFadeOut(duration,OnFinished);
     end,

@@ -89,7 +89,7 @@ begin
     procedure ()
       Begin
         if FActive then
-        w3_callback( Procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
           Begin
             FContent.left:=clientWidth;
             FContent.top:=(Height div 2) - (FContent.height div 2);

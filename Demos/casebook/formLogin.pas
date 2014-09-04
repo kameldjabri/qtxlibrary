@@ -44,7 +44,7 @@ end;
 
 procedure TformLogin.W3Button1Click(Sender: TObject);
 begin
-  w3_callback( procedure ()
+    TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       FFirst:=False;
          w3label2.fxFadeOut(0.5);
@@ -52,7 +52,7 @@ begin
          w3button1.Enabled:=False;
          w3button1.fxFadeOut(0.5);
 
-      w3_callback( procedure ()
+      TQTXRuntime.DelayedDispatch( procedure ()
         begin
           application.GotoForm('mainForm',feFromRight);
         end,
@@ -96,8 +96,7 @@ begin
   FSky2.Background.FromURL('res/cloud_2.png');
   FSky2.Visible:=false;
 
-  w3_callback(
-    procedure ()
+    TQTXRuntime.DelayedDispatch( procedure ()
     begin
       FSky1.left:=45;
       FSky1.Top:=100;
@@ -140,11 +139,11 @@ Begin
     FSky2.fxMoveTo(-FSky2.width,FSky2.top,12.0,
     procedure ()
     begin
-      w3_callback( procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
         Begin
           FSky2.left:=clientwidth;
           FSky2.top:=FSky2.top;
-          w3_callback( procedure ()
+          TQTXRuntime.DelayedDispatch( procedure ()
             Begin
               updateCloud2;
             end,
@@ -164,11 +163,11 @@ begin
     FSky1.fxMoveTo(-FSky1.width,FSky1.top,4.0,
     procedure ()
     begin
-      w3_callback( procedure ()
+      TQTXRuntime.DelayedDispatch( procedure ()
         Begin
           FSky1.left:=clientwidth;
           FSky1.top:=FSky1.top;
-          w3_callback( procedure ()
+          TQTXRuntime.DelayedDispatch( procedure ()
             Begin
               updateCloud1;
             end,
@@ -189,7 +188,7 @@ Begin
   begin
     //TApplication(application).header.title.caption:='Welcome';
 
-    w3_callback( procedure ()
+    TQTXRuntime.DelayedDispatch( procedure ()
     Begin
       dy:=clientHeight div 2;
       dec(dy,24);

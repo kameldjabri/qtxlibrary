@@ -335,7 +335,7 @@ Begin
     //(TW3CustomControl(FBox.Parent).ClientHeight div 2) - FBox.height div 2,
     0.6, procedure ()
       begin
-        w3_callback( procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
           Begin
             FBox.fxFadeOut(0.3,
               procedure ()
