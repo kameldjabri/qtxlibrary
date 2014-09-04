@@ -30,7 +30,9 @@ unit qtxheader;
 interface
 
 uses 
-  W3System, w3components, w3graphics, w3ToolButton, w3borders,
+  System.Types, SmartCL.System, SmartCL.Components, SmartCL.Effects,
+  SmartCL.controls.toolbutton, SmartCL.graphics, SmartCL.borders,
+  w3c.dom,
   qtxutils,
   qtxeffects,
   qtxlabel;

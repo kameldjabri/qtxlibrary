@@ -254,6 +254,8 @@ begin
     FPanel.fxFadeIn(0.1);
   end;
 end;
+
+
  
 procedure TForm1.Resize;
 var

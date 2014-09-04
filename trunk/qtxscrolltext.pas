@@ -3,9 +3,10 @@ unit qtxscrolltext;
 interface
 
 uses 
-  W3System, w3Components, w3graphics,
-  qtxutils,
-  qtxeffects;
+  System.Types, SmartCL.System, SmartCL.Components, SmartCL.Effects,
+  w3c.dom,
+  qtxeffects,
+  qtxutils;
 
   Type
 

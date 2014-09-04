@@ -28,7 +28,10 @@ unit qtxTransformController;
 interface
 
 uses
-  W3System, W3Graphics, W3Components;
+  System.Types, SmartCL.System, SmartCL.Components, SmartCL.Effects,
+  SmartCL.graphics,
+  w3c.dom,
+  qtxutils;
 
 type
 

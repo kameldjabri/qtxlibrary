@@ -26,8 +26,12 @@ unit qtxutils;
 
 interface
 
+
+
 uses
-  W3System, w3Components, w3effects, w3inet, w3c.dom;
+  System.Types, SmartCL.System, SmartCL.Components, SmartCL.Effects,
+  SmartCL.Inet, w3c.dom;
+
 
 const
   (* Prefix for "data-attr" tag fields.
@@ -210,8 +214,9 @@ type
   TW3CustomControl = partial class(TW3MovableControl)
   private
     FAccess:    TQTXAttrAccess;
+    function    getAccess:TQTXAttrAccess;
   public
-    Property    ElementData:TQTXAttrAccess read FAccess;
+    Property    ElementData:TQTXAttrAccess read getAccess;
 
     function    MeasureText(aContent:String):TQTXTextMetric;overload;
     function    MeasureTextFixed(aContent:String):TQTXTextMetric;overload;
@@ -224,9 +229,6 @@ type
 
     function    getFontInfo:TQTXFontInfo;overload;
     class function  getFontInfo(const aHandle:THandle):TQTXFontInfo;overload;
-
-    Constructor Create(AOwner:TW3Component);override;
-    Destructor  Destroy;Override;
   end;
 
   (* This class isolates functionality dealing with execution of code.
@@ -793,16 +795,11 @@ end;
 // TW3CustomControl
 //############################################################################
 
-Constructor TW3CustomControl.Create(AOwner:TW3Component);
-Begin
-  inherited Create(AOwner);
+function TW3CustomControl.getAccess:TQTXAttrAccess;
+begin
+  if FAccess=NIL then
   FAccess:=TQTXAttrAccess.Create(self.Handle);
-end;
-
-Destructor TW3CustomControl.Destroy;
-Begin
-  FAccess.free;
-  inherited;
+  result:=FAccess;
 end;
 
 function TW3CustomControl.getFontInfo:TQTXFontInfo;

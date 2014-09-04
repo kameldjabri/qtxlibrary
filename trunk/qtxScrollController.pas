@@ -31,7 +31,9 @@ unit qtxScrollController;
 interface
  
 uses
-  W3System, W3Components, w3graphics, qtxutils;
+  System.Types, SmartCL.System, SmartCL.Components, SmartCL.Effects,
+  w3c.dom,
+  qtxutils;
  
   type
  

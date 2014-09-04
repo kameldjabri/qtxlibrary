@@ -27,7 +27,7 @@ unit qtxStyles;
 interface
 
 uses 
-  W3System;
+  System.Types, SmartCL.system, w3c.dom;
 
 type
 
