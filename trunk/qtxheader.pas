@@ -381,7 +381,7 @@ Begin
       setWasSized;
       endUpdate;
     end else
-    w3_callback(procedure ()
+    TQTXRuntime.DelayedDispatch( procedure ()
       begin
         setMargin(aValue);
       end,100);

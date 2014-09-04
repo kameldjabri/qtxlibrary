@@ -26,8 +26,17 @@ unit qtxutils;
 
 interface
 
-uses 
+uses
   W3System, w3Components, w3effects, w3inet, w3c.dom;
+
+const
+  (* Prefix for "data-attr" tag fields.
+     All data-attributes are ignored by the browser, and resemble the "tag"
+     property in Delphi. JS coders use it to store persistent data which
+     belongs to a construct. Perfect for effects which are triggered by
+     a single command, and thus can remain persistent without any
+     instance connected to it *)
+  CNT_ATTR_PREFIX = 'data-';
 
 type
 
@@ -57,23 +66,49 @@ type
   TQTXXMLDataReadyEvent = procedure
     (sender:TW3HttpRequest;aObject:JXMLDocument);
 
+  (* This class isolates common functionality for loading resource files.
+     All methods accept a callback delegate, which can be used to track
+     loaded files - or know when to begin something that relies on
+     a file being loaded. *)
   TQTXIOAccess = Class(TObject)
   public
-    class procedure LoadXML
-          (aFilename:String;const OnComplete:TQTXXMLDataReadyEvent);
-    class procedure LoadFile
-          (aFilename:String;const OnComplete:TQTXTextDataReadyEvent);
+    (* Loading XML without a callback serves no purpose, so I dont
+       provide an overloaded versin *)
+    class procedure LoadXML(aFilename:String;
+          const OnComplete:TQTXXMLDataReadyEvent);
+
+    (* Loading a HTML or Textfile without a processing
+       callback has no purpose, so no overloaded version here *)
+    class procedure LoadFile(aFilename:String;
+          const OnComplete:TQTXTextDataReadyEvent);
 
     class function LoadCSS(const aRel,aHref:String;
-         const OnComplete:TProcedureRef):THandle;
+         const OnComplete:TProcedureRef):THandle;overload;
+    class function LoadCSS(const aRel,aHref:String):THandle;overload;
 
     class Procedure LoadScript(aFilename:String;
-          const OnComplete:TProcedureRef);
+          const OnComplete:TProcedureRef);overload;
+    class procedure LoadScript(aFilename:String);overload;
 
     class function LoadImage(aFilename:String;
-          const OnComplete:TProcedureRef):THandle;
+          const OnComplete:TProcedureRef):THandle;overload;
+    class function LoadImage(aFilename:String):THandle;overload;
   End;
 
+  (* This is a helper class for THandle value-types, which
+     provides some very simple but handy functionality.
+     Now handles (all handles) can be tested by:
+
+      FHandle.Valid()
+
+    Handles which references HTML elements can use the
+    Ready() function, which checks if the handle
+    exists in the DOM and thus can be accessed:
+
+      if FHandle.ready then            // ready for action?
+      DoSomethingVisual else           // execute at once
+      FHandle.readyExecute( ThisProc); // come back later & try again
+  *)
   TQTXHandleHelper = helper for THandle
     function  Valid:Boolean;
     function  Ready:Boolean;
@@ -98,12 +133,20 @@ type
     class function  CreateGUID:String;
   End;
 
+  (* These are experimental, and presently only works after an
+     animation has executed a sequence *)
   TQTXAnimationHelper = helper for TW3CustomAnimation
     procedure Pause;
     procedure Resume;
     procedure Stop;
   End;
 
+  (* This is a very important class. It provides functions for:
+    1. Detecting if a font is installed and can be used
+    2. Measuring the width/height (metrics) of a piece of HTML
+    3. -- // -- restricted to a fixed width
+    4. -- // -- for the selected font on an element
+  *)
   TQTXFontDetector = Class(TObject)
   private
     FBaseFonts:     array of string;
@@ -135,6 +178,15 @@ type
     Constructor Create;virtual;
   End;
 
+  (* This class provides <TAG Attr=Value ATTR=Value> attribute read/write
+     access. Under HTML5 all attributes which starts with "data-" are
+     ignored by the browser and can be accessed by javascript.
+     This is perfect for storing information about a tag construct.
+     In our case we also use it to mark an element (control) with a busy
+     flag for effects. So while an effect is running, its state is stored
+     in the actual tag which is affected.
+     This gives the tag a high level of freedom, since a JS instance does
+     not have to be permanently connected to the tag. *)
   TQTXAttrAccess = Class(TObject)
   private
     FHandle:    THandle;
@@ -148,6 +200,13 @@ type
     Constructor Create(Const aHandle:THandle);virtual;
   End;
 
+  (* This is an extension to TW3Customcontrol which provides:
+    1. Attribute read/write access
+    2. Text measurement both for instance and generic
+    3. font analysis (instance and generic)
+
+  When you include this unit, all TW3Customcontrol instances will
+  contain these functions. *)
   TW3CustomControl = partial class(TW3MovableControl)
   private
     FAccess:    TQTXAttrAccess;
@@ -170,8 +229,20 @@ type
     Destructor  Destroy;Override;
   end;
 
+  (* This class isolates functionality dealing with execution of code.
+     The earlier W3_Callback (w3system.pas) is here re-incarnated
+     as DelayedDispatch.
+
+     The execute() function allows you to execute a delegate
+     X number of times, which can be handy for precise count-downs
+     or procedures which should only run a fixed number of times
+     (e.g a count-down to automatic form close).
+  *)
   TQTXRuntime = class(TObject)
   public
+    class function DelayedDispatch( const OnEntry:TProcedureRef;
+          const aDelay:Integer):THandle;
+    class procedure CancelDelayedDispatch(const aHandle:THandle);
     class procedure Execute(const OnExecute:TProcedureRef;
             const aCount:Integer;
             const aDelay:Integer);
@@ -186,10 +257,20 @@ implementation
 var
 _FontDetect:TQTXFontDetector;
 
-Initialization
-begin
-  _FontDetect:=TQTXFontDetector.Create;
-end;
+
+resourcestring
+CNT_ERR_ATTR_InvalidHandle =
+'Failed to create attribute storage object, invalid handle error';
+
+CNT_ERR_ATTR_FailedRead =
+'Failed to read attribute field, browser threw exception: %s';
+
+CNT_ERR_ATTR_FailedWrite =
+'Failed to write attribute field, browser threw exception: %s';
+
+CNT_ERR_IO_FailedLoadScript = 'Failed to load script-file [%s] error';
+CNT_ERR_IO_FailedLoadImage  = 'Failed to load image.file [%s] error';
+CNT_ERR_IO_FailedLoadCSS    = 'Failed to load CSS file [%s] error';
 
 //#############################################################################
 // TQTXIntegerHelper
@@ -225,6 +306,11 @@ end;
 //############################################################################
 
 
+class procedure TQTXIOAccess.LoadScript(aFilename:String);
+begin
+  LoadScript(aFilename,NIL);
+end;
+
 class procedure TQTXIOAccess.LoadScript(aFilename:String;
       const OnComplete:TProcedureRef);
 var
@@ -247,7 +333,12 @@ Begin
     end;
 
   end else
-  raise exception.Create('Failed to allocate script element error');
+  raise EW3Exception.CreateFmt(CNT_ERR_IO_FailedLoadScript,[aFilename]);
+end;
+
+class function TQTXIOAccess.LoadImage(aFilename:String):THandle;
+Begin
+  result:=LoadImage(aFilename,NIL);
 end;
 
 class function TQTXIOAccess.LoadImage(aFilename:String;
@@ -267,7 +358,13 @@ Begin
       end;
 
     result.src := aFilename;
-  end;
+  end else
+  Raise EW3Exception.CreateFmt(CNT_ERR_IO_FailedLoadImage,[aFilename]);
+end;
+
+class function TQTXIOAccess.LoadCSS(const aRel,aHref:String):THandle;
+Begin
+  result:=LoadCSS(aRel,aHref,NIL);
 end;
 
 class function TQTXIOAccess.LoadCSS(const aRel,aHref:String;
@@ -279,20 +376,27 @@ Begin
   //     See http://www.w3schools.com/tags/att_link_rel.asp
   //     for a list of all options
   asm
-    @mLink = document.createElement('link');
+  @mLink = document.createElement('link');
+  end;
+
+  if mLink.valid then
+  begin
+    asm
     (@mLink).href = @aHref;
     (@mLink).rel=@aRel;
     document.head.appendChild(@mLink);
-  end;
-  if assigned(OnComplete) then
-  mLink.onload := procedure ()
-  Begin
-    OnComplete();
-  end;
+    end;
 
-  result:=mLink;
+    if assigned(OnComplete) then
+    mLink.onload := procedure ()
+    Begin
+      OnComplete();
+    end;
+
+    result:=mLink;
+  end else
+  Raise EW3Exception.CreateFmt(CNT_ERR_IO_FailedLoadCSS,[aHref]);
 end;
-
 
 class procedure TQTXIOAccess.LoadFile(aFilename:String;
       const OnComplete:TQTXTextDataReadyEvent);
@@ -324,7 +428,6 @@ Begin
     end;
   mLoader.Get(aFilename);
 end;
-
 
 class procedure TQTXIOAccess.LoadXML(aFilename:String;
       const OnComplete:TQTXXMLDataReadyEvent);
@@ -629,8 +732,7 @@ Begin
       OnReady() else
 
       (* Try again in 100ms *)
-      w3_callback(
-        procedure ()
+      TQTXRuntime.DelayedDispatch( procedure ()
         begin
           self.ReadyExecute(OnReady);
         end,100);
@@ -648,15 +750,14 @@ Begin
   inherited Create;
   if aHandle.valid then
   FHandle:=aHandle else
-  raise Exception.Create
-  ('Failed to create attribute access, invalid handle error');
+  raise Exception.Create(CNT_ERR_ATTR_InvalidHandle);
 end;
 
 function  TQTXAttrAccess.Exists(aName:String):Boolean;
 var
   mName:  String;
 begin
-  mName:=lowercase('data-' + aName);
+  mName:=lowercase(CNT_ATTR_PREFIX + aName);
   result:=FHandle.hasAttribute(mName);
 end;
 
@@ -665,14 +766,13 @@ var
   mName:  String;
 begin
   try
-    mName:=lowercase('data-' + aName);
+    mName:=lowercase(CNT_ATTR_PREFIX + aName);
     if FHandle.hasAttribute(mName) then
     Result := FHandle.getAttribute(mName) else
     result:=null;
   except
     on e: exception do
-    raise EW3Exception.CreateFmt('Failed to read attribute: %s',
-      [e.message]);
+    raise EW3Exception.CreateFmt(CNT_ERR_ATTR_FailedRead,[e.message]);
   end;
 end;
 
@@ -681,12 +781,11 @@ var
   mName:  String;
 begin
   try
-    mName:=lowercase('data-' + aName);
+    mName:=lowercase(CNT_ATTR_PREFIX + aName);
     FHandle.setAttribute(mName, aValue);
   except
     on e: exception do
-    raise EW3Exception.CreateFmt('Failed to write attribute: %s',
-      [e.message]);
+    raise EW3Exception.CreateFmt(CNT_ERR_ATTR_FailedWrite,[e.message]);
   end;
 end;
 
@@ -707,73 +806,37 @@ Begin
 end;
 
 function TW3CustomControl.getFontInfo:TQTXFontInfo;
-//var
-//  mObj: TQTXFontDetector;
 Begin
   result:=_FontDetect.getFontInfo(Handle);
-  (*
-  mObj:=TQTXFontDetector.Create;
-  try
-    result:=mObj.getFontInfo(Handle);
-  finally
-    mObj.free;
-  end; *)
 end;
 
 class function  TW3CustomControl.getFontInfo(const aHandle:THandle):TQTXFontInfo;
-(* var
-  mObj: TQTXFontDetector; *)
 Begin
   result:=_FontDetect.getFontInfo(aHandle);
-  (* mObj:=TQTXFontDetector.Create;
-  try
-    result:=mObj.getFontInfo(aHandle);
-  finally
-    mObj.free;
-  end;  *)
 end;
 
 function TW3CustomControl.MeasureText(aContent:String):TQTXTextMetric;
-(* var
-  mObj: TQTXFontDetector; *)
 Begin
   aContent:=trim(aContent);
   if aContent.length>0 then
   begin
     result:=_FontDetect.MeasureText(
     _FontDetect.getFontInfo(Handle),aContent);
-    (*
-    mObj:=TQTXFontDetector.Create;
-    try
-      result:=mObj.MeasureText(mObj.getFontInfo(Handle),aContent);
-    finally
-      mObj.free;
-    end; *)
   end;
 end;
 
 function TW3CustomControl.MeasureTextFixed(aContent:String):TQTXTextMetric;
-//var
-//  mObj: TQTXFontDetector;
 Begin
   aContent:=trim(aContent);
   if aContent.length>0 then
   begin
     result:=_FontDetect.MeasureText(
     _FontDetect.getFontInfo(Handle),ClientWidth,aContent);
-    (* mObj:=TQTXFontDetector.Create;
-    try
-      result:=mObj.MeasureText(mObj.getFontInfo(Handle),ClientWidth,aContent);
-    finally
-      mObj.free;
-    end; *)
   end;
 end;
 
 class function TW3CustomControl.MeasureTextSize(const aHandle:THandle;
       const aContent:String):TQTXTextMetric;
-//var
-//  mObj: TQTXFontDetector;
 Begin
   if aHandle.valid then
   begin
@@ -781,20 +844,12 @@ Begin
     begin
       result:=_FontDetect.MeasureText(
       _FontDetect.getFontInfo(aHandle),aContent);
-      (* mObj:=TQTXFontDetector.Create;
-      try
-        result:=mObj.MeasureText(mObj.getFontInfo(aHandle),-1,aContent);
-      finally
-        mObj.free;
-      end; *)
     end;
   end;
 end;
 
 class function TW3CustomControl.MeasureTextSizeF(const aHandle:THandle;
       const aWidth:Integer;const aContent:String):TQTXTextMetric;
-//var
-//  mObj: TQTXFontDetector;
 Begin
   if aHandle.valid then
   begin
@@ -802,12 +857,6 @@ Begin
     begin
       result:=_FontDetect.MeasureText(
       _FontDetect.getFontInfo(aHandle),aWidth,aContent);
-      (* mObj:=TQTXFontDetector.Create;
-      try
-        result:=mObj.MeasureText(mObj.getFontInfo(aHandle),aWidth,aContent);
-      finally
-        mObj.free;
-      end; *)
     end;
   end;
 end;
@@ -825,12 +874,30 @@ end;
 // TQTXRuntime
 //############################################################################
 
+class procedure TQTXRuntime.CancelDelayedDispatch(const aHandle:THandle);
+begin
+  if aHandle.valid then
+  begin
+    asm
+      clearTimeout(@aHandle);
+    end;
+  end;
+end;
+
+class function TQTXRuntime.DelayedDispatch(const OnEntry:TProcedureRef;
+          const aDelay:Integer):THandle;
+Begin
+  asm
+    @result = setTimeout(@OnEntry,@aDelay);
+  end;
+end;
+
 class procedure TQTXRuntime.ExecuteDocumentReady(const OnReady:TProcedureRef);
 Begin
   if Ready then
   OnReady() else
   Begin
-    w3_callback( procedure ()
+    TQTXRuntime.DelayedDispatch( procedure ()
       begin
         ExecuteDocumentReady(OnReady);
       end,
@@ -855,8 +922,7 @@ Begin
     begin
       OnExecute();
       if aCount>1 then
-      w3_callback(
-        procedure ()
+      DelayedDispatch( procedure ()
         begin
           Execute(OnExecute,aCount-1,aDelay);
         end,
@@ -919,7 +985,6 @@ begin
   end;
 end;
 
-
 // http://www.ietf.org/rfc/rfc4122.txt
 class function TQTXStringHelper.CreateGUID:String;
 Begin
@@ -936,6 +1001,12 @@ Begin
     @result = s.join("");
   end;
   result:=uppercase(result);
+end;
+
+
+Initialization
+begin
+  _FontDetect:=TQTXFontDetector.Create;
 end;
 
 

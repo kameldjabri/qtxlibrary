@@ -62,7 +62,7 @@ Begin
     FFirst:=False;
 
 
-    w3_callback( procedure ()
+      TQTXRuntime.DelayedDispatch( procedure ()
       begin
         {$IFNDEF DEBUG_MODE}
         if width<>320 then
@@ -99,7 +99,7 @@ begin
     Handle.readyExecute( procedure ()
   //TQTXMarshal.ExecuteOnElementReady(self.handle, procedure ()
     begin
-      w3_callback( procedure ()
+      TQTXRuntime.DelayedDispatch( procedure ()
         Begin
           setupItems;
         end,
@@ -191,7 +191,7 @@ begin
       FHomeButton.OnMouseTouchRelease:=Procedure (Sender: TObject; Button: TMouseButton;
         Shift: TShiftState; X, Y: Integer)
       Begin
-          w3_callback( procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
           begin
             TApplication(application).ShowDialog('<li class="fa fa-warning">&nbsp</li>Logout?',
             'Are you sure you wish to log<br>out of this application?',aoYesNo);
@@ -242,7 +242,7 @@ begin
         Begin
           mPanel.free;
         end;
-        w3_callback( procedure ()
+        TQTXRuntime.DelayedDispatch( procedure ()
           Begin
             mPanel.free;
             mpanel:=NIL;
@@ -368,7 +368,7 @@ begin
         for x:=0 to mObjs.length-1 do
         Begin
           (* create news item with default width/height *)
-          var mItem:=TCBNewsItem.Create(FList.Content);
+          mItem:=TCBNewsItem.Create(FList.Content);
           mItem.setBounds(2,dy,FList.Content.ClientWidth-4,100);
 
           (* Get URL target for article *)

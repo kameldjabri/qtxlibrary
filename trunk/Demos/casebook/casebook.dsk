@@ -1,22 +1,22 @@
 <SMART>
   <state>
     <editor>
-      <tab filename="casebook" fullname="casebook.pas" topline="29" col="35" row="50" />
-      <tab filename="formLogin" fullname="formLogin.pas" topline="36" col="10" row="47" />
-      <tab filename="mainForm" fullname="mainForm.pas" topline="347" col="19" row="371" />
-      <tab filename="formProfile" fullname="formProfile.pas" topline="1" col="49" row="26" />
-      <tab filename="formAccount" fullname="formAccount.pas" topline="1" col="14" row="29" />
-      <tab filename="qtxlabel" fullname="..\..\qtxlabel.pas" topline="19" col="33" row="38" />
-      <tab filename="cbclasses" fullname="cbclasses.pas" topline="139" col="141" row="31" />
-      <tab filename="qtxheader" fullname="..\..\qtxheader.pas" topline="469" col="34" row="492" />
-      <tab filename="casebookApplication" fullname="casebookApplication.spr" topline="1" col="30" row="2" />
-      <tab filename="qtxEffects" fullname="..\..\qtxEffects.pas" topline="67" col="25" row="81" />
-      <tab filename="W3System" fullname="..\..\..\..\RTL\W3System.pas" topline="468" col="50" row="486" />
-      <tab filename="W3Editbox" fullname="..\..\..\..\RTL\W3EditBox.pas" topline="1" col="16" row="4" />
-      <tab filename="qtxdataset" fullname="..\..\qtxdataset.pas" topline="1364" col="35" row="1378" />
-      <tab filename="qtxscrolltext" fullname="..\..\qtxscrolltext.pas" topline="100" col="17" row="115" />
-      <tab filename="qtxutils" fullname="..\..\qtxutils.pas" topline="791" col="46" row="808" />
-      <activetab>qtxheader</activetab>
+      <tab filename="casebook" fullname="casebook.pas" topline="1" col="40" row="6" />
+      <tab filename="formLogin" fullname="formLogin.pas" topline="184" col="191" row="5" />
+      <tab filename="mainForm" fullname="mainForm.pas" topline="232" col="9" row="245" />
+      <tab filename="formProfile" fullname="formProfile.pas" topline="1" col="26" row="49" />
+      <tab filename="formAccount" fullname="formAccount.pas" topline="1" col="29" row="14" />
+      <tab filename="qtxlabel" fullname="..\..\qtxlabel.pas" topline="70" col="86" row="1" />
+      <tab filename="cbclasses" fullname="cbclasses.pas" topline="323" col="9" row="338" />
+      <tab filename="qtxheader" fullname="..\..\qtxheader.pas" topline="534" col="104" row="565" />
+      <tab filename="casebookApplication" fullname="casebookApplication.spr" topline="1" col="2" row="30" />
+      <tab filename="qtxEffects" fullname="..\..\qtxEffects.pas" topline="1" col="49" row="1050" />
+      <tab filename="W3System" fullname="..\..\..\..\RTL\W3System.pas" topline="456" col="483" row="74" />
+      <tab filename="W3Editbox" fullname="..\..\..\..\RTL\W3EditBox.pas" topline="1" col="4" row="16" />
+      <tab filename="qtxdataset" fullname="..\..\qtxdataset.pas" topline="1348" col="1025" row="35" />
+      <tab filename="qtxscrolltext" fullname="..\..\qtxscrolltext.pas" topline="77" col="11" row="99" />
+      <tab filename="qtxutils" fullname="..\..\qtxutils.pas" topline="970" col="116" row="1001" />
+      <activetab>qtxutils</activetab>
     </editor>
   </state>
 </SMART>

@@ -84,7 +84,6 @@ Begin
       mObj.free;
     end;
 
-    //mSize:=TQTXTools.calcTextMetrics(innerHTML,Font.name,font.size);
     if (mSize.tmWidth<1)
     or (mSize.tmHeight<1) then
     Begin
