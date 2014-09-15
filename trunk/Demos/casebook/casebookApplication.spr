@@ -1,5 +1,5 @@
 uses casebook, cbclasses, qtxEffects, qtxStyles, qtxTransformController, qtxutils, qtxdataset,
-qtxscrolltext, formLogin, qtxlabel, formProfile, qtxheader, formAccount;
+qtxscrolltext, formLogin, qtxlabel, formProfile, qtxheader, formAccount, qtxcomponent;
 
 {$IFDEF SMART_INTERNAL_HANDLE_EXCEPTIONS}
 uses W3System;
