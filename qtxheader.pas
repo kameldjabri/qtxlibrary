@@ -82,6 +82,7 @@ type
     procedure setCaption(const aValue:String);override;
   End;
 
+
   (* Header control, dynamically resizes and positions caption and
      button based on visibility. Otherwise identical to TW3HeaderControl *)
   TQTXHeaderBar = Class(TW3CustomControl)
@@ -91,6 +92,7 @@ type
     FCaption:     TQTXHeaderTitle;
     FMargin:  Integer = 4;
     FFader:   Boolean = false;
+
     Procedure HandleBackButtonVisibleChange(sender:TObject;aVisible:Boolean);
     Procedure HandleNextButtonVisibleChange(sender:TObject;aVisible:Boolean);
   protected
@@ -340,8 +342,8 @@ Begin
   FCaption:=TQTXHeaderTitle.Create(self);
   FCaption.Autosize:=False;
   FCaption.Caption:='Welcome';
-  //FCaption.handle.style['border']:='1px solid #444444';
-  //FCaption.handle.style['background-color']:='rgba(255,255,255,0.3)';
+  FCaption.handle.style['border']:='1px solid #444444';
+  FCaption.handle.style['background-color']:='rgba(255,255,255,0.2)';
 
   (* hook up events when element is injected in the DOM *)
   //TQTXTools.ExecuteOnElementReady(Handle, procedure ()

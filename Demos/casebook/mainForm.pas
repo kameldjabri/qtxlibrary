@@ -97,7 +97,6 @@ begin
   Flist.handle.style['background-color']:='transparent';
 
     Handle.readyExecute( procedure ()
-  //TQTXMarshal.ExecuteOnElementReady(self.handle, procedure ()
     begin
       TQTXRuntime.DelayedDispatch( procedure ()
         Begin
@@ -338,15 +337,10 @@ Begin
     no-compromise native user interfaces.';
   end;
 
-  //item.height:=item.Height+12;
-  //item.Text.Background.fromcolor(clRed);
   TCBNewsItem.Index:=TCBNewsItem.Index + 1;
 end;
 
 Procedure TForm1.setupItems;
-//var
-  //mXML:JXMLDocument;
-  //mUrl: String;
 begin
 
   TQTXIOAccess.LoadXML('http://feeds.feedburner.com/delphifeeds?format=xml',
@@ -399,8 +393,6 @@ begin
 
           (* get text snippet *)
           mItem.Text.caption:=mObjs[x].childnodes[9].textContent;
-
-
 
           (* just loop through avatar images at this point *)
           var mNames:Array of String =

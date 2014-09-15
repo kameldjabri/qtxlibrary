@@ -1,7 +1,5 @@
 unit qtxlabel;
 
-
-
 //#############################################################################
 //
 //  Unit:       qtxlabel.pas
@@ -66,6 +64,8 @@ Begin
 
   Handle.readyExecute( Procedure ()
     Begin
+      handle.style['-webkit-user-select']:='none';
+      handle.style['user-select']:='none';
       AdjustSize;
     end);
 end;
@@ -73,17 +73,10 @@ end;
 procedure TQTXLabel.AdjustSize;
 var
   mSize: TQTXTextMetric;
-  mObj: TQTXFontDetector;
 Begin
   if FAuto then
   Begin
-    mObj:=TQTXFontDetector.Create;
-    try
-      mSize:=mObj.MeasureText(mObj.getfontInfo(Handle),innerHTML);
-    finally
-      mObj.free;
-    end;
-
+    mSize:=self.MeasureText(innerHTML);
     if (mSize.tmWidth<1)
     or (mSize.tmHeight<1) then
     Begin
@@ -101,7 +94,8 @@ Begin
   if aValue<>FAuto then
   Begin
     FAuto:=aValue;
-    if FAuto then
+    if FAuto
+    and Handle.valid then
     AdjustSize;
   end;
 end;
@@ -120,6 +114,7 @@ Begin
     if assigned(FOnChanged) then
     FOnChanged(self);
 
+    if Handle.valid then
     AdjustSize;
   end;
 end;
