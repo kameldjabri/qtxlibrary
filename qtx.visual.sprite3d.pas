@@ -1,16 +1,14 @@
-unit qtxTransformController;
-
+unit qtx.visual.sprite3d;
 
 //#############################################################################
 //
-//  Unit:       qtxTransformController.pas
 //  Author:     Jon Lennart Aasenden [cipher diaz of quartex]
 //  Copyright:  Jon Lennart Aasenden, all rights reserved
 //
 //  Description:
 //  ============
-//  This unit contains a controller to manage a HTML element (control)
-//  using CSS3 GPU powered effects.
+//  Updated port of Sprite3D, which allows for 3D manipulation of any
+//  HTML elements, powered by the CSS GPU capabilities
 //
 //  _______           _______  _______ _________ _______
 // (  ___  )|\     /|(  ___  )(  ____ )\__   __/(  ____ \|\     /|
@@ -28,17 +26,20 @@ unit qtxTransformController;
 interface
 
 uses
-  W3System, W3Graphics, W3Components;
+  System.Types,
+  SmartCL.System,
+  SmartCL.Components,
+  SmartCL.Graphics;
 
 type
 
   TQTXTransformOptions = set of
     (
-    toUsePos,
-    toUseRotX,
-    toUseRotY,
-    toUseRotZ,
-    toUseScale
+      toUsePos,   //  You will use position properties
+      toUseRotX,  //  You will use ROTX property
+      toUseRotY,  //  You will use ROTY property
+      toUseRotZ,  //  You will use ROTZ property
+      toUseScale  //  You will apply scale property
     );
 
   TQTXTransformController = Class(TObject)

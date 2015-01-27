@@ -1,8 +1,7 @@
-unit qtxheader;
+unit qtx.visual.header;
 
 //#############################################################################
 //
-//  Unit:       qtxheader.pas
 //  Author:     Jon Lennart Aasenden [Cipher Diaz of Quartex]
 //  Company:    Jon Lennart Aasenden LTD
 //  Copyright:  Copyright Jon Lennart Aasenden, all rights reserved
@@ -30,10 +29,19 @@ unit qtxheader;
 interface
 
 uses 
-  W3System, w3components, w3graphics, w3ToolButton, w3borders,
-  qtxutils,
-  qtxeffects,
-  qtxlabel;
+  System.Types,
+  SmartCL.System,
+  SmartCL.Components,
+  SmartCL.Effects,
+  SmartCL.Graphics,
+  SmartCL.Controls.ToolButton,
+  SmartCL.Borders,
+
+  //W3System, w3components, w3graphics, , w3borders,
+
+  qtx.effects,
+  qtx.runtime,
+  qtx.visual.label;
 
 {$DEFINE USE_ANIMFRAME_SYNC}
 

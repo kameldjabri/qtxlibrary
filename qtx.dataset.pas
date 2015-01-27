@@ -1,8 +1,7 @@
-unit qtxdataset;
+unit qtx.dataset;
 
 //#############################################################################
 //
-//  Unit:       qtxdataset.pas
 //  Author:     Jon Lennart Aasenden [cipher diaz of quartex]
 //  Copyright:  Jon Lennart Aasenden, all rights reserved
 //
@@ -22,12 +21,25 @@ unit qtxdataset;
 // (____\/_)(_______)|/     \||/   \__/   )_(   (_______/|/     \|
 //
 //
+// The QUARTEX library for Smart Mobile Studio is copyright
+// Jon Lennart Aasenden. All rights reserved. This is a commercial product.
+//
+// Jon Lennart Aasenden LTD is a registered Norwegian company:
+//
+//      Company ID: 913494741
+//      Legal Info: http://w2.brreg.no/enhet/sok/detalj.jsp?orgnr=913494741
+//
+//  The QUARTEX library of units is subject to international copyright
+//  laws and regulations regarding intellectual properties.
+//
 //#############################################################################
 
 interface
 
 uses
-  W3System, qtxutils;
+  System.Types,
+  SmartCL.System,
+  qtx.helpers;
 
 type
 
@@ -186,7 +198,7 @@ type
   public
     Property    Count:Integer read (FFields.count);
     Property    Items[index:Integer]:TQTXDatasetField read (FFields[index]);
-    function    DataExport:TQTXDatasetPacket;virtual;
+    function    DataExport:Variant;virtual;
     Procedure   DataImport(const aValue:TQTXDatasetPacket);virtual;
     function    IndexOf(aName:String):Integer;
     function    Add(aName:String;
@@ -246,9 +258,12 @@ type
     Destructor  Destroy;Override;
   End;
 
-  TDatasetStateChangeEvent = Procedure (sender:TObject;const aState:TQTXDatasetState);
   TDatasetPositionChangeEvent = procedure (sender:TObject;aOldPos,aNewPos:Integer);
+  TDatasetStateChangeEvent    = Procedure (sender:TObject;
+                                const aState:TQTXDatasetState);
   TDatasetRecordDeleteEvent   = Procedure (sender:TObject;const aRecNo:Integer);
+  TDatasetRecordAddEvent      = procedure (sender:TObject);
+
 
   TQTXDataset = Class(TObject)
   private
@@ -264,6 +279,7 @@ type
     FOnState:   TDatasetStateChangeEvent;
     FOnPos:     TDatasetPositionChangeEvent;
     FOnDelete:  TDatasetRecordDeleteEvent;
+    FOnAdd:     TDatasetRecordAddEvent;
 
     FDsIndex:   Integer;
 
@@ -324,6 +340,9 @@ type
     Constructor Create;virtual;
     Destructor  Destroy;Override;
   published
+
+    Property    OnRecordAdded:TDatasetRecordAddEvent
+                read FOnAdd write FOnAdd;
 
     Property    OnRecordDeleted:TDatasetRecordDeleteEvent
                 read FOnDelete write FOnDelete;
@@ -640,7 +659,7 @@ end;
 
 Class function TQTXDataset.Version:String;
 Begin
-  result:=IntToStr(CNT_DATASET_MAJOR) + '.' + IntToStr(CNT_DATASET_MINOR);
+  result:=Format("%d.%d",[CNT_DATASET_MAJOR,CNT_DATASET_MINOR]);
 end;
 
 Function TQTXDataset.saveToString:String;
@@ -867,6 +886,7 @@ Begin
       setState(dsInsert);
       (FFields as IDatasetFieldsAccess).resetValues;
       UpdateGeneratedFields;
+
     end else
     raise EW3Dataset.Create(CNT_DATASET_INVALID_STATE);
   end else
@@ -985,8 +1005,8 @@ Begin
         (* Write data to record pointer *)
         setPacketFromFields;
 
-        (* position record PTR on last record *)
-        //setPosition(FCache.Count-1);
+        if assigned(OnRecordAdded) then
+        OnRecordAdded(self);
 
         (* set state to idle *)
         setState(dsIdle);
@@ -1361,7 +1381,7 @@ Begin
   result:=False;
 end;
 
-function TQTXDatasetField.getValue:Variant;
+function TQTXDatasetField.getValue:TQTXDatasetPacket;
 Begin
   result:=FValue;
 end;
