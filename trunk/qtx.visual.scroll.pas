@@ -1,8 +1,7 @@
-unit qtxScrollController;
- 
+unit qtx.visual.scroll;
+
 //#############################################################################
 //
-//  Unit:       qtxScrollController.pas
 //  Author:     Jon Lennart Aasenden
 //  Company:    Jon Lennart Aasenden LTD
 //  Copyright:  Copyright Jon Lennart Aasenden, all rights reserved
@@ -27,14 +26,19 @@ unit qtxScrollController;
 //
 //
 //#############################################################################
- 
+
 interface
- 
+
 uses
-  W3System, W3Components, w3graphics, qtxutils;
- 
+  System.Types,
+  SmartCL.System,
+  SmartCL.Components,
+  SmartCL.Graphics,
+  qtx.helpers,
+  qtx.control;
+
   type
- 
+
   (* These are the constructor parameters for iScroll.
      Note: this object is managed by the controller.
      This structure represents the constructor parameter for iScroll. *)
@@ -56,7 +60,7 @@ uses
     function    toJSON:Variant;virtual;
     constructor Create;virtual;
   End;
- 
+
   (* This is the IScroll controller/wrapper.
      Elements who wants to use IScroll should create an instance
      of this class, and then attach it to the element handle.
@@ -93,16 +97,15 @@ uses
     Property    OnAttached:TNotifyEvent read FOnAttach write FOnAttach;
     Property    OnDetached:TNotifyEvent read FOnDetach write FOnDetach;
   End;
- 
+
   (* Scrollable content placeholder.
      An instance of this class is created automatically by TW3ScrollWindow.
      To introduce another content class, derive class from
      TQTXScrollWindowContentClass - then override getScrollContentClass
      in TW3ScrollWindow and return your own derived classtype *)
-  TQTXScrollWindowContent = Class(TW3CustomControl)
-  end;
+  TQTXScrollWindowContent = Class(TW3CustomControl);
   TQTXScrollWindowContentClass = Class of TQTXScrollWindowContent;
- 
+
   (* Scrollable content custom-control.
      If you need smooth, momentum based scrolling of content -- derive
      your custom control from this baseclass. *)
@@ -118,22 +121,22 @@ uses
     Property  Content:TQTXScrollWindowContent read FContent;
     Property  ScrollApi:TQTXScrollController read FScroller;
   End;
- 
+
 implementation
- 
+
 {$R 'iScroll.js'}
 
 //############################################################################
 // TQTXScrollController
 //############################################################################
- 
+
 Constructor TQTXScrollController.Create(Const aHandle:THandle);
 Begin
   inherited Create;
   FOptions:=TQTXScrollOptions.Create;
   FControl:=aHandle;
 end;
- 
+
 Destructor TQTXScrollController.Destroy;
 Begin
   if (FHandle) then
@@ -144,7 +147,7 @@ Begin
   FOptions.free;
   inherited;
 end;
- 
+
 function TQTXScrollController.getReady:Boolean;
 Begin
   if (FHandle) then
@@ -158,7 +161,7 @@ Begin
     end;
   end;
 end;
- 
+
 Procedure TQTXScrollController.Stop;
 Begin
   if (FHandle) then
@@ -172,7 +175,7 @@ Begin
     end;
   end;
 end;
- 
+
 procedure  TQTXScrollController.setEnabled(const aValue:Boolean);
 Begin
   if (FHandle) then
@@ -193,7 +196,7 @@ Begin
     end;
   end;
 end;
- 
+
 Procedure TQTXScrollController.Refresh;
 begin
   if (FHandle) then
@@ -207,7 +210,7 @@ begin
     end;
   end;
 end;
- 
+
 Procedure TQTXScrollController.ScrollTo(x,y:Integer;
           time:Integer;relative:Boolean);
 Begin
@@ -222,7 +225,7 @@ Begin
     end;
   end;
 end;
- 
+
 Procedure TQTXScrollController.ScrollToPage(PageX,PageY:Integer;time:Integer);
 Begin
   if (FHandle) then
@@ -236,7 +239,7 @@ Begin
     end;
   end;
 end;
- 
+
 Procedure TQTXScrollController.ScrollToElement
          (const aElement:String;time:Integer);
 Begin
@@ -251,7 +254,7 @@ Begin
     end;
   end;
 end;
- 
+
 Procedure TQTXScrollController.ScrollToElement
           (const aElement:THandle;time:Integer);
 Begin
@@ -266,7 +269,7 @@ Begin
     end;
   end;
 end;
- 
+
 Procedure TQTXScrollController.Attach;
 var
   mHandle:  THandle;
@@ -276,10 +279,10 @@ Begin
   (* Shut down current instance *)
   if (FHandle) then
   Detach;
- 
+
   (* setup iScroll options *)
   mOptions:=FOptions.toJSON;
- 
+
   (* Create iScroll controller for our viewport *)
   try
     mHandle:=FControl;
@@ -292,14 +295,14 @@ Begin
     raise EW3Exception.CreateFmt
     ('Failed to create IScroll instance: %s',[e.message]);
   end;
- 
+
   FEnabled:=True;
- 
+
   if assigned(FOnAttach) then
   FOnAttach(Self);
- 
+
 end;
- 
+
 Procedure TQTXScrollController.Detach;
 Begin
   if (FHandle) then
@@ -316,17 +319,17 @@ Begin
     finally
       FEnabled:=False;
     end;
- 
+
     if assigned(FOnDetach) then
     FOnDetach(self);
- 
+
   end;
 end;
- 
+
 //############################################################################
 // TQTXScrollOptions
 //############################################################################
- 
+
 constructor TQTXScrollOptions.Create;
 Begin
   inherited Create;
@@ -339,7 +342,7 @@ Begin
   HideScrollbar:=false;
   Click:=true;
 end;
- 
+
 function TQTXScrollOptions.toJSON:Variant;
 Begin
   (* Push IScroll options into JSON object *)
@@ -360,30 +363,30 @@ Begin
   result.click:='true';
 
 end;
- 
+
 //############################################################################
 // TQTXScrollWindow
 //############################################################################
- 
+
 procedure TQTXScrollWindow.InitializeObject;
 Begin
   inherited;
   FContent:=getScrollContentClass.Create(self);
   FContent.Height:=0;
- 
+
   w3_setStyle(FContent.Handle,'postion','relative');
   w3_setStyle(FContent.Handle,'min-width','100%');
   w3_setStyle(FContent.Handle,'min-height','0px');
- 
+
   FScroller:=TQTXScrollController.Create(self.Handle);
- 
+
   (* Attach IScroll when DOM element ready *)
   Handle.readyExecute( procedure ()
     begin
       FScroller.Attach;
     end );
 end;
- 
+
 procedure TQTXScrollWindow.FinalizeObject;
 Begin
   FScroller.Detach;
@@ -391,10 +394,10 @@ Begin
   FContent.free;
   inherited;
 end;
- 
+
 function TQTXScrollWindow.getScrollContentClass:TQTXScrollWindowContentClass;
 Begin
   result:=TQTXScrollWindowContent;
 end;
- 
+
 end.

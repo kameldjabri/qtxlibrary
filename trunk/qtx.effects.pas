@@ -1,20 +1,13 @@
-unit qtxEffects;
+unit qtx.effects;
 
 {$DEFINE USE_ANIM_HELPER}
 {.$DEFINE USE_ANIM_REGISTRY}
 
 //#############################################################################
 //
-//  Unit:       qtxEffects.pas
-//  Author:     Jon Lennart Aasenden
-//  Company:    Jon Lennart Aasenden LTD
-//  Copyright:  Copyright Jon Lennart Aasenden, all rights reserved
+//  Author:     Jon Lennart Aasenden [cipher diaz of quartex]
+//  Copyright:  Jon Lennart Aasenden, all rights reserved
 //
-//  About:      This unit introduces a class helper for TW3CustomControl
-//              which provides jQuery like "effects", such as fadeIn/out etc.
-//
-//  Note:       Simply add this unit to your uses-list, and all controls
-//              based on TW3CustomControl will have the new methods.
 //
 //  _______           _______  _______ _________ _______
 // (  ___  )|\     /|(  ___  )(  ____ )\__   __/(  ____ \|\     /|
@@ -26,8 +19,19 @@ unit qtxEffects;
 // (____\/_)(_______)|/     \||/   \__/   )_(   (_______/|/     \|
 //
 //
+// The QUARTEX library for Smart Mobile Studio is copyright
+// Jon Lennart Aasenden. All rights reserved. This is a commercial product.
+//
+// Jon Lennart Aasenden LTD is a registered Norwegian company:
+//
+//      Company ID: 913494741
+//      Legal Info: http://w2.brreg.no/enhet/sok/detalj.jsp?orgnr=913494741
+//
+//  The QUARTEX library of units is subject to international copyright
+//  laws and regulations regarding intellectual properties.
 //
 //#############################################################################
+
 (* Note:
 
    This unit can use a dictionary-object for keeping track of active
@@ -67,9 +71,15 @@ unit qtxEffects;
 
 interface
 
-uses 
-  w3System, w3Components, w3Effects,
-  qtxutils;
+uses
+  System.Types,
+  SmartCL.System,
+  SmartCL.Components,
+  SmartCL.Effects,
+  qtx.runtime,
+  qtx.helpers,
+  qtx.control,
+  qtx.attributes;
 
 const
 CNT_RELEASE_DELAY = 25;

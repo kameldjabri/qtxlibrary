@@ -1,8 +1,7 @@
-unit qtxlabel;
+unit qtx.visual.label;
 
 //#############################################################################
 //
-//  Unit:       qtxlabel.pas
 //  Author:     Jon Lennart Aasenden [cipher diaz of quartex]
 //  Copyright:  Jon Lennart Aasenden, all rights reserved
 //
@@ -27,8 +26,14 @@ unit qtxlabel;
 interface
 
 uses 
-  qtxutils,
-  W3System, w3graphics, w3components;
+  System.Types,
+  SmartCL.System,
+  SmartCL.Components,
+  SmartCL.Graphics,
+
+  qtx.control,
+  qtx.font,
+  qtx.helpers;
 
 type
 

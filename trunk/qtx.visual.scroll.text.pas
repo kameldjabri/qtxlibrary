@@ -1,10 +1,9 @@
-unit qtxscrolltext;
+unit qtx.visual.scroll.text;
 
 interface
 
 uses 
   W3System, w3Components, w3graphics,
-  qtxutils,
   qtxeffects;
 
   Type
