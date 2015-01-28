@@ -2,9 +2,41 @@ unit qtx.visual.scroll.text;
 
 interface
 
+//#############################################################################
+//
+//  Author:     Jon Lennart Aasenden
+//  Company:    Jon Lennart Aasenden LTD
+//  Copyright:  Copyright Jon Lennart Aasenden, all rights reserved
+//
+//  About:      This unit introduces wrapper classes for iScroll, and
+//              provides a baseclass for scrolling content
+//              (TScrollingWinControl under Delphi).
+//
+//  Note:       Save "iScroll.js" (built for version 5.1.2) to SMS/Libs
+//              See iScroll documentation for more information.
+//
+//              IScroll homepage: http://cubiq.org/iscroll-5
+//
+//  _______           _______  _______ _________ _______
+// (  ___  )|\     /|(  ___  )(  ____ )\__   __/(  ____ \|\     /|
+// | (   ) || )   ( || (   ) || (    )|   ) (   | (    \/( \   / )
+// | |   | || |   | || (___) || (____)|   | |   | (__     \ (_) /
+// | |   | || |   | ||  ___  ||     __)   | |   |  __)     ) _ (
+// | | /\| || |   | || (   ) || (\ (      | |   | (       / ( ) \
+// | (_\ \ || (___) || )   ( || ) \ \__   | |   | (____/\( /   \ )
+// (____\/_)(_______)|/     \||/   \__/   )_(   (_______/|/     \|
+//
+//
+//#############################################################################
+
 uses 
-  W3System, w3Components, w3graphics,
-  qtxeffects;
+  System.Types,
+  SmartCL.System,
+  SmartCL.Components,
+  SmartCL.Graphics,
+  qtx.runtime,
+  qtx.font,
+  qtx.effects;
 
   Type
 

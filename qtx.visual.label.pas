@@ -5,11 +5,6 @@ unit qtx.visual.label;
 //  Author:     Jon Lennart Aasenden [cipher diaz of quartex]
 //  Copyright:  Jon Lennart Aasenden, all rights reserved
 //
-//  Description:
-//  ============
-//  This unit contains a more lightweight label control.
-//  It has no horizontal alignment, but for pure "text" labels which doesnt
-//  need special treatment, this control is much better than TW3Label.
 //
 //  _______           _______  _______ _________ _______
 // (  ___  )|\     /|(  ___  )(  ____ )\__   __/(  ____ \|\     /|
@@ -20,6 +15,17 @@ unit qtx.visual.label;
 // | (_\ \ || (___) || )   ( || ) \ \__   | |   | (____/\( /   \ )
 // (____\/_)(_______)|/     \||/   \__/   )_(   (_______/|/     \|
 //
+//
+// The QUARTEX library for Smart Mobile Studio is copyright
+// Jon Lennart Aasenden. All rights reserved. This is a commercial product.
+//
+// Jon Lennart Aasenden LTD is a registered Norwegian company:
+//
+//      Company ID: 913494741
+//      Legal Info: http://w2.brreg.no/enhet/sok/detalj.jsp?orgnr=913494741
+//
+//  The QUARTEX library of units is subject to international copyright
+//  laws and regulations regarding intellectual properties.
 //
 //#############################################################################
 
