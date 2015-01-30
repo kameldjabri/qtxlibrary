@@ -56,22 +56,25 @@ type
      than a record. Also, it does not derive from TObject - and as such
      is suitable for 1:1 JSON mapping.
 
-     Note: The Source string is special, as it's demanded by the browser to
-           send the URL which is the source of whatever document the message
-           is targeting. You can send messages between open windows in
-           modern browser -- but we dont implement that (yet) since SMS is
-           all about single-page, rich content applications.
-           Either way, the source must either contain the current document
-           URL -- or alternatively "*" which means "any". By default we
-           set this value, so you really dont have to know about that *)
+     Note:  The Source string is special, as it's demanded by the browser to
+            send the URL which is the source of whatever document the message
+            is targeting. You can send messages between open windows in
+            modern browser -- but we dont implement that (yet) since SMS is
+            all about single-page, rich content applications.
+            Either way, the source must either contain the current document
+            URL -- or alternatively "*" which means "any". By default we
+            set this value, so you really dont have to know about that
 
+     Note:  You dont need to free TQTXMessageData objects, Javascript is
+            garbage-collected. *)
   TQTXMessageData = class
-    property ID: Integer;
-    property Source: String;
-    property Data: String;
+  public
+    property    ID: Integer;
+    property    Source: String;
+    property    Data: String;
 
-    function  toJSON:String;
-    procedure fromJSON(const value:String);
+    function    toJSON:String;
+    procedure   fromJSON(const value:String);
 
     Constructor Create;virtual;
   end;
@@ -123,14 +126,13 @@ type
     Constructor Create;reintroduce;virtual;
   end;
 
-
   (* This message port represent the "main" message port for any
      application that includes this unit. It will connect to the main
      window (deriving from the "owned" base class) and has a custom
      message-handler which dispatches messages to any subscribers *)
   TQTXMainMessagePort = Class(TQTXOwnedMsgPort)
   protected
-    procedure HandleMessage(Sender:TObject;EventObj:JMessageEvent);
+    procedure   HandleMessage(Sender:TObject;EventObj:JMessageEvent);
   public
     Constructor Create(WND:THandle);override;
   end;
@@ -188,10 +190,12 @@ begin
     mItem:=_subscribers[x];
     if mItem.SubscribesToMessage(mData.ID) then
     Begin
+      (* We execute with a minor delay, allowing the browser to
+         exit the function before we dispatch our data *)
       TQTXRuntime.DelayedDispatch(procedure ()
         begin
           mItem.Dispatch(mData);
-        end,9);
+        end,8);
     end;
   end;
 end;
@@ -210,14 +214,9 @@ begin
 end;
 
 procedure QTX_PostMessage(const msgValue:TQTXMessageData);
-//var
-//  mText:  String;
 begin
   if msgValue<>NIL then
-  begin
-    //mText:=JSon.Stringify(msgValue);
-    getMsgport.PostMessage(msgValue.toJSON,msgValue.Source);
-  end else
+  getMsgport.PostMessage(msgValue.toJSON,msgValue.Source) else
   raise exception.create('Postmessage failed, message object was NIL error');
 end;
 
@@ -262,14 +261,13 @@ end;
 Constructor TQTXMainMessagePort.Create(WND:THandle);
 begin
   inherited Create(WND);
-  self.OnMessageReceived:=QTXDefaultMessageHandler;
+  OnMessageReceived:=QTXDefaultMessageHandler;
 end;
 
 procedure TQTXMainMessagePort.HandleMessage(Sender:TObject;
           EventObj:JMessageEvent);
 begin
-  showmessage('over here!!');
-  //
+  QTXDefaultMessageHandler(self,eventObj);
 end;
 
 //#############################################################################
