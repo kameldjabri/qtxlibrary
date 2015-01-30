@@ -40,9 +40,47 @@ uses
 
 type
 
+  TQTXMessageData       = Class;
+  TQTXCustomMsgPort     = Class;
+  TQTXOwnedMsgPort      = Class;
+  TQTXMsgPort           = Class;
+  TQTXMainMessagePort   = Class;
+  TQTXMessageSubscription = Class;
+
+  TQTXMessageSubCallback  = procedure (Message:TQTXMessageData);
   TQTXMsgPortMessageEvent = procedure  (sender:TObject;EventObj:JMessageEvent);
   TQTXMsgPortErrorEvent   = procedure  (sender:TObject;EventObj:JDOMError);
 
+  (* The TQTXMessageData represents the actual message-data which is sent
+     internally by the system. Unlike Delphi or FPC, it is a class rather
+     than a record. Also, it does not derive from TObject - and as such
+     is suitable for 1:1 JSON mapping.
+
+     Note: The Source string is special, as it's demanded by the browser to
+           send the URL which is the source of whatever document the message
+           is targeting. You can send messages between open windows in
+           modern browser -- but we dont implement that (yet) since SMS is
+           all about single-page, rich content applications.
+           Either way, the source must either contain the current document
+           URL -- or alternatively "*" which means "any". By default we
+           set this value, so you really dont have to know about that *)
+
+  TQTXMessageData = class
+    property ID: Integer;
+    property Source: String;
+    property Data: String;
+
+    function  toJSON:String;
+    procedure fromJSON(const value:String);
+
+    Constructor Create;virtual;
+  end;
+
+
+  (* A mesaage port is a wrapper around the DOM->Window[]->OnMessage
+     event and DOM->Window[]->PostMessage API.
+     This base-class implements the generic behavior we want from this
+     class. We later derive new variations from it *)
   TQTXCustomMsgPort = Class(TObject)
   private
     FWindow:    THandle;
@@ -61,22 +99,19 @@ type
     Property    OnError:TQTXMsgPortErrorEvent;
   end;
 
-  (* This message-port can be connected to a window-handle to access
-     the message-features. For instance:
-
-      mPort:=TQTXOwnedMsgPort.Create(browserAPI.window);
-      try
-        mport.postMessage("this is a message","*");
-      finally
-        mPort.free;
-      end;
-  *)
+  (* This type of message-port is designed to be used with an already
+     visible browser window, most notably the default "main" window.
+     The base-class accepts a window-handle in it's constructor, so
+     in this class we simply give it the main DOM window.
+     We also re-introduce the constructor to isolate this fact *)
   TQTXOwnedMsgPort = Class(TQTXCustomMsgPort)
   end;
 
-  (* This message-port type creates it's own window-handle
-     and functions more or less as a message hub. Perfect for
-     communication between objects *)
+  (* This message-port type is very different from both the
+     ad-hoc baseclass and "owned" variation above.
+     This one actually creates it's own IFrame instance, which
+     means it's a completely stand-alone entity which doesnt need an
+     existing window to dispatch and handle messages *)
   TQTXMsgPort = Class(TQTXCustomMsgPort)
   private
     FFrame:     THandle;
@@ -89,7 +124,225 @@ type
   end;
 
 
+  (* This message port represent the "main" message port for any
+     application that includes this unit. It will connect to the main
+     window (deriving from the "owned" base class) and has a custom
+     message-handler which dispatches messages to any subscribers *)
+  TQTXMainMessagePort = Class(TQTXOwnedMsgPort)
+  protected
+    procedure HandleMessage(Sender:TObject;EventObj:JMessageEvent);
+  public
+    Constructor Create(WND:THandle);override;
+  end;
+
+  (* Information about registered subscriptions *)
+  TQTXSubscriptionInfo = Record
+    MSGID:    Integer;
+    Callback: TQTXMessageSubCallback;
+  end;
+
+  (* A message subscription is an object that allows you to install
+     X number of event-handlers for messages you want to recieve. Its
+     important to note that all subscribers to a message will get the
+     same message -- there is no blocking or ownership concepts
+     involved. This system is a huge improvement over the older WinAPI *)
+  TQTXMessageSubscription = Class(TObject)
+  private
+    FObjects:   Array of TQTXSubscriptionInfo;
+  public
+    function    SubscribesToMessage(MSGID:Integer):Boolean;
+    procedure   Dispatch(const Message:TQTXMessageData);virtual;
+
+    function    Subscribe(MSGID:Integer;
+                const Callback:TQTXMessageSubCallback):THandle;
+
+    procedure   Unsubscribe(Handle:THandle);
+    Constructor Create;virtual;
+    Destructor  Destroy;Override;
+  end;
+
+  (* Helper functions which simplify message handling *)
+  function  QTX_MakeMsgData:TQTXMessageData;
+  procedure QTX_PostMessage(const msgValue:TQTXMessageData);
+  procedure QTX_BroadcastMessage(const msgValue:TQTXMessageData);
+
 implementation
+
+uses SmartCL.System;
+
+var
+_mainport:    TQTXMainMessagePort = NIL;
+_subscribers: Array of TQTXMessageSubscription;
+
+procedure QTXDefaultMessageHandler(sender:TObject;EventObj:JMessageEvent);
+var
+  x:      Integer;
+  mItem:  TQTXMessageSubscription;
+  mData:  TQTXMessageData;
+begin
+  mData:=new TQTXMessageData();
+  mData.fromJSON(EventObj.Data);
+
+  for x:=0 to _subscribers.count-1 do
+  Begin
+    mItem:=_subscribers[x];
+    if mItem.SubscribesToMessage(mData.ID) then
+    Begin
+      TQTXRuntime.DelayedDispatch(procedure ()
+        begin
+          mItem.Dispatch(mData);
+        end,9);
+    end;
+  end;
+end;
+
+function  QTX_MakeMsgData:TQTXMessageData;
+begin
+  result:=new TQTXMessageData();
+  result.Source:="*";
+end;
+
+function getMsgport:TQTXMainMessagePort;
+begin
+  if _mainport=NIL then
+  _mainport:=TQTXMainMessagePort.Create(BrowserAPI.Window);
+  result:=_mainport;
+end;
+
+procedure QTX_PostMessage(const msgValue:TQTXMessageData);
+//var
+//  mText:  String;
+begin
+  if msgValue<>NIL then
+  begin
+    //mText:=JSon.Stringify(msgValue);
+    getMsgport.PostMessage(msgValue.toJSON,msgValue.Source);
+  end else
+  raise exception.create('Postmessage failed, message object was NIL error');
+end;
+
+procedure QTX_BroadcastMessage(const msgValue:TQTXMessageData);
+Begin
+  if msgValue<>NIL then
+  getMsgport.BroadcastMessage(msgValue,msgValue.Source) else
+  raise exception.create('Broadcastmessage failed, message object was NIL error');
+end;
+
+//#############################################################################
+// TQTXMainMessagePort
+//#############################################################################
+
+Constructor TQTXMessageData.Create;
+begin
+  self.Source:="*";
+end;
+
+function  TQTXMessageData.toJSON:String;
+begin
+  result:=JSON.Stringify(self);
+end;
+
+procedure TQTXMessageData.fromJSON(const value:String);
+var
+  mTemp:  TQTXMessageData;
+Begin
+  mTemp:=TQTXMessageData.Create;
+  asm
+    @mTemp = JSON.parse(@value);
+  end;
+  self.ID:=mTemp.ID;
+  self.Source:=mTemp.Source;
+  self.Data:=mTemp.Data;
+end;
+
+//#############################################################################
+// TQTXMainMessagePort
+//#############################################################################
+
+Constructor TQTXMainMessagePort.Create(WND:THandle);
+begin
+  inherited Create(WND);
+  self.OnMessageReceived:=QTXDefaultMessageHandler;
+end;
+
+procedure TQTXMainMessagePort.HandleMessage(Sender:TObject;
+          EventObj:JMessageEvent);
+begin
+  showmessage('over here!!');
+  //
+end;
+
+//#############################################################################
+// TQTXMessageSubscription
+//#############################################################################
+
+Constructor TQTXMessageSubscription.Create;
+begin
+  inherited Create;
+  _subscribers.add(self);
+end;
+
+Destructor TQTXMessageSubscription.Destroy;
+Begin
+  _subscribers.Remove(self);
+  inherited;
+end;
+
+function TQTXMessageSubscription.SubScribe(MSGID:Integer;
+         const Callback:TQTXMessageSubCallback):THandle;
+var
+  mObj: TQTXSubscriptionInfo;
+begin
+  mObj.MSGID:=MSGID;
+  mObj.Callback:=@Callback;
+  FObjects.add(mObj);
+  result:=mObj;
+end;
+
+procedure TQTXMessageSubscription.Unsubscribe(Handle:THandle);
+var
+  x:  Integer;
+begin
+  for x:=0 to FObjects.Count-1 do
+  Begin
+    if Variant(FObjects[x]) = Handle then
+    Begin
+      FObjects.delete(x,1);
+      break;
+    end;
+  end;
+end;
+
+function TQTXMessageSubscription.SubscribesToMessage(MSGID:Integer):Boolean;
+var
+  x:  Integer;
+begin
+  result:=False;
+  for x:=0 to FObjects.Count-1 do
+  Begin
+    if FObjects[x].MSGID = MSGID then
+    Begin
+      result:=true;
+      break;
+    end;
+  end;
+end;
+
+procedure TQTXMessageSubscription.Dispatch(const Message:TQTXMessageData);
+var
+  x:  Integer;
+begin
+  for x:=0 to FObjects.Count-1 do
+  Begin
+    if FObjects[x].MSGID = Message.ID then
+    Begin
+      if assigned(FObjects[x].Callback) then
+      FObjects[x].Callback(Message);
+      break;
+    end;
+  end;
+end;
+
 
 //#############################################################################
 // TQTXMsgPort
@@ -199,6 +452,13 @@ begin
   mLen:=TVariant.AsInteger(browserAPI.Window.frames.length);
   for x:=0 to mLen-1 do
   browserAPI.window.frames[x].postMessage(msg,targetOrigin);
+end;
+
+
+finalization
+begin
+  if assigned(_mainport) then
+  _mainport.free;
 end;
 
 end.
