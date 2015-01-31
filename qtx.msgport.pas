@@ -38,6 +38,9 @@ uses
   qtx.runtime,
   qtx.helpers;
 
+const
+  CNT_QTX_MESSAGES_BASEID = 1000;
+
 type
 
   TQTXMessageData       = Class;
