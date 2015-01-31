@@ -70,16 +70,16 @@ type
 
      Note:  You dont need to free TQTXMessageData objects, Javascript is
             garbage-collected. *)
-  TQTXMessageData = class
+  TQTXMessageData = class(JObject)
   public
     property    ID: Integer;
     property    Source: String;
     property    Data: String;
 
-    function    toJSON:String;
-    procedure   fromJSON(const value:String);
+    function    Deserialize:String;
+    procedure   Serialize(const value:String);
 
-    Constructor Create;virtual;
+    Constructor Create;
   end;
 
 
@@ -186,7 +186,7 @@ var
   mData:  TQTXMessageData;
 begin
   mData:=new TQTXMessageData();
-  mData.fromJSON(EventObj.Data);
+  mData.Serialize(EventObj.Data);
 
   for x:=0 to _subscribers.count-1 do
   Begin
@@ -219,7 +219,7 @@ end;
 procedure QTX_PostMessage(const msgValue:TQTXMessageData);
 begin
   if msgValue<>NIL then
-  getMsgport.PostMessage(msgValue.toJSON,msgValue.Source) else
+  getMsgport.PostMessage(msgValue.Deserialize,msgValue.Source) else
   raise exception.create('Postmessage failed, message object was NIL error');
 end;
 
@@ -239,22 +239,19 @@ begin
   self.Source:="*";
 end;
 
-function  TQTXMessageData.toJSON:String;
+function  TQTXMessageData.Deserialize:String;
 begin
   result:=JSON.Stringify(self);
 end;
 
-procedure TQTXMessageData.fromJSON(const value:String);
+procedure TQTXMessageData.Serialize(const value:String);
 var
-  mTemp:  TQTXMessageData;
+  mTemp:  variant;
 Begin
-  mTemp:=TQTXMessageData.Create;
-  asm
-    @mTemp = JSON.parse(@value);
-  end;
-  self.ID:=mTemp.ID;
-  self.Source:=mTemp.Source;
-  self.Data:=mTemp.Data;
+  mTemp:=JSON.Parse(value);
+  self.id := TQTXMessageData(mTemp).ID;
+  self.source:= TQTXMessageData(mTemp).source;
+  self.data:=TQTXMessageData(mTemp).data;
 end;
 
 //#############################################################################
