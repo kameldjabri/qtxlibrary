@@ -34,7 +34,7 @@ interface
 uses 
   system.types,
   SmartCL.System,
-  qtx.iocodec;
+  qtx.codec;
 
 
 type
