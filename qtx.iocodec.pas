@@ -33,207 +33,154 @@ interface
 
 uses 
   system.types,
-  SmartCL.System;
+  SmartCL.System,
+  qtx.options;
 
 type
 
+  (*  Codecs:
+      A codec is a class which does two things, namely to:
+        1.  Encode a piece of input data
+        2.  Decode a previously Encoded piece of data
+
+      A codec is traditionally associated with video and audio processing,
+      but in reality the concept is applicable to almost any process
+      which deals with standard IO processing.
+
+      Technology such as compression, encryption and data-mapping have almost
+      everything in common with a codec, hence my library treats them
+      all the same.
+
+      Note: Since some codec's require unique properties to be set,
+            properties that cant be refactored so easily, the base codec
+            class has a method called "SetOptions". You can override this
+            to accept a standard TQTXOptions instance, from where you can
+            read in any values you need.
+
+            Users must also be aware of this, since they in turn have to
+            deliver mentioned TQTXOptions instance fully populated.
+
+      Tip:  All of this has been neatly isolated in classes and helper
+            functions. You can encode and decode with a call to:
+
+            QTX_Encode(Const Data:String;
+            Const Options:TQTXOptions;
+            Const Codec:TQTXCodecClassType):String;
+
+            QTX_Decode(Const Data:String;
+            Const Options:TQTXOptions;
+            Const Codec:TQTXCodecClassType):String;
+
+            So you dont need to create codec instances directly.
+            Use the helper functions as a proxy.
+       *)
+
+
+  EQTXCodecException = Class(EW3Exception);
+
+  (* This is the base-class from which all codec's derive *)
   TQTXCustomCodec = class(TObject)
   public
-    function  Encode(const data:Variant):Variant;virtual;
-    function  Decode(const data:Variant):Variant;virtual;
+    Procedure SetOptions(Const Options:TQTXOptions);virtual;
+    function  Encode(const data:String):String;virtual;
+    function  Decode(const data:String):String;virtual;
   end;
 
-  TQTXRLECodec = Class(TQTXCustomCodec)
-  public
-    function  Encode(const data:String):String;reintroduce;virtual;
-    function  Decode(const data:String):String;reintroduce;virtual;
-  end;
+  TQTXCodecClassType = Class of TQTXCustomCodec;
 
-  TQTCRC4Codec = Class(TQTXCustomCodec)
-  public
-    Property  Key:String;
-    function  Encode(const data:String):String;reintroduce;virtual;
-    function  Decode(const data:String):String;reintroduce;virtual;
-  end;
+  function  QTX_Encode(Const Data:String;
+            Const Options:TQTXOptions;
+            Const Codec:TQTXCodecClassType):String;
 
-  TQTXBase64Codec = Class(TQTXCustomCodec)
-  public
-    function  Encode(const data:String):String;reintroduce;virtual;
-    function  Decode(const Data:String):String;reintroduce;virtual;
-  end;
 
-  TQTXURICodec = Class(TQTXCustomCodec)
-  public
-    function  Encode(const data:String):String;reintroduce;virtual;
-    function  Decode(const Data:String):String;reintroduce;virtual;
-  end;
+  function  QTX_Decode(Const Data:String;
+            Const Options:TQTXOptions;
+            Const Codec:TQTXCodecClassType):String;
 
 implementation
 
-//############################################################################
-// TQTXURICodec
-//###########################################################################
-
-function  TQTXURICodec.Encode(const data:String):String;
-begin
-  if data.length>0 then
-  begin
-    asm
-      @result = encodeURI(@data);
-    end;
-  end else
-  Raise Exception.Create('Encoding failed, input was empty or invalid error');
-end;
-
-function  TQTXURICodec.Decode(const Data:String):String;
-Begin
-  if data.length>0 then
-  begin
-    asm
-      @result = decodeURI(@data);
-    end;
-  end else
-  Raise Exception.Create('Decoding failed, input was empty or invalid error');
-end;
+uses qtx.helpers,
+     qtx.storage;
 
 //############################################################################
-// TQTXBase64Codec encodeURI
+// HELPER ROUTINES
 //###########################################################################
 
-function  TQTXBase64Codec.Encode(const data:String):String;
-begin
-  if data.length>0 then
-  begin
-    asm
-      @result = btoa(@data);
-    end;
-  end else
-  Raise Exception.Create('Encoding failed, input was empty or invalid error');
-end;
 
-function  TQTXBase64Codec.Decode(const Data:String):String;
-Begin
-  if data.length>0 then
-  begin
-    asm
-      @result = atob(@data);
-    end;
-  end else
-  Raise Exception.Create('Decoding failed, input was empty or invalid error');
-end;
-
-//############################################################################
-// TQTCRC4Codec
-//###########################################################################
-
-function TQTCRC4Codec.Encode(const data:String):String;
+function  QTX_Decode(const Data:String;
+          Const Options:TQTXOptions;
+          Const Codec:TQTXCodecClassType):String;
 var
-  mKey: String;
+  mCodec: TQTXCustomCodec;
 begin
-  result:="";
-  mKey:=self.key;
-  if mKey.length>0 then
-  Begin
-    if data.length>0 then
-    begin
-      asm
-        var s = [], j = 0, x, res = '';
-        for (var i = 0; i < 256; i++) {
-          s[i] = i;
-        }
-        for (i = 0; i < 256; i++) {
-          j = (j + s[i] + (@mKey).charCodeAt(i % (@mKey).length)) % 256;
-          x = s[i];
-          s[i] = s[j];
-          s[j] = x;
-        }
+  if data.length>0 then
+  begin
+    if codec<>NIL then
+    Begin
+      mCodec:=Codec.Create;
+      try
 
-        i = 0;
-        j = 0;
-        for (var y = 0; y < (@data).length; y++) {
-          i = (i + 1) % 256;
-          j = (j + s[i]) % 256;
-          x = s[i];
-          s[i] = s[j];
-          s[j] = x;
-          @result += String.fromCharCode((@data).charCodeAt(y)
-            ^ s[(s[i] + s[j]) % 256]);
-        }
+        if Options<>NIL then
+        mCodec.SetOptions(Options);
+
+        result:=mCodec.Decode(Data);
+      finally
+        mCodec.free;
       end;
-    end;
+
+    end else
+    raise EQTXCodecException.Create
+    ('Encoding failed, Codec was NIL or undefined error');
   end else
-  Raise Exception.Create('Decoding failed, invalid or empty key error');
+  Raise EQTXCodecException.Create
+  ('Encoding failed, source data was empty error');
 end;
 
-function TQTCRC4Codec.Decode(const Data:String):String;
+function  QTX_Encode(const Data:String;
+          Const Options:TQTXOptions;
+          Const Codec:TQTXCodecClassType):String;
+var
+  mCodec: TQTXCustomCodec;
 begin
-  if key.length>0 then
-  result:=Encode(Data) else
-  Raise Exception.Create('Decoding failed, invalid or empty key error');
-end;
+  if data.length>0 then
+  begin
+    if codec<>NIL then
+    Begin
+      mCodec:=Codec.Create;
+      try
 
-//############################################################################
-// TQTXRLECodec
-//###########################################################################
+        if Options<>NIL then
+        mCodec.SetOptions(Options);
 
-function TQTXRLECodec.Encode(const data:String):String;
-begin
-  asm
-    @result = new Array;
-    if((@data).length == 0)  {
-		  @result = "";
-    } else {
-      var count = 1;
-      var r = 0;
-      for(var i = 0; i < ((@data).length - 1); i++) {
-		    if(@data[i] != @data[i+1])
-        {
-          @result[r] = @data[i];
-          @result[r+1] = count;
-          count = 0;
-          r +=2;
-        }
-		    count++;
-      }
-      @result[r] = @data[i];
-      @result[r+1] = count;
-    }
-  end;
-  writeln(result);
-end;
+        result:=mCodec.Encode(Data);
+      finally
+        mCodec.free;
+      end;
 
-function TQTXRLECodec.Decode(const Data:String):String;
-begin
-  asm
-    @result = new Array;
-    if((@data).length == 0) {
-      return result;
-    } else {
-      if(((@data).length % 2) <> 0)
-      {
-        for(var i = 0; i < (@data).length; i+=2)
-        {
-          var val = @data[i];
-          var count = @data[i+1];
-          for(var c = 0; c < count; c++)
-            @result[(@result).length] = val;
-        }
-      }
-    }
-  end;
+    end else
+    raise EQTXCodecException.Create
+    ('Encoding failed, Codec was NIL or undefined error');
+  end else
+  Raise EQTXCodecException.Create
+  ('Encoding failed, source data was empty error');
 end;
 
 //############################################################################
 // TQTXCustomCodec
 //###########################################################################
 
-function TQTXCustomCodec.Encode(const data:Variant):Variant;
+Procedure TQTXCustomCodec.SetOptions(Const Options:TQTXOptions);
+begin
+  Raise Exception.Create('NOT IMPLEMENTED');
+end;
+
+function TQTXCustomCodec.Encode(const data:string):string;
 begin
   result:=null;
   Raise Exception.Create('NOT IMPLEMENTED');
 end;
 
-function TQTXCustomCodec.Decode(const Data:Variant):Variant;
+function TQTXCustomCodec.Decode(const Data:string):string;
 begin
   result:=null;
   Raise Exception.Create('NOT IMPLEMENTED');
