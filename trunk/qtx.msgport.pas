@@ -179,6 +179,10 @@ var
 _mainport:    TQTXMainMessagePort = NIL;
 _subscribers: Array of TQTXMessageSubscription;
 
+//#############################################################################
+//
+//#############################################################################
+
 procedure QTXDefaultMessageHandler(sender:TObject;EventObj:JMessageEvent);
 var
   x:      Integer;

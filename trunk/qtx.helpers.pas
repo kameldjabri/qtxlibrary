@@ -77,11 +77,37 @@ type
     class function  CreateGUID:String;
   End;
 
+  TQTXVariant = class(TOBject)
+  public
+    class function  IsObject(const aValue:Variant):Boolean;
+    class function  IsUnassigned(const aValue:Variant):Boolean;
+  end;
 
 
 implementation
 
 uses qtx.runtime;
+
+//#############################################################################
+// TQTXVariantHelper
+//#############################################################################
+
+class function TQTXVariant.IsUnassigned(const aValue:Variant):Boolean;
+begin
+  asm
+    @result = (typeof @aValue =="undefined")
+  end;
+end;
+
+class function TQTXVariant.IsObject(const aValue:Variant):Boolean;
+begin
+  asm
+    @result = ((@aValue) !== null)
+      && (typeof @aValue !== "undefind")
+      && (typeof (@aValue) === "object");
+  end;
+end;
+
 
 //#############################################################################
 // TQTXStringHelper
