@@ -94,8 +94,6 @@ begin
 end;
 
 procedure TQTXOptions.Serialize(data:String);
-var
-  mTemp:  Variant;
 begin
   FData := TQTXOptionArray( JSON.parse(data) );
 end;

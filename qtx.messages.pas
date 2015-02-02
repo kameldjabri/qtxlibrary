@@ -247,7 +247,7 @@ begin
   for x:=0 to _subscribers.count-1 do
   Begin
     mItem:=_subscribers[x];
-    result:=mItem.SubscribesToMessage(mData.ID);
+    result:=mItem.SubscribesToMessage(msgId);
     if result then
     break;
   end;
