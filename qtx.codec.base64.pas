@@ -34,7 +34,8 @@ interface
 uses 
   system.types,
   SmartCL.System,
-  qtx.codec;
+  qtx.codec,
+  qtx.storage.options;
 
 
 type

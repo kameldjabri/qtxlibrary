@@ -1,4 +1,4 @@
-unit qtx.iocodec;
+unit qtx.codec;
 
 interface
 
@@ -34,7 +34,7 @@ interface
 uses 
   system.types,
   SmartCL.System,
-  qtx.options;
+  qtx.storage.options;
 
 type
 
@@ -97,10 +97,20 @@ type
             Const Options:TQTXOptions;
             Const Codec:TQTXCodecClassType):String;
 
+
+resourcestring
+  QTX_CODEC_ERR_InvalidInputData  =
+    'Codec operation failed, invalid input data error';
+
+  QTX_CODEC_ERR_InvalidOption     =
+    'Codec operation failed, invalid option value error';
+
+  QTX_CODEC_ERR_NILCodec  =
+    'Codec operation failed, codec reference was NIL or undefined error';
+
 implementation
 
-uses qtx.helpers,
-     qtx.storage;
+uses  qtx.helpers;
 
 //############################################################################
 // HELPER ROUTINES
@@ -129,11 +139,9 @@ begin
       end;
 
     end else
-    raise EQTXCodecException.Create
-    ('Encoding failed, Codec was NIL or undefined error');
+    raise EQTXCodecException.Create(QTX_CODEC_ERR_NILCodec);
   end else
-  Raise EQTXCodecException.Create
-  ('Encoding failed, source data was empty error');
+  Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
 end;
 
 function  QTX_Encode(const Data:String;
@@ -158,11 +166,9 @@ begin
       end;
 
     end else
-    raise EQTXCodecException.Create
-    ('Encoding failed, Codec was NIL or undefined error');
+    raise EQTXCodecException.Create(QTX_CODEC_ERR_NILCodec);
   end else
-  Raise EQTXCodecException.Create
-  ('Encoding failed, source data was empty error');
+  Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
 end;
 
 //############################################################################
