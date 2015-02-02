@@ -35,7 +35,7 @@ uses
   system.types,
   SmartCL.System,
   qtx.codec,
-  qtx.options;
+  qtx.storage.options;
 
 type
 

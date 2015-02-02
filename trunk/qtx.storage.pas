@@ -37,7 +37,6 @@ uses
   SmartCL.Inet,
   w3c.dom;
 
-
 type
 
   TQTXTextDataReadyEvent = procedure
@@ -79,6 +78,85 @@ type
 
   End;
 
+  TQTXFileSystemObject      = Class;
+  TQTXFileSystemFolder      = Class;
+  TQTXFileSystemFile        = Class;
+  TQTXFileSystemObjectList  = Array of TQTXFileSystemObject;
+
+  TQTXFileSystemObject = Class(TObject)
+  private
+    FName:      String;
+    FSize:      Integer;
+    FParent:    TQTXFileSystemFolder;
+  protected
+    FChildren:  TQTXFileSystemObjectList;
+
+    procedure setName(value:String);
+
+    function  getName:String;virtual;
+    function  getSize:Integer;virtual;
+    property  Size:Integer read getSize;
+
+    Property  Files[index:Integer]:TQTXFileSystemObject
+              read ( FChildren[index] );
+    property  Count:Integer
+              read ( FChildren.length );
+
+  public
+    Property  Parent:TQTXFileSystemFolder read FParent;
+    Property  Name:String read getName;
+    Constructor Create(Aowner:TQTXFileSystemFolder);
+  end;
+
+  TQTXFileSystemObjectClass = Class of TQTXFileSystemObject;
+
+  TQTXFileSystemFolder = Class(TQTXFileSystemObject)
+  protected
+    function  getFileObj(aFileName:String):TQTXFileSystemObject;
+    function  getPath:String;virtual;
+  public
+    Property  Path:String read getPath;
+    Property  Files;
+    property  Count;
+    function  FileExists(aFileName:String):Boolean;virtual;
+    function  mkDir(aFilename:String):TQTXFileSystemFolder;virtual;
+    function  mkFile(aFilename:String;const Data:Variant):TQTXFileSystemFile;virtual;
+  end;
+
+  IQTXFileSystemFile = Interface
+    function  getData:Variant;
+    procedure setData(Const value:Variant);
+  end;
+
+  TQTXFileSystemFile = Class(TQTXFileSystemObject,IQTXFileSystemFile)
+  private
+    FData:    Variant;
+  protected
+    function  getData:Variant;
+    procedure setData(Const value:Variant);
+  public
+    property  Name;
+  end;
+
+  TQTXFileSystem = Class(TQTXFileSystemFolder)
+  private
+    FCurrent:   TQTXFileSystemFolder;
+    //function    getNodeNames(Const clsType:TQTXFileSystemObjectClass):Array of String;
+  protected
+    function    getPath:String;override;
+    function    getCurrent:TQTXFileSystemFolder;virtual;
+  public
+    Property    Files;
+    Property    Count;
+    Property    Current:TQTXFileSystemFolder read getCurrent;
+    procedure   chDir(NewPath:String);
+
+    function    FileExists(aFileName:String):Boolean;override;
+    function    mkDir(aFilename:String):TQTXFileSystemFolder;override;
+    function    mkFile(aFilename:String;const Data:Variant):TQTXFileSystemFile;override;
+  end;
+
+
 implementation
 
 uses qtx.helpers;
@@ -99,6 +177,227 @@ resourcestring
 CNT_ERR_IO_FailedLoadScript = 'Failed to load script-file [%s] error';
 CNT_ERR_IO_FailedLoadImage  = 'Failed to load image.file [%s] error';
 CNT_ERR_IO_FailedLoadCSS    = 'Failed to load CSS file [%s] error';
+
+//############################################################################
+// TQTXFileSystem
+//############################################################################
+
+function TQTXFileSystem.getCurrent:TQTXFileSystemFolder;
+begin
+  if FCurrent=NIL then
+  FCurrent:=self;
+  result:=FCurrent;
+end;
+
+function TQTXFileSystem.FileExists(aFileName:String):Boolean;
+begin
+  if Current<>self then
+  result:=Current.FileExists(aFilename) else
+  result:=inherited FileExists(aFilename);
+end;
+
+function TQTXFileSystem.mkDir(aFilename:String):TQTXFileSystemFolder;
+begin
+  if Current<>self then
+  result:=Current.mkdir(aFilename) else
+  result:=inherited mkDir(aFilename);
+end;
+
+function TQTXFileSystem.mkFile(aFilename:String;
+         const Data:Variant):TQTXFileSystemFile;
+begin
+  if Current<>self then
+  result:=Current.mkFile(aFilename,Data) else
+  result:=inherited mkFile(aFilename,Data);
+end;
+
+function TQTXFileSystem.getPath:String;
+begin
+  if Current<>Self then
+  result:=Current.path else
+  result:='/';
+end;
+
+procedure TQTXFileSystem.chDir(NewPath:String);
+var
+  mList:  Array of String;
+  mItems: Array of String;
+  x:  Integer;
+  mItem:  TQTXFileSystemObject;
+begin
+  newPath:=newPath.Trim();
+  if newpath.length>0 then
+  begin
+
+    (* strip left double delimiters *)
+    while (newpath.length>0)
+      and (newpath.left(1)="/") do
+      newpath.DeleteLeft(1);
+
+    (* strip right double delimiters *)
+    while (newpath.length>0)
+      and (newpath.right(1)="/") do
+      newpath.DeleteRight(1);
+
+    (* Strip contained double delimiters *)
+    while newPath.Contains('//') do
+    newPath:=newpath.Replace('//','/');
+
+    mItems:=newPath.Explode('/');
+    if mItems.length >0 then
+    Begin
+
+      FCurrent:=self;
+
+      for x:=mitems.low to mItems.High do
+      begin
+        mItem:=Current.getFileObj(mItems[x]);
+        if mItem<>NIL then
+        Begin
+          if (mItem is TQTXFileSystemFolder) then
+          begin
+            FCurrent:=TQTXFileSystemFolder(mItem);
+          end else
+          Raise exception.Create('Directory error, filename in path error');
+        end else
+        raise exception.create('Invalid path error');
+      end;
+
+    end;
+  end;
+end;
+
+//############################################################################
+// TQTXFileSystemFolder
+//############################################################################
+
+function TQTXFileSystemFolder.getPath:String;
+var
+  mItem:  TQTXFileSystemFolder;
+begin
+  result:='';
+  mItem:=self;
+  repeat
+    result:=(mItem.Name + '\' + result);
+    mItem:=mItem.Parent;
+  until mItem=NIL;
+end;
+
+function TQTXFileSystemFolder.getFileObj(aFileName:String):TQTXFileSystemObject;
+var
+  x:  Integer;
+begin
+  result:=NIL;
+  for x:=0 to Count-1 do
+  begin
+    if sameText(Files[x].Name,aFileName) then
+    begin
+      result:=Files[x];
+      break;
+    end;
+  end;
+end;
+
+function TQTXFileSystemFolder.mkFile(aFilename:String;const Data:Variant):TQTXFileSystemFile;
+var
+  mItem:  TQTXFileSystemObject;
+begin
+  result:=NIL;
+
+  aFileName:=aFileName.lowercase().trim();
+  if aFileName.length>0 then
+  begin
+    if not FileExists(aFileName) then
+    begin
+
+      mItem:=TQTXFileSystemFile.Create(self);
+      mItem.setName(aFileName);
+      FChildren.Add(mItem);
+
+      (* Default data? *)
+      if not TQTXVariant.IsUnassigned(Data)
+      and not TVariant.IsNull(Data) then
+      (mItem as IQTXFileSystemFile).setData(Data);
+
+      result:=TQTXFileSystemFile(mItem);
+    end else
+    raise exception.Create('File <' + name + '> already exists error');
+  end;
+end;
+
+function TQTXFileSystemFolder.mkDir(aFileName:String):TQTXFileSystemFolder;
+var
+  mItem:  TQTXFileSystemObject;
+begin
+  result:=NIL;
+  aFileName:=aFileName.lowercase().trim();
+  if aFileName.length>0 then
+  begin
+    if not FileExists(aFileName) then
+    begin
+
+      mItem:=TQTXFileSystemFolder.Create(self);
+      mItem.setName(aFileName);
+      FChildren.Add(mItem);
+
+      result:=TQTXFileSystemFolder(mItem);
+
+    end else
+    raise exception.Create('File <' + name + '> already exists error');
+  end;
+end;
+
+function TQTXFileSystemFolder.FileExists(aFileName:String):Boolean;
+var
+  x:  Integer;
+begin
+  result:=False;
+  for x:=0 to Count-1 do
+  begin
+    result:=sameText(Files[x].Name,aFileName);
+    if result then
+    break;
+  end;
+end;
+
+//############################################################################
+// TQTXFileSystemFile
+//############################################################################
+
+function TQTXFileSystemFile.getData:Variant;
+begin
+  result:=FData;
+end;
+
+procedure TQTXFileSystemFile.setData(Const value:Variant);
+begin
+  FData:=Value;
+end;
+
+//############################################################################
+// TQTXFileSystemObject
+//############################################################################
+
+Constructor TQTXFileSystemObject.Create(Aowner:TQTXFileSystemFolder);
+begin
+  inherited Create;
+  FParent:=AOwner;
+end;
+
+procedure TQTXFileSystemObject.setName(value:String);
+begin
+  FName:=value;
+end;
+
+function TQTXFileSystemObject.getName:String;
+begin
+  result:=FName;
+end;
+
+function TQTXFileSystemObject.getSize:Integer;
+begin
+  result:=FSize;
+end;
 
 //############################################################################
 // TQTXStorage
