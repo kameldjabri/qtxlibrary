@@ -1,4 +1,4 @@
-unit qtx.msgport;
+unit qtx.messages;
 
 //#############################################################################
 //
@@ -171,6 +171,10 @@ type
   procedure QTX_PostMessage(const msgValue:TQTXMessageData);
   procedure QTX_BroadcastMessage(const msgValue:TQTXMessageData);
 
+  (* Audience returns true if a message-ID have any
+     subscriptions assigned to it *)
+  function  QTX_Audience(msgId:Integer):Boolean;
+
 implementation
 
 uses SmartCL.System;
@@ -232,6 +236,21 @@ Begin
   if msgValue<>NIL then
   getMsgport.BroadcastMessage(msgValue,msgValue.Source) else
   raise exception.create('Broadcastmessage failed, message object was NIL error');
+end;
+
+function  QTX_Audience(msgId:Integer):Boolean;
+var
+  x:  Integer;
+  mItem:  TQTXMessageSubscription;
+begin
+  result:=False;
+  for x:=0 to _subscribers.count-1 do
+  Begin
+    mItem:=_subscribers[x];
+    result:=mItem.SubscribesToMessage(mData.ID);
+    if result then
+    break;
+  end;
 end;
 
 //#############################################################################
