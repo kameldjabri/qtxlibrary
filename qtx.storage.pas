@@ -114,6 +114,7 @@ type
   protected
     function  getFileObj(aFileName:String):TQTXFileSystemObject;
     function  getPath:String;virtual;
+    function  getValidPath(aFilename:String):Boolean;
   public
     Property  Path:String read getPath;
     Property  Files;
@@ -141,7 +142,6 @@ type
   TQTXFileSystem = Class(TQTXFileSystemFolder)
   private
     FCurrent:   TQTXFileSystemFolder;
-    //function    getNodeNames(Const clsType:TQTXFileSystemObjectClass):Array of String;
   protected
     function    getPath:String;override;
     function    getCurrent:TQTXFileSystemFolder;virtual;
@@ -281,6 +281,10 @@ begin
     result:=(mItem.Name + '\' + result);
     mItem:=mItem.Parent;
   until mItem=NIL;
+end;
+
+function  getValidPath(aFilename:String):Boolean;
+begin
 end;
 
 function TQTXFileSystemFolder.getFileObj(aFileName:String):TQTXFileSystemObject;

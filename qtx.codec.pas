@@ -34,7 +34,7 @@ interface
 uses 
   system.types,
   SmartCL.System,
-  qtx.storage.options;
+  qtx.options;
 
 type
 
