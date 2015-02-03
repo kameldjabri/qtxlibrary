@@ -2,18 +2,53 @@ unit qtx.storage.filesystem;
 
 interface
 
+//#############################################################################
+//
+//  Author:     Jon Lennart Aasenden [cipher diaz of quartex]
+//  Copyright:  Jon Lennart Aasenden, all rights reserved
+//
+//
+//  _______           _______  _______ _________ _______
+// (  ___  )|\     /|(  ___  )(  ____ )\__   __/(  ____ \|\     /|
+// | (   ) || )   ( || (   ) || (    )|   ) (   | (    \/( \   / )
+// | |   | || |   | || (___) || (____)|   | |   | (__     \ (_) /
+// | |   | || |   | ||  ___  ||     __)   | |   |  __)     ) _ (
+// | | /\| || |   | || (   ) || (\ (      | |   | (       / ( ) \
+// | (_\ \ || (___) || )   ( || ) \ \__   | |   | (____/\( /   \ )
+// (____\/_)(_______)|/     \||/   \__/   )_(   (_______/|/     \|
+//
+//
+// The QUARTEX library for Smart Mobile Studio is copyright
+// Jon Lennart Aasenden. All rights reserved. This is a commercial product.
+//
+// Jon Lennart Aasenden LTD is a registered Norwegian company:
+//
+//      Company ID: 913494741
+//      Legal Info: http://w2.brreg.no/enhet/sok/detalj.jsp?orgnr=913494741
+//
+//  The QUARTEX library of units is subject to international copyright
+//  laws and regulations regarding intellectual properties.
+//
+//#############################################################################
+
 uses 
   System.Types,
   SmartCL.System,
-  qtx.helpers;
+  SmartCL.storage;
 
 type
-
 
   TQTXFileSystemObject      = Class;
   TQTXFileSystemFolder      = Class;
   TQTXFileSystemFile        = Class;
   TQTXFileSystemObjectList  = Array of TQTXFileSystemObject;
+
+  TQTXFileData = Record
+    fdName:     String;
+    fdSize:     Integer;
+    fdData:     Variant;
+    fdChildren: Array of TQTXFileData;
+  end;
 
   TQTXFileSystemObject = Class(TObject)
   private
@@ -22,23 +57,21 @@ type
     FParent:    TQTXFileSystemFolder;
   protected
     FChildren:  TQTXFileSystemObjectList;
-
     procedure setName(value:String);
     function  getPath:String;virtual;
-
     function  getName:String;virtual;
     function  getSize:Integer;virtual;
-    property  Size:Integer read getSize;
 
+    property  Size:Integer read getSize;
     Property  Files[index:Integer]:TQTXFileSystemObject
               read ( FChildren[index] );
     property  Count:Integer
               read ( FChildren.length );
-
   public
     property  Path:String read getPath;
     Property  Parent:TQTXFileSystemFolder read FParent;
     Property  Name:String read getName;
+    function  Pack:TQTXFileData;virtual;abstract;
     Constructor Create(Aowner:TQTXFileSystemFolder);
   end;
 
@@ -50,29 +83,23 @@ type
   public
     Property  Files;
     property  Count;
-
+    function  Pack:TQTXFileData;override;
     function  FindFileObject(aFilename:String):TQTXFileSystemObject;
-
     function  getValidPath(aFilename:String):Boolean;
-
     function  FileExists(aFileName:String):Boolean;virtual;
     function  mkDir(aFilename:String):TQTXFileSystemFolder;virtual;
     function  mkFile(aFilename:String;const Data:Variant):TQTXFileSystemFile;virtual;
   end;
 
-  IQTXFileSystemFile = Interface
-    function  getData:Variant;
-    procedure setData(Const value:Variant);
-  end;
-
-  TQTXFileSystemFile = Class(TQTXFileSystemObject,IQTXFileSystemFile)
+  TQTXFileSystemFile = Class(TQTXFileSystemObject)
   private
     FData:    Variant;
   protected
     function  getData:Variant;
     procedure setData(Const value:Variant);
   public
-    procedure WriteData(Value:Variant);virtual;
+    function  Pack:TQTXFileData;override;
+    procedure WriteData(const Value:Variant);virtual;
     function  ReadData:Variant;virtual;
     property  Name;
   end;
@@ -89,6 +116,11 @@ type
     Property    Current:TQTXFileSystemFolder read getCurrent;
     procedure   chDir(NewPath:String);
 
+    procedure   SaveTo(keyName:String;
+                Const aStorage:TW3CustomStorage);
+    procedure   loadFrom(keyname:String;
+                Const aStorage:TW3CustomStorage);
+
     function    FileExists(aFileName:String):Boolean;override;
     function    mkDir(aFilename:String):TQTXFileSystemFolder;override;
     function    mkFile(aFilename:String;const Data:Variant):TQTXFileSystemFile;override;
@@ -96,11 +128,67 @@ type
 
 implementation
 
-uses qtx.storage;
+uses  qtx.helpers,
+      qtx.codec,
+      qtx.codec.base64,
+      qtx.codec.uri,
+      qtx.storage;
 
 //############################################################################
 // TQTXFileSystem
 //############################################################################
+
+
+procedure TQTXFileSystem.SaveTo(keyName:String;
+          Const aStorage:TW3CustomStorage);
+begin
+  if aStorage<>NIL then
+  begin
+    if aStorage.Active then
+    begin
+      keyname:=keyname.trim();
+      if keyName.length>0 then
+      begin
+        try
+          aStorage.setKeyStr(Classname,JSON.Stringify(self.pack));
+        except
+          on e: exception do
+          raise Exception.Create
+          ("Write failed, storage threw <" + e.message +">");
+        end;
+      end else
+      raise Exception.Create('Write failed, invalid key-name error');
+    end else
+    Raise Exception.Create('Write failed, storage medium inactive error');
+  end else
+  raise Exception.Create('Write failed, storage medium is NIL or invalid error');
+end;
+
+procedure TQTXFileSystem.LoadFrom(keyname:String;
+          const aStorage:TW3LocalStorage);
+begin
+  if aStorage<>NIL then
+  begin
+    if aStorage.Active then
+    begin
+      keyname:=keyname.trim();
+      if keyName.length>0 then
+      begin
+        try
+          aStorage.setKeyStr(Classname,JSON.Stringify(self.pack));
+        except
+          on e: exception do
+          raise Exception.Create
+          ("Read failed, storage threw <" + e.message +">");
+        end;
+      end else
+      raise Exception.Create('Read failed, invalid key-name error');
+    end else
+    Raise Exception.Create('Read failed, storage medium inactive error');
+  end else
+  raise Exception.Create('Read failed, storage medium is NIL or invalid error');
+end;
+
 
 function TQTXFileSystem.getCurrent:TQTXFileSystemFolder;
 begin
@@ -190,6 +278,17 @@ end;
 //############################################################################
 // TQTXFileSystemFolder
 //############################################################################
+
+function TQTXFileSystemFolder.Pack:TQTXFileData;
+var
+  x:  Integer;
+begin
+  result.fdName:=Name;
+  result.fdSize:=0;
+  if Count>0 then
+  for x:=0 to Count-1 do
+  result.fdChildren.Add(Files[x].Pack);
+end;
 
 function TQTXFileSystemFolder.findFileObject
         (aFilename:String):TQTXFileSystemObject;
@@ -324,7 +423,7 @@ begin
       (* Default data? *)
       if not TQTXVariant.IsUnassigned(Data)
       and not TVariant.IsNull(Data) then
-      (mItem as IQTXFileSystemFile).setData(Data);
+      TQTXFileSystemFile(mItem).WriteData(Data);
 
       result:=TQTXFileSystemFile(mItem);
     end else
@@ -366,7 +465,15 @@ end;
 // TQTXFileSystemFile
 //############################################################################
 
-procedure TQTXFileSystemFile.WriteData(Value:Variant);
+function TQTXFileSystemFile.Pack:TQTXFileData;
+begin
+  result.fdName:=Name;
+  result.fdSize:=Size;
+  result.fdData:=ReadData();
+  result.fdChildren.Clear;
+end;
+
+procedure TQTXFileSystemFile.WriteData(const Value:Variant);
 begin
   setData(Value);
 end;
@@ -401,6 +508,7 @@ begin
   inherited Create;
   FParent:=AOwner;
 end;
+
 
 function TQTXFileSystemObject.getPath:String;
 var
