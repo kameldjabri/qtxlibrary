@@ -92,6 +92,7 @@ type
     FChildren:  TQTXFileSystemObjectList;
 
     procedure setName(value:String);
+    function  getPath:String;virtual;
 
     function  getName:String;virtual;
     function  getSize:Integer;virtual;
@@ -103,6 +104,7 @@ type
               read ( FChildren.length );
 
   public
+    property  Path:String read getPath;
     Property  Parent:TQTXFileSystemFolder read FParent;
     Property  Name:String read getName;
     Constructor Create(Aowner:TQTXFileSystemFolder);
@@ -112,13 +114,15 @@ type
 
   TQTXFileSystemFolder = Class(TQTXFileSystemObject)
   protected
-    function  getFileObj(aFileName:String):TQTXFileSystemObject;
-    function  getPath:String;virtual;
-    function  getValidPath(aFilename:String):Boolean;
+    function  getLocalFileObj(aFileName:String):TQTXFileSystemObject;
   public
-    Property  Path:String read getPath;
     Property  Files;
     property  Count;
+
+    function  FindFileObject(aFilename:String):TQTXFileSystemObject;
+
+    function  getValidPath(aFilename:String):Boolean;
+
     function  FileExists(aFileName:String):Boolean;virtual;
     function  mkDir(aFilename:String):TQTXFileSystemFolder;virtual;
     function  mkFile(aFilename:String;const Data:Variant):TQTXFileSystemFile;virtual;
@@ -136,6 +140,8 @@ type
     function  getData:Variant;
     procedure setData(Const value:Variant);
   public
+    procedure WriteData(Value:Variant);virtual;
+    function  ReadData:Variant;virtual;
     property  Name;
   end;
 
@@ -177,6 +183,62 @@ resourcestring
 CNT_ERR_IO_FailedLoadScript = 'Failed to load script-file [%s] error';
 CNT_ERR_IO_FailedLoadImage  = 'Failed to load image.file [%s] error';
 CNT_ERR_IO_FailedLoadCSS    = 'Failed to load CSS file [%s] error';
+
+
+
+function ExtractFileName(aPath:String):String;
+var
+  x:  Integer;
+begin
+  result:='';
+
+  aPath:=aPath.trim();
+  if (aPath.length>0) then
+  begin
+    if aPath[aPath.length]<>'/' then
+    begin
+
+      for x:=aPath.high downto aPath.low do
+      begin
+        if aPath[x]<>'/' then
+        result:=(aPath[x] + result) else
+        break;
+      end;
+
+    end;
+  end;
+end;
+
+function ExtractFileExt(aFilename:String):String;
+var
+  x:  integer;
+Begin
+  result:='';
+  afileName:=aFilename.trim();
+  if aFilename.length>0 then
+  begin
+    for x:=aFilename.high downto aFilename.low do
+    begin
+      if (aFilename[x]<>'.') then
+      begin
+        if (aFilename[x]<>'/') then
+        result:=(aFilename[x] + result) else
+        break;
+      end else
+      begin
+        result:=(aFilename[x] + result);
+        break;
+      end;
+    end;
+
+    if result.length>0 then
+    begin
+      if result[1]<>'.' then
+      result:='';
+    end;
+
+  end;
+end;
 
 //############################################################################
 // TQTXFileSystem
@@ -251,7 +313,7 @@ begin
 
       for x:=mitems.low to mItems.High do
       begin
-        mItem:=Current.getFileObj(mItems[x]);
+        mItem:=Current.getLocalFileObj(mItems[x]);
         if mItem<>NIL then
         Begin
           if (mItem is TQTXFileSystemFolder) then
@@ -271,23 +333,105 @@ end;
 // TQTXFileSystemFolder
 //############################################################################
 
-function TQTXFileSystemFolder.getPath:String;
+function TQTXFileSystemFolder.findFileObject
+        (aFilename:String):TQTXFileSystemObject;
 var
-  mItem:  TQTXFileSystemFolder;
+  mList:  Array of String;
+  mItems: Array of String;
+  x:  Integer;
+  mItem:  TQTXFileSystemObject;
+  mCurrent: TQTXFileSystemFolder;
+  mFile:  String;
 begin
-  result:='';
-  mItem:=self;
-  repeat
-    result:=(mItem.Name + '\' + result);
-    mItem:=mItem.Parent;
-  until mItem=NIL;
+  result:=NIL;
+  aFilename:=aFilename.Trim();
+  if aFilename.length>0 then
+  begin
+
+    (* strip left double delimiters *)
+    while (aFilename.length>0)
+      and (aFilename[1]="/") do
+      delete(aFilename,1,1);
+
+    (* strip right double delimiters *)
+    while (aFilename.length>0)
+      and (aFilename[aFilename.length]="/") do
+      delete(aFilename,aFilename.length,1);
+
+    (* Strip contained double delimiters *)
+    while aFilename.Contains('//') do
+    aFilename:=aFilename.Replace('//','/');
+
+    (* Still valid ? *)
+    aFilename:=aFilename.trim();
+    if aFilename.length=0 then
+    exit;
+
+    (* grab filename *)
+    mFile:=ExtractFileName(aFilename);
+
+    //writeln('filename:' + mFile);
+    //writeln('Ext:' + ExtractFileExt(mFile));
+
+    if ExtractFileExt(mFile).length>0 then
+    begin
+      mItems:=aFilename.Explode('/');
+      //writeln('Deleting:' + mItems[mitems.length-1]);
+      mItems.Delete(mItems.length-1,1);
+    end else
+    Begin
+      mFile:='';
+      mItems:=aFilename.Explode('/');
+    end;
+
+    (* writeln('Working with:' + aFilename);
+    for x:=mItems.low to mitems.high do
+    begin
+      writeln('   ' + mitems[x]);
+    end; *)
+
+    mCurrent:=self;
+    if mItems.length >0 then
+    Begin
+      for x:=mitems.low to mItems.High do
+      begin
+        mItem:=mCurrent.getLocalFileObj(mItems[x]);
+        if mItem<>NIL then
+        begin
+          if (mItem is TQTXFileSystemFolder) then
+          mCurrent:=TQTXFileSystemFolder(mItem) else
+          Begin
+            mCurrent:=NIL;
+            break;
+          end;
+        end else
+        begin
+          mCurrent:=NIL;
+          break;
+        end;
+      end;
+    end;
+
+    if mCurrent<>NIl then
+    begin
+      if mFile.length>0 then
+      begin
+        if mCurrent.FileExists(mFile) then
+        result:=mCurrent.getLocalFileObj(mFile);
+      end else
+      result:=mCurrent;
+    end;
+
+  end;
 end;
 
-function  getValidPath(aFilename:String):Boolean;
+function TQTXFileSystemFolder.getValidPath(aFilename:String):Boolean;
 begin
+  result:=FindFileObject(aFilename)<>NIL;
 end;
 
-function TQTXFileSystemFolder.getFileObj(aFileName:String):TQTXFileSystemObject;
+function TQTXFileSystemFolder.getLocalFileObj
+         (aFileName:String):TQTXFileSystemObject;
 var
   x:  Integer;
 begin
@@ -302,7 +446,8 @@ begin
   end;
 end;
 
-function TQTXFileSystemFolder.mkFile(aFilename:String;const Data:Variant):TQTXFileSystemFile;
+function TQTXFileSystemFolder.mkFile(aFilename:String;
+         const Data:Variant):TQTXFileSystemFile;
 var
   mItem:  TQTXFileSystemObject;
 begin
@@ -347,35 +492,46 @@ begin
       result:=TQTXFileSystemFolder(mItem);
 
     end else
-    raise exception.Create('File <' + name + '> already exists error');
+    raise exception.Create
+    ('A filesystem object <' + name + '> already exists error');
   end;
 end;
 
 function TQTXFileSystemFolder.FileExists(aFileName:String):Boolean;
-var
-  x:  Integer;
 begin
-  result:=False;
-  for x:=0 to Count-1 do
-  begin
-    result:=sameText(Files[x].Name,aFileName);
-    if result then
-    break;
-  end;
+  if aFilename.Contains('/') then
+  result:=self.FindFileObject(aFilename)<>NIL else
+  result:=self.getLocalFileObj(aFilename)<>NIL;
 end;
 
 //############################################################################
 // TQTXFileSystemFile
 //############################################################################
 
+procedure TQTXFileSystemFile.WriteData(Value:Variant);
+begin
+  setData(Value);
+end;
+
+function TQTXFileSystemFile.ReadData:Variant;
+begin
+  result:=getData;
+end;
+
 function TQTXFileSystemFile.getData:Variant;
 begin
-  result:=FData;
+  if not TQTXVariant.IsUnassigned(FData)
+  and not TVariant.IsNull(FData) then
+  result:=JSON.parse(FData) else
+  result:=null;
 end;
 
 procedure TQTXFileSystemFile.setData(Const value:Variant);
 begin
-  FData:=Value;
+  if not TQTXVariant.IsUnassigned(value)
+  and not TVariant.IsNull(value) then
+  FData:=JSON.Stringify(Value) else
+  FData:=null;
 end;
 
 //############################################################################
@@ -386,6 +542,24 @@ Constructor TQTXFileSystemObject.Create(Aowner:TQTXFileSystemFolder);
 begin
   inherited Create;
   FParent:=AOwner;
+end;
+
+function TQTXFileSystemObject.getPath:String;
+var
+  mItem:  TQTXFileSystemObject;
+begin
+  result:='';
+  if parent<>NIL then
+  begin
+    mItem:=self.parent;
+    repeat
+      result:=(mItem.Name + '\' + result);
+      mItem:=mItem.Parent;
+    until mItem=NIL;
+
+    result += self.name;
+  end else
+  result:=Name;
 end;
 
 procedure TQTXFileSystemObject.setName(value:String);
