@@ -1,5 +1,7 @@
 unit qtx.codec.base64;
 
+interface
+
 //#############################################################################
 //
 //  Author:     Jon Lennart Aasenden [cipher diaz of quartex]
@@ -28,8 +30,6 @@ unit qtx.codec.base64;
 //  laws and regulations regarding intellectual properties.
 //
 //#############################################################################
-
-interface
 
 uses 
   system.types,

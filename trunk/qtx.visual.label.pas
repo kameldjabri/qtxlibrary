@@ -1,5 +1,7 @@
 unit qtx.visual.label;
 
+interface
+
 //#############################################################################
 //
 //  Author:     Jon Lennart Aasenden [cipher diaz of quartex]
@@ -28,8 +30,6 @@ unit qtx.visual.label;
 //  laws and regulations regarding intellectual properties.
 //
 //#############################################################################
-
-interface
 
 uses 
   System.Types,
@@ -117,7 +117,7 @@ end;
 
 Procedure TQTXLabel.setCaption(Const aValue:String);
 Begin
-  if aValue<>innerHTML then
+  if not sameText(aValue,innerHTML) then
   Begin
     innerHTML:=aValue;
 
@@ -129,7 +129,7 @@ Begin
   end;
 end;
 
-function  TQTXLabel.MakeElementTagId: String;
+function TQTXLabel.MakeElementTagId: String;
 Begin
   result:='PRE';
 end;
