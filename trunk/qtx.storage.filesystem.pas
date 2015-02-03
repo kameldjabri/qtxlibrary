@@ -166,6 +166,8 @@ end;
 
 procedure TQTXFileSystem.LoadFrom(keyname:String;
           const aStorage:TW3LocalStorage);
+var
+  mData:  String;
 begin
   if aStorage<>NIL then
   begin
@@ -175,7 +177,11 @@ begin
       if keyName.length>0 then
       begin
         try
-          aStorage.setKeyStr(Classname,JSON.Stringify(self.pack));
+          mData:=aStorage.getKeyStr(Classname,"");
+          if mData.length>0 then
+          begin
+            //
+          end;
         except
           on e: exception do
           raise Exception.Create
