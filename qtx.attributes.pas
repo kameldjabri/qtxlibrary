@@ -1,5 +1,6 @@
 unit qtx.attributes;
 
+interface
 
 //#############################################################################
 //
@@ -29,9 +30,6 @@ unit qtx.attributes;
 //  laws and regulations regarding intellectual properties.
 //
 //#############################################################################
-
-
-interface
 
 uses 
   System.Types,
