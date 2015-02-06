@@ -34,8 +34,8 @@ interface
 uses 
   system.types,
   SmartCL.System,
-  qtx.codec,
-  qtx.options;
+  qtx.codec.base,
+  qtx.storage.options;
 
 
 type
@@ -65,7 +65,7 @@ begin
       @result = btoa(@data);
     end;
   end else
-  Raise Exception.Create('Encoding failed, input was empty or invalid error');
+  Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
 end;
 
 function  TQTXBase64Codec.Decode(const Data:String):String;
@@ -76,7 +76,7 @@ Begin
       @result = atob(@data);
     end;
   end else
-  Raise Exception.Create('Decoding failed, input was empty or invalid error');
+  Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
 end;
 
 

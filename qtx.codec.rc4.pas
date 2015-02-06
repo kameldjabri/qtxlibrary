@@ -34,7 +34,7 @@ interface
 uses
   system.types,
   SmartCL.System,
-  qtx.codec,
+  qtx.codec.base,
   qtx.storage.options;
 
 type
@@ -62,7 +62,8 @@ begin
   if options<>NIl then
   begin
     Key:=options.Option['key']
-  end;
+  end else
+  Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidOption);
 end;
 
 function TQTCRC4Codec.Encode(const data:String):String;
@@ -99,16 +100,15 @@ begin
             ^ s[(s[i] + s[j]) % 256]);
         }
       end;
-    end;
+    end else
+    Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
   end else
-  Raise Exception.Create('Decoding failed, invalid or empty key error');
+  Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidOption);
 end;
 
 function TQTCRC4Codec.Decode(const Data:String):String;
 begin
-  if key.length>0 then
-  result:=Encode(Data) else
-  Raise Exception.Create('Decoding failed, invalid or empty key error');
+  result:=Encode(Data);
 end;
 
 end.
