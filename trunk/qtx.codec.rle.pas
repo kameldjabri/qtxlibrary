@@ -34,7 +34,7 @@ interface
 uses
   system.types,
   SmartCL.System,
-  qtx.codec,
+  qtx.codec.base,
   qtx.storage.options;
 
 type
@@ -57,49 +57,56 @@ uses  qtx.helpers;
 
 function TQTXRLECodec.Encode(const data:String):String;
 begin
-  asm
-    @result = new Array;
-    if((@data).length == 0)  {
-		  @result = "";
-    } else {
-      var count = 1;
-      var r = 0;
-      for(var i = 0; i < ((@data).length - 1); i++) {
-		    if(@data[i] != @data[i+1])
-        {
-          @result[r] = @data[i];
-          @result[r+1] = count;
-          count = 0;
-          r +=2;
+  if data.length>0 then
+  begin
+    asm
+      @result = new Array;
+      if((@data).length == 0)  {
+  		  @result = "";
+      } else {
+        var count = 1;
+        var r = 0;
+        for(var i = 0; i < ((@data).length - 1); i++) {
+  		    if(@data[i] != @data[i+1])
+          {
+            @result[r] = @data[i];
+            @result[r+1] = count;
+            count = 0;
+            r +=2;
+          }
+  		    count++;
         }
-		    count++;
+        @result[r] = @data[i];
+        @result[r+1] = count;
       }
-      @result[r] = @data[i];
-      @result[r+1] = count;
-    }
-  end;
-  writeln(result);
+    end;
+  end else
+  Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
 end;
 
 function TQTXRLECodec.Decode(const Data:String):String;
 begin
-  asm
-    @result = new Array;
-    if((@data).length == 0) {
-      return result;
-    } else {
-      if(((@data).length % 2) <> 0)
-      {
-        for(var i = 0; i < (@data).length; i+=2)
+  if data.length>0 then
+  begin
+    asm
+      @result = new Array;
+      if((@data).length == 0) {
+        return result;
+      } else {
+        if(((@data).length % 2) <> 0)
         {
-          var val = @data[i];
-          var count = @data[i+1];
-          for(var c = 0; c < count; c++)
-            @result[(@result).length] = val;
+          for(var i = 0; i < (@data).length; i+=2)
+          {
+            var val = @data[i];
+            var count = @data[i+1];
+            for(var c = 0; c < count; c++)
+              @result[(@result).length] = val;
+          }
         }
       }
-    }
-  end;
+    end;
+  end else
+  Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
 end;
 
 

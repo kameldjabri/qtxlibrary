@@ -34,7 +34,8 @@ interface
 uses
   system.types,
   SmartCL.System,
-  qtx.codec;
+  qtx.storage.options,
+  qtx.codec.base;
 
 type
 
@@ -62,7 +63,7 @@ begin
       @result = encodeURI(@data);
     end;
   end else
-  Raise Exception.Create('Encoding failed, input was empty or invalid error');
+  Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
 end;
 
 function  TQTXURICodec.Decode(const Data:String):String;
@@ -73,7 +74,7 @@ Begin
       @result = decodeURI(@data);
     end;
   end else
-  Raise Exception.Create('Decoding failed, input was empty or invalid error');
+  Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
 end;
 
 
