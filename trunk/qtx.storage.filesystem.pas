@@ -132,7 +132,7 @@ uses  qtx.helpers,
       qtx.codec,
       qtx.codec.base64,
       qtx.codec.uri,
-      qtx.storage;
+      qtx.storage.common;
 
 //############################################################################
 // TQTXFileSystem
@@ -427,7 +427,7 @@ begin
       FChildren.Add(mItem);
 
       (* Default data? *)
-      if not TQTXVariant.IsUnassigned(Data)
+      if not Data.IsUnassigned
       and not TVariant.IsNull(Data) then
       TQTXFileSystemFile(mItem).WriteData(Data);
 
@@ -491,7 +491,7 @@ end;
 
 function TQTXFileSystemFile.getData:Variant;
 begin
-  if not TQTXVariant.IsUnassigned(FData)
+  if not FData.IsUnassigned
   and not TVariant.IsNull(FData) then
   result:=JSON.parse(FData) else
   result:=null;
@@ -499,7 +499,7 @@ end;
 
 procedure TQTXFileSystemFile.setData(Const value:Variant);
 begin
-  if not TQTXVariant.IsUnassigned(value)
+  if not value.IsUnassigned
   and not TVariant.IsNull(value) then
   FData:=JSON.Stringify(Value) else
   FData:=null;

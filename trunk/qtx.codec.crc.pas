@@ -1,4 +1,4 @@
-unit qtx.codec.base64;
+unit qtx.codec.crc;
 
 interface
 
@@ -31,55 +31,85 @@ interface
 //
 //#############################################################################
 
-uses 
+uses
   system.types,
   SmartCL.System,
   qtx.codec.base,
   qtx.storage.options;
 
-
 type
 
-  (* Base64 codec *)
-  TQTXBase64Codec = Class(TQTXCustomCodec)
+  TQTXCodecCRC = Class(TQTXCustomCodec)
   public
+    function  GetCodecCaps:TQTXCodecCapabilities;override;
     function  Encode(const data:variant):variant;override;
     function  Decode(const data:variant):variant;override;
   end;
 
-
 implementation
 
-uses  qtx.helpers;
+uses qtx.helpers;
 
+var
+  CRC_TABLE:  array[0..512] of integer;
 
-//############################################################################
-// TQTXBase64Codec encodeURI
-//###########################################################################
-
-function  TQTXBase64Codec.Encode(const data:variant):variant;
+function TQTXCodecCRC.GetCodecCaps:TQTXCodecCapabilities;
 begin
-  if data.length>0 then
-  begin
-    asm
-      @result = btoa(@data);
-    end;
-  end else
-  Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
+  /* This codec provides encoding only */
+  result:=[ccEncode];
 end;
 
-function  TQTXBase64Codec.Decode(const Data:variant):variant;
-Begin
-  if data.length>0 then
+function TQTXCodecCRC.Encode(const Data:variant):variant;
+var
+  i:  Integer;
+  res:  Integer;
+  cc  : Integer;
+begin
+
+  res:= $FFFFFFFF;
+  for i:=1 to String(data).length do
   begin
-    asm
-      @result = atob(@data);
+    cc:=String(data).charCode(i);
+    res:= (res shr 8) xor CRC_TABLE[ cc  XOR (res and $000000FF)];
+  end;
+
+  (* asm
+    @result = ( (@res ^ -1) >>> 0);
+  end; *)
+  result:=((res xor -1) SAR 0);
+
+end;
+
+function  TQTXCodecCRC.Decode(const data:variant):variant;
+begin
+  result:=Data;
+end;
+
+procedure BuildCRCTable;
+const
+  CRCPOLY = $EDB88320;
+var
+  i, j: Integer;
+  r: Integer;
+begin
+  for i := 0 to 255 do
+  begin
+    r := i shl 1;
+    for j := 8 downto 0 do
+    begin
+      if (r and 1) <> 0 then
+      r := (r Shr 1) xor CRCPOLY else
+      r := r shr 1;
+      CRC_TABLE[i] := r;
     end;
-  end else
-  Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
+  end;
 end;
 
 
+initialization
+begin
+  BuildCRCTable;
+end;
 
 
 end.

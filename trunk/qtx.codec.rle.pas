@@ -42,8 +42,8 @@ type
   (* Run-Length-Encoding text compression *)
   TQTXRLECodec = Class(TQTXCustomCodec)
   public
-    function  Encode(const data:String):String;override;
-    function  Decode(const data:String):String;override;
+    function  Encode(const data:variant):variant;override;
+    function  Decode(const data:variant):variant;override;
   end;
 
 implementation
@@ -55,7 +55,7 @@ uses  qtx.helpers;
 // TQTXRLECodec
 //###########################################################################
 
-function TQTXRLECodec.Encode(const data:String):String;
+function TQTXRLECodec.Encode(const data:variant):variant;
 begin
   if data.length>0 then
   begin
@@ -84,7 +84,7 @@ begin
   Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
 end;
 
-function TQTXRLECodec.Decode(const Data:String):String;
+function TQTXRLECodec.Decode(const Data:variant):variant;
 begin
   if data.length>0 then
   begin

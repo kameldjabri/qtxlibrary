@@ -75,27 +75,30 @@ type
             Use the helper functions as a proxy.
        *)
 
-
   EQTXCodecException = Class(EW3Exception);
+
+
+  TQTXCodecCapabilities = set of (ccEncode,ccDecode);
 
   (* This is the base-class from which all codec's derive *)
   TQTXCustomCodec = class(TObject)
   public
+    function  GetCodecCaps:TQTXCodecCapabilities;virtual;
     Procedure SetOptions(Const Options:TQTXOptions);virtual;
-    function  Encode(const data:String):String;virtual;
-    function  Decode(const data:String):String;virtual;
+    function  Encode(const data:variant):variant;virtual;
+    function  Decode(const data:variant):variant;virtual;
   end;
 
   TQTXCodecClassType = Class of TQTXCustomCodec;
 
-  function  QTX_Encode(Const Data:String;
+  function  QTX_Encode(Const Data:variant;
             Const Options:TQTXOptions;
-            Const Codec:TQTXCodecClassType):String;
+            Const Codec:TQTXCodecClassType):variant;
 
 
-  function  QTX_Decode(Const Data:String;
+  function  QTX_Decode(Const Data:variant;
             Const Options:TQTXOptions;
-            Const Codec:TQTXCodecClassType):String;
+            Const Codec:TQTXCodecClassType):variant;
 
 
 resourcestring
@@ -120,9 +123,9 @@ uses  qtx.helpers;
 //###########################################################################
 
 
-function  QTX_Decode(const Data:String;
+function  QTX_Decode(const Data:variant;
           Const Options:TQTXOptions;
-          Const Codec:TQTXCodecClassType):String;
+          Const Codec:TQTXCodecClassType):variant;
 var
   mCodec: TQTXCustomCodec;
 begin
@@ -147,9 +150,9 @@ begin
   Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
 end;
 
-function  QTX_Encode(const Data:String;
+function  QTX_Encode(const Data:variant;
           Const Options:TQTXOptions;
-          Const Codec:TQTXCodecClassType):String;
+          Const Codec:TQTXCodecClassType):variant;
 var
   mCodec: TQTXCustomCodec;
 begin
@@ -177,6 +180,11 @@ end;
 //############################################################################
 // TQTXCustomCodec
 //###########################################################################
+
+function TQTXCustomCodec.GetCodecCaps:TQTXCodecCapabilities;
+begin
+  result:=[ccEncode,ccDecode];
+end;
 
 Procedure TQTXCustomCodec.SetOptions(Const Options:TQTXOptions);
 begin

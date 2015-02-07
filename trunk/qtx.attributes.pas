@@ -62,6 +62,8 @@ type
 
 implementation
 
+uses qtx.helpers;
+
 
 const
   (* Prefix for "data-attr" tag fields.

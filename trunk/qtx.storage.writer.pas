@@ -74,7 +74,7 @@ Constructor TQTXWriter.Create(const aBuffer:Variant);
 begin
   inherited Create;
   if not TVariant.IsNull(aBuffer)
-  and not TQTXVariant.IsUnassigned(aBuffer) then
+  and not aBuffer.IsUnassigned then
   FBuffer:=aBuffer else
   FBuffer:=TVariant.CreateObject;
 end;
