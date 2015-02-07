@@ -44,8 +44,8 @@ type
   public
     Property  Key:String;
     Procedure SetOptions(Const Options:TQTXOptions);override;
-    function  Encode(const data:String):String;override;
-    function  Decode(const data:String):String;override;
+    function  Encode(const data:variant):variant;override;
+    function  Decode(const data:variant):variant;override;
   end;
 
 
@@ -66,7 +66,7 @@ begin
   Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidOption);
 end;
 
-function TQTCRC4Codec.Encode(const data:String):String;
+function TQTCRC4Codec.Encode(const data:variant):variant;
 var
   mKey: String;
 begin
@@ -74,7 +74,7 @@ begin
   mKey:=self.key;
   if mKey.length>0 then
   Begin
-    if data.length>0 then
+    if String(data).length>0 then
     begin
       asm
         var s = [], j = 0, x, res = '';
@@ -106,7 +106,7 @@ begin
   Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidOption);
 end;
 
-function TQTCRC4Codec.Decode(const Data:String):String;
+function TQTCRC4Codec.Decode(const Data:variant):variant;
 begin
   result:=Encode(Data);
 end;

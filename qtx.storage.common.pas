@@ -1,4 +1,4 @@
-unit qtx.codec.base64;
+unit qtx.storage.common;
 
 interface
 
@@ -31,55 +31,70 @@ interface
 //
 //#############################################################################
 
-uses 
-  system.types,
-  SmartCL.System,
-  qtx.codec.base,
-  qtx.storage.options;
+uses
+  System.Types,
+  SmartCL.System;
 
 
-type
-
-  (* Base64 codec *)
-  TQTXBase64Codec = Class(TQTXCustomCodec)
-  public
-    function  Encode(const data:variant):variant;override;
-    function  Decode(const data:variant):variant;override;
-  end;
-
+function ExtractFileName(aPath:String):String;
+function ExtractFileExt(aFilename:String):String;
 
 implementation
 
-uses  qtx.helpers;
 
-
-//############################################################################
-// TQTXBase64Codec encodeURI
-//###########################################################################
-
-function  TQTXBase64Codec.Encode(const data:variant):variant;
+function ExtractFileName(aPath:String):String;
+var
+  x:  Integer;
 begin
-  if data.length>0 then
+  result:='';
+
+  aPath:=aPath.trim();
+  if (aPath.length>0) then
   begin
-    asm
-      @result = btoa(@data);
+    if aPath[aPath.length]<>'/' then
+    begin
+
+      for x:=aPath.high downto aPath.low do
+      begin
+        if aPath[x]<>'/' then
+        result:=(aPath[x] + result) else
+        break;
+      end;
+
     end;
-  end else
-  Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
+  end;
 end;
 
-function  TQTXBase64Codec.Decode(const Data:variant):variant;
+function ExtractFileExt(aFilename:String):String;
+var
+  x:  integer;
 Begin
-  if data.length>0 then
+  result:='';
+  afileName:=aFilename.trim();
+  if aFilename.length>0 then
   begin
-    asm
-      @result = atob(@data);
+    for x:=aFilename.high downto aFilename.low do
+    begin
+      if (aFilename[x]<>'.') then
+      begin
+        if (aFilename[x]<>'/') then
+        result:=(aFilename[x] + result) else
+        break;
+      end else
+      begin
+        result:=(aFilename[x] + result);
+        break;
+      end;
     end;
-  end else
-  Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
+
+    if result.length>0 then
+    begin
+      if result[1]<>'.' then
+      result:='';
+    end;
+
+  end;
 end;
-
-
 
 
 end.

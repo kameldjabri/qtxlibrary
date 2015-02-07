@@ -74,13 +74,33 @@ type
   TQTXStringHelper = Helper for String
     function  Numeric:Boolean;
     function  Explode(const separator:String):Array of String;
+    function  CharCode(index:Integer):Integer;
     class function  CreateGUID:String;
   End;
 
-  TQTXVariant = class(TOBject)
-  public
-    class function  IsObject(const aValue:Variant):Boolean;
-    class function  IsUnassigned(const aValue:Variant):Boolean;
+  TQTXVariantDataType = (
+      vdUnknown,
+      vdBoolean,
+      vdInteger,
+      vdFloat,
+      vdString,
+      vdSymbol,
+      vdFunction,
+      vdObject,
+      vdArray );
+
+  TQTXVariantHelper = helper for variant
+    function  IsObject:Boolean;
+    function  IsArray:Boolean;
+    function  IsUnassigned:Boolean;
+    function  IsInteger:Boolean;
+    function  IsFloat:Boolean;
+    function  IsBoolean:Boolean;
+    function  IsString:Boolean;
+    function  IsSymbol:Boolean;
+    function  IsFunction:Boolean;
+
+    function  DataType:TQTXVariantDataType;
   end;
 
 
@@ -88,23 +108,99 @@ implementation
 
 uses qtx.runtime;
 
-//#############################################################################
-// TQTXVariantHelper
-//#############################################################################
+function TQTXVariantHelper.DataType:TQTXVariantDataType;
+begin
+  if isObject then    result:=vdObject else
+  if isArray then     result:=vdArray else
+  if isBoolean then   result:=vdBoolean else
+  if isInteger then   result:=vdInteger else
+  if isFloat then     result:=vdFloat else
+  if isString then    result:=vdString else
+  if isSymbol then    result:=vdSymbol else
+  if isFunction then  result:=vdFunction else
+  result:=vdUnknown;
+end;
 
-class function TQTXVariant.IsUnassigned(const aValue:Variant):Boolean;
+function TQTXVariantHelper.IsObject:Boolean;
 begin
   asm
-    @result = (typeof @aValue =="undefined")
+    @result = ((@self) !== undefined)
+      && (typeof @self !== null)
+      && (typeof @self  === "object")
+      && ((@self).length === undefined);
   end;
 end;
 
-class function TQTXVariant.IsObject(const aValue:Variant):Boolean;
+function TQTXVariantHelper.IsSymbol:Boolean;
 begin
   asm
-    @result = ((@aValue) !== null)
-      && (typeof @aValue !== "undefind")
-      && (typeof (@aValue) === "object");
+    @result = ((@self) !== undefined)
+      && (typeof @self !== null)
+      && (typeof @self  === "symbol");
+  end;
+end;
+
+function TQTXVariantHelper.IsFunction:Boolean;
+begin
+  asm
+    @result = ((@self) !== undefined)
+      && (typeof @self !== null)
+      && (typeof @self  === "function");
+  end;
+end;
+
+function TQTXVariantHelper.IsBoolean:Boolean;
+begin
+  asm
+    @result = ((@self) !== undefined)
+      && (typeof @self !== null)
+      && (typeof @self  === "boolean");
+  end;
+end;
+
+function TQTXVariantHelper.IsString:Boolean;
+Begin
+  asm
+    @result = ((@self) !== undefined)
+      && (typeof @self !== null)
+      && (typeof @self  === "string");
+  end;
+end;
+
+function TQTXVariantHelper.IsFloat:Boolean;
+begin
+  asm
+    @result = ((@self) !== undefined)
+      && (typeof @self !== null)
+      && (typeof @self  === "number")
+      && (Math.round(@self) != @self);
+  end;
+end;
+
+function TQTXVariantHelper.IsInteger:Boolean;
+begin
+  asm
+    @result = ((@self) !== undefined)
+      && (typeof @self !== null)
+      && (typeof @self  === "number")
+      && (Math.round(@self) === @self);
+  end;
+end;
+
+function TQTXVariantHelper.IsArray:boolean;
+begin
+  asm
+    @result = ((@self) !== undefined)
+      && (typeof @self !== null)
+      && (typeof @self === "object")
+      && ((@self).length !== undefined);
+  end;
+end;
+
+function TQTXVariantHelper.IsUnassigned:Boolean;
+begin
+  asm
+    @result = (typeof @self === undefined);
   end;
 end;
 
@@ -112,6 +208,14 @@ end;
 //#############################################################################
 // TQTXStringHelper
 //#############################################################################
+
+function TQTXStringHelper.CharCode(index:Integer):Integer;
+begin
+  asm
+    @result = (@self).charCodeAt(@index);
+  end;
+end;
+
 
 function TQTXStringHelper.Explode(const separator:String):Array of String;
 var

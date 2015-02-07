@@ -42,8 +42,8 @@ type
   (* URI codec *)
   TQTXURICodec = Class(TQTXCustomCodec)
   public
-    function  Encode(const data:String):String;override;
-    function  Decode(const data:String):String;override;
+    function  Encode(const data:variant):variant;override;
+    function  Decode(const data:variant):variant;override;
   end;
 
 
@@ -55,9 +55,9 @@ uses  qtx.helpers;
 // TQTXURICodec
 //###########################################################################
 
-function  TQTXURICodec.Encode(const data:String):String;
+function  TQTXURICodec.Encode(const data:variant):variant;
 begin
-  if data.length>0 then
+  if String(data).length>0 then
   begin
     asm
       @result = encodeURI(@data);
@@ -66,9 +66,9 @@ begin
   Raise EQTXCodecException.Create(QTX_CODEC_ERR_InvalidInputData);
 end;
 
-function  TQTXURICodec.Decode(const Data:String):String;
+function  TQTXURICodec.Decode(const Data:variant):variant;
 Begin
-  if data.length>0 then
+  if String(data).length>0 then
   begin
     asm
       @result = decodeURI(@data);

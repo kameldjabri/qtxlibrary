@@ -78,12 +78,12 @@ type
 
   End;
 
-function ExtractFileName(aPath:String):String;
-function ExtractFileExt(aFilename:String):String;
+
 
 implementation
 
-uses qtx.helpers;
+uses qtx.helpers,
+     qtx.storage.common;
 
 type
 TQTXPreLoadBatch = Record
@@ -104,59 +104,6 @@ CNT_ERR_IO_FailedLoadCSS    = 'Failed to load CSS file [%s] error';
 
 
 
-function ExtractFileName(aPath:String):String;
-var
-  x:  Integer;
-begin
-  result:='';
-
-  aPath:=aPath.trim();
-  if (aPath.length>0) then
-  begin
-    if aPath[aPath.length]<>'/' then
-    begin
-
-      for x:=aPath.high downto aPath.low do
-      begin
-        if aPath[x]<>'/' then
-        result:=(aPath[x] + result) else
-        break;
-      end;
-
-    end;
-  end;
-end;
-
-function ExtractFileExt(aFilename:String):String;
-var
-  x:  integer;
-Begin
-  result:='';
-  afileName:=aFilename.trim();
-  if aFilename.length>0 then
-  begin
-    for x:=aFilename.high downto aFilename.low do
-    begin
-      if (aFilename[x]<>'.') then
-      begin
-        if (aFilename[x]<>'/') then
-        result:=(aFilename[x] + result) else
-        break;
-      end else
-      begin
-        result:=(aFilename[x] + result);
-        break;
-      end;
-    end;
-
-    if result.length>0 then
-    begin
-      if result[1]<>'.' then
-      result:='';
-    end;
-
-  end;
-end;
 
 //############################################################################
 // TQTXStorage
