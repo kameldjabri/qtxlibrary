@@ -73,11 +73,9 @@ begin
     res:= (res shr 8) xor CRC_TABLE[ cc  XOR (res and $000000FF)];
   end;
 
-  (* asm
+  asm
     @result = ( (@res ^ -1) >>> 0);
-  end; *)
-  result:=((res xor -1) SAR 0);
-
+  end;
 end;
 
 function  TQTXCodecCRC.Decode(const data:variant):variant;
