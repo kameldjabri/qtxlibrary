@@ -82,7 +82,7 @@ uses
   qtx.attributes;
 
 const
-CNT_RELEASE_DELAY = 25;
+CNT_RELEASE_DELAY = 100;
 CNT_CACHE_DELAY   = 50;
 
 type
@@ -380,13 +380,15 @@ end;
 function TQTXEffectsHelper.fxBusy:Boolean;
 Begin
   if self.elementData.exists('fxBusy') then
-  result:=self.ElementData.read('fxBusy')='yes';
-  self.elementData.write('fxBusy','no');
+  result:=self.ElementData.read('fxBusy')='yes' else
+  result:=False;
 end;
 
 Procedure TQTXEffectsHelper.fxSetBusy(const aValue:Boolean);
+const
+  CNT_CDATA: Array[boolean] of string = ('no','yes');
 Begin
-  self.elementdata.write('fxBusy','yes');
+  self.elementdata.write('fxBusy',CNT_CDATA[aValue]);
 end;
 
 function TQTXEffectsHelper.fxScaleUp(aFactor:Integer;
@@ -854,7 +856,7 @@ Begin
     Begin
       fxZoomIn(duration,OnFinished);
     end,
-    100);
+    CNT_CACHE_DELAY);
 end;
 
 function TQTXEffectsHelper.fxZoomOut(const Duration:Float):TW3CustomControl;
