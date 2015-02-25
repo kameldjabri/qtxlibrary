@@ -954,6 +954,7 @@ var
 Begin
   if not fxBusy then
   Begin
+    self.fxSetBusy(True);
     mEffect:=TW3WarpInTransition.Create;
     mEffect.Duration:=Duration;
     mEffect.OnAnimationEnds:=Procedure (Sender:TObject)

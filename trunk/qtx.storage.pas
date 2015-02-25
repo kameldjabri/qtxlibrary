@@ -52,7 +52,7 @@ type
   TQTXStorage = Class(TObject)
   public
     (* Loading XML without a callback serves no purpose, so I dont
-       provide an overloaded versin *)
+       provide an overloaded version *)
     class procedure LoadXML(aFilename:String;
           const OnComplete:TQTXXMLDataReadyEvent);
 
