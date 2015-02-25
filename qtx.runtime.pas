@@ -126,6 +126,14 @@ Begin
           Execute(OnExecute,aCount-1,aDelay);
         end,
         aDelay);
+    end else
+    begin
+      OnExecute();
+      DelayedDispatch( procedure ()
+        begin
+          Execute(OnExecute,-1,aDelay);
+        end,
+        aDelay);
     end;
   end;
 end;
